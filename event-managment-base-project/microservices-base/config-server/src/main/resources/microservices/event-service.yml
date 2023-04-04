@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: event-service
+  datasource:
+    url: jdbc:postgresql://localhost:10000/event-managment
+    username: admin
+    password: 12345
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  cache:
+    type: redis
+
+server:
+  port: 9001

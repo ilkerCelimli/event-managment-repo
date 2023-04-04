@@ -1,0 +1,10 @@
+spring:
+  config:
+    import: optional:configserver:http://localhost:8888
+  profiles:
+    active: development
+  application:
+    name: event-service
+  cloud:
+    config:
+      name: event-service
