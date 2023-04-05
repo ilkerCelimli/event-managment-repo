@@ -1,0 +1,16 @@
+
+spring:
+  application:
+    name: user-service
+  cloud:
+    config:
+      name: user-service
+  config:
+    import: optional:configserver:http://localhost:8888
+
+email:
+  host: smtp.office365.com
+  port: 587
+  cripto : STARTTLS
+  username: ilkerCelimli@outlook.com
+  password: 6572'ilker'
