@@ -9,8 +9,16 @@ spring:
     import: optional:configserver:http://localhost:8888
 
 email:
-  host: smtp.office365.com
-  port: 587
-  cripto : STARTTLS
-  username: ilkerCelimli@outlook.com
-  password: 6572'ilker'
+    host: smtp.gmail.com
+    username: Meloonia52@gmail.com
+    password: ckxkwsewgvfmszpo #knxlunkzdwsfatxj
+    port: 587
+    properties:
+      mail:
+        stmp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            required: true
+            enabled: true

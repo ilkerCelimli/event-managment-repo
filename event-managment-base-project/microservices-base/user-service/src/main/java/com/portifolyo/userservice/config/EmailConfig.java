@@ -15,16 +15,15 @@ public class EmailConfig {
     private final String password;
     private final String host;
     private final Integer port;
-    private final String cripto;
 
-    public EmailConfig(@Value("${email.host}") String host , @Value("${email.cripto}") String cripto,
+    public EmailConfig(@Value("${email.host}") String host,
                        @Value("${email.password}") String password, @Value("${email.username}")String username,
                        @Value("${email.port}") Integer port) {
         this.host = host;
         this.port = port;
         this.userName = username;
         this.password = password;
-        this.cripto = cripto;
+
     }
 
     @Bean
