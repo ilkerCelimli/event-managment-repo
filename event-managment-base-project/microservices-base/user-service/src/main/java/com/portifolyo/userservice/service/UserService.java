@@ -27,17 +27,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+
     @Transactional
     public User saveUser(UserRegisterRequest userRegisterRequest) throws MessagingException {
-      //  if (!findEmailIsExists(userRegisterRequest.email())) {
+        if (!findEmailIsExists(userRegisterRequest.email())) {
             User u = userRegisterRequestConverter.toEntity(userRegisterRequest);
             this.userRepository.save(u);
             log.info("saved user date {},id {}", new Date(), u.getId());
             emailService.sendMail(u);
             return u;
-        //}
-        //throw new EmailIsExistsException();
+        }
+        throw new EmailIsExistsException();
     }
+
     @Transactional
     public void activiteUser(String activitionCode) {
         Optional<User> u = this.userRepository.findUserByActivitionCode(activitionCode);
@@ -46,8 +48,10 @@ public class UserService {
             this.userRepository.save(i);
         });
     }
+
     @Transactional
     public void updateUser(UserRegisterRequest userRegisterRequest) {
+
         Optional<User> opt = this.userRepository.findUserByEmail(userRegisterRequest.email());
         opt.ifPresentOrElse((i -> {
             if (userRegisterRequest.birtday() != null) i.setBirtday(userRegisterRequest.birtday());
@@ -67,10 +71,16 @@ public class UserService {
         return this.userRepository.findAllByIsActiveTrue();
     }
 
+    public UserInfo findUserByEmail(String email) {
+        Optional<UserInfo> user = this.userRepository.findUserByEmailAndIsActiveTrue(email);
+        return user.isPresent() ? user.get(): null;
+    }
+
 
     private boolean findEmailIsExists(String email) {
-        return this.userRepository.findByEmailIsExists(email);
+        return this.userRepository.existsUserByEmail(email);
     }
+
     @Transactional
     public void deleteUser(String email) {
         Optional<User> user = this.userRepository.findUserByEmail(email);

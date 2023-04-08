@@ -8,8 +8,12 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.userservice.UserInfo;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
+import org.portifolyo.response.GenericResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition;
 
 import java.util.List;
 
@@ -22,32 +26,38 @@ public class UserApi {
 
 
     @PostMapping("/")
-    public ResponseEntity<User> saveUser(@RequestBody UserRegisterRequest userRegisterRequest) throws MessagingException {
+    public ResponseEntity<GenericResponse<Void>> saveUser(@RequestBody UserRegisterRequest userRegisterRequest) throws MessagingException {
         User u = this.userService.saveUser(userRegisterRequest);
-        return ResponseEntity.ok(u);
+        return ResponseEntity.ok(new GenericResponse<>(200,"created User"));
     }
 
     @GetMapping("/activeuser")
-    public ResponseEntity<Void> activeUser(@RequestParam String code) {
+    public ResponseEntity<GenericResponse<Void>> activeUser(@RequestParam String code) {
         this.userService.activiteUser(code);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new GenericResponse<>(200,"User Activited"));
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<UserInfo>> findUsers() {
-        return ResponseEntity.ok(this.userService.findAllUser());
+    public ResponseEntity<GenericResponse<List<UserInfo>>> findUsers() {
+        return ResponseEntity.ok(new GenericResponse<>(200,null,this.userService.findAllUser()));
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> updateUsers(@JsonInclude(JsonInclude.Include.NON_NULL) @RequestBody UserRegisterRequest request) {
+    public ResponseEntity<GenericResponse<Void>> updateUsers(@JsonInclude(JsonInclude.Include.NON_NULL) @RequestBody UserRegisterRequest request) {
         this.userService.updateUser(request);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new GenericResponse<>(200,"User Updated"));
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<Void> deleteUser(@RequestParam String email) {
+    public ResponseEntity<GenericResponse<Void>> deleteUser(@RequestParam String email) {
          this.userService.deleteUser(email);
-         return ResponseEntity.ok().build();
+         return ResponseEntity.ok(new GenericResponse<>(200,"user inactived"));
+    }
+    @GetMapping(value = "/finduser")
+    public ResponseEntity<GenericResponse<UserInfo>>findUserByEmail(@RequestParam String email){
+        UserInfo u = this.userService.findUserByEmail(email);
+       return u != null ? ResponseEntity.ok(new GenericResponse<>(200,"Email is Found",u)) :
+               ResponseEntity.ok().build();
     }
 
 

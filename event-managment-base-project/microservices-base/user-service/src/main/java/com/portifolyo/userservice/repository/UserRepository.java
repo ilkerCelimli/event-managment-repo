@@ -13,8 +13,12 @@ public interface UserRepository extends MongoRepository<User,String> {
     Optional<User> findUserByActivitionCode(String user);
     Optional<UserInfo> findUserById(String id);
     Optional<User> findUserByEmail(String email);
-    @Query("email {$exists: true}")
-    Boolean findByEmailIsExists(String email);
+
+    Boolean existsUserByEmail(String email);
+
+   // S findByEmailExists(String email);
     List<UserInfo> findAllByIsActiveTrue();
+
+    Optional<UserInfo> findUserByEmailAndIsActiveTrue(String email);
 
 }

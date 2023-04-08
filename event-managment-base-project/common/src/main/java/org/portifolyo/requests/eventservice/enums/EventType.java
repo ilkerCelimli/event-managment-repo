@@ -1,4 +1,4 @@
-package com.portifolyo.eventservice.enums;
+package org.portifolyo.requests.eventservice.enums;
 
 public enum EventType {
 
