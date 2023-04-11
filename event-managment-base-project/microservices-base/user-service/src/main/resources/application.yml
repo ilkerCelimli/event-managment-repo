@@ -1,0 +1,24 @@
+
+spring:
+  application:
+    name: user-service
+  cloud:
+    config:
+      name: user-service
+  config:
+    import: optional:configserver:http://localhost:8888
+
+email:
+    host: smtp.gmail.com
+    username: Meloonia52@gmail.com
+    password: ckxkwsewgvfmszpo #knxlunkzdwsfatxj
+    port: 587
+    properties:
+      mail:
+        stmp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            required: true
+            enabled: true
