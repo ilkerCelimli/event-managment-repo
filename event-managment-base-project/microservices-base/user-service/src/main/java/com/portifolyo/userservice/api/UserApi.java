@@ -9,11 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.userservice.UserInfo;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
 import org.portifolyo.response.GenericResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.condition.ProducesRequestCondition;
 
 import java.util.List;
 
@@ -22,13 +19,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserApi {
     private final UserService userService;
-    private final EmailService emailService;
 
 
     @PostMapping("/")
-    public ResponseEntity<GenericResponse<Void>> saveUser(@RequestBody UserRegisterRequest userRegisterRequest) throws MessagingException {
+    public ResponseEntity<GenericResponse<User>> saveUser(@RequestBody UserRegisterRequest userRegisterRequest) throws MessagingException {
         User u = this.userService.saveUser(userRegisterRequest);
-        return ResponseEntity.ok(new GenericResponse<>(200,"created User"));
+        return ResponseEntity.ok(new GenericResponse<>(200,"created User",u));
     }
 
     @GetMapping("/activeuser")
@@ -56,7 +52,7 @@ public class UserApi {
     @GetMapping(value = "/finduser")
     public ResponseEntity<GenericResponse<UserInfo>>findUserByEmail(@RequestParam String email){
         UserInfo u = this.userService.findUserByEmail(email);
-       return u != null ? ResponseEntity.ok(new GenericResponse<>(200,"Email is Found",u)) :
+       return u != null ? ResponseEntity.ok(new GenericResponse<>(200,null,u)) :
                ResponseEntity.ok().build();
     }
 

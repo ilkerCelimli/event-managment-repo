@@ -4,16 +4,23 @@ import com.portifolyo.userservice.entity.User;
 import com.portifolyo.userservice.exception.apiexceptions.EmailIsExistsException;
 import com.portifolyo.userservice.exception.apiexceptions.EmailIsNotFoundException;
 import com.portifolyo.userservice.repository.UserRepository;
+import com.portifolyo.userservice.util.RandomStringGenerator;
 import com.portifolyo.userservice.util.converter.UserRegisterRequestConverter;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang.SerializationUtils;
+import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.requests.userservice.UserInfo;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -75,6 +82,16 @@ public class UserService {
         Optional<UserInfo> user = this.userRepository.findUserByEmailAndIsActiveTrue(email);
         return user.isPresent() ? user.get(): null;
     }
+    @Transactional
+    public void handleOrganizator(OrganizatorRequest organizatorRequest) throws MessagingException {
+        UserInfo userInfo = findUserByEmail(organizatorRequest.email());
+        if(userInfo == null) {
+            User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
+                    RandomStringGenerator.randomStringGenerator(),new Date("1900-01-01"),true);
+            this.userRepository.save(u);
+            emailService.sendMail(u);
+        }
+    }
 
 
     private boolean findEmailIsExists(String email) {
@@ -90,4 +107,13 @@ public class UserService {
         }, EmailIsNotFoundException::new);
 
     }
-}
+    @RabbitListener(queues = "user-queue")
+    public void handleMessage(byte[] message) {
+        try (ByteArrayInputStream bis = new ByteArrayInputStream(message);
+             ObjectInputStream ois = new ObjectInputStream(bis)) {
+            OrganizatorRequest deserializedUser = (OrganizatorRequest) ois.readObject();
+            handleOrganizator(deserializedUser);
+        } catch (IOException | ClassNotFoundException | MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }}
