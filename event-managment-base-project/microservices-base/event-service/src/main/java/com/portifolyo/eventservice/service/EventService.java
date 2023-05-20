@@ -6,5 +6,5 @@ import org.portifolyo.requests.eventservice.EventSaveRequest;
 public interface EventService {
 
     void saveEventRequestHandle(EventSaveRequest event);
-
+    void updateEventRequestHandle(EventSaveRequest event,String eventId);
 }

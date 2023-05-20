@@ -4,6 +4,7 @@ import com.portifolyo.userservice.entity.User;
 import com.portifolyo.userservice.exception.apiexceptions.EmailIsExistsException;
 import com.portifolyo.userservice.exception.apiexceptions.EmailIsNotFoundException;
 import com.portifolyo.userservice.repository.UserRepository;
+import com.portifolyo.userservice.util.RandomStringGenerator;
 import com.portifolyo.userservice.util.converter.UserRegisterRequestConverter;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
@@ -81,6 +82,16 @@ public class UserService {
         Optional<UserInfo> user = this.userRepository.findUserByEmailAndIsActiveTrue(email);
         return user.isPresent() ? user.get(): null;
     }
+    @Transactional
+    public void handleOrganizator(OrganizatorRequest organizatorRequest) throws MessagingException {
+        UserInfo userInfo = findUserByEmail(organizatorRequest.email());
+        if(userInfo == null) {
+            User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
+                    RandomStringGenerator.randomStringGenerator(),new Date("1900-01-01"),true);
+            this.userRepository.save(u);
+            emailService.sendMail(u);
+        }
+    }
 
 
     private boolean findEmailIsExists(String email) {
@@ -101,8 +112,8 @@ public class UserService {
         try (ByteArrayInputStream bis = new ByteArrayInputStream(message);
              ObjectInputStream ois = new ObjectInputStream(bis)) {
             OrganizatorRequest deserializedUser = (OrganizatorRequest) ois.readObject();
-            System.out.println(deserializedUser);
-        } catch (IOException | ClassNotFoundException e) {
+            handleOrganizator(deserializedUser);
+        } catch (IOException | ClassNotFoundException | MessagingException e) {
             throw new RuntimeException(e);
         }
     }}

@@ -23,6 +23,12 @@ public class BaseServiceImpl<T extends BaseEntity> {
         return saved;
     }
 
+    protected T update(T entity) {
+        T updated = this.baseRepository.save(entity);
+        log.info("updated id {}",updated.getId());
+        return updated;
+    }
+
     protected T findById(String id) {
         Optional<T> entity = this.baseRepository.findById(id);
         entity.orElseThrow(() -> new NotFoundException(id));

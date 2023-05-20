@@ -1,5 +1,6 @@
 package com.portifolyo.eventservice.api;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.portifolyo.eventservice.feign.UserServiceFeignClient;
 import com.portifolyo.eventservice.service.EventService;
 import jakarta.validation.Valid;
@@ -20,6 +21,14 @@ public class EventApi {
     @PostMapping("/")
     public ResponseEntity<GenericResponse<Void>> saveEvent(@Valid @RequestBody EventSaveRequest request) {
         this.eventService.saveEventRequestHandle(request);
+        return ResponseEntity.ok(new GenericResponse<>(200,"Success"));
+    }
+
+    @PutMapping("/")
+    public ResponseEntity<GenericResponse<Void>> updateEvent(@JsonInclude(JsonInclude.Include.NON_NULL)
+                                                                 @RequestBody
+                                                                 EventSaveRequest request,@RequestParam String id){
+        this.eventService.updateEventRequestHandle(request,id);
         return ResponseEntity.ok(new GenericResponse<>(200,"Success"));
     }
 
