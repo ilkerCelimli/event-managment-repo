@@ -1,9 +1,9 @@
 package com.portifolyo.eventservice.exceptions;
 
-public class GeneralException extends RuntimeException{
+public class GenericException extends RuntimeException{
 
     private final int statusCode;
-    public GeneralException(String message,int statusCode) {
+    public GenericException(String message, int statusCode) {
         super(message);
         this.statusCode = statusCode;
     }

@@ -19,4 +19,6 @@ public class EventAndOrganizatorManyToMany extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "organizator_id")
     private Organizator organizator;
+
+
 }

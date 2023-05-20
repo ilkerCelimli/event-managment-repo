@@ -35,7 +35,7 @@ public class BaseServiceImpl<T extends BaseEntity> {
 
     protected void delete(String id) {
         T entity = findById(id);
-        entity.setIsDeleted(true);
+     //   entity.setIsDeleted(true);
         this.baseRepository.save(entity);
     }
 
