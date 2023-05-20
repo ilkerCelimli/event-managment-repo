@@ -25,8 +25,18 @@ public class EventArea extends BaseEntity {
 
     @Column(name = "area_lng",nullable = false)
     private String areaLng;
+    @Column(name ="area_capacity",nullable = false)
+    private Integer areaCapacity;
 
     @Column(name = "open_adress",nullable = false)
     private String openAdress;
 
+    public EventArea(String areaName, String areaLat, String areaLng, Integer areaCapacity, String openAdress) {
+        this.areaName = areaName;
+        this.areaLat = areaLat;
+        this.areaLng = areaLng;
+        this.areaCapacity = areaCapacity;
+        this.openAdress = openAdress;
+    }
+    public EventArea() {}
 }

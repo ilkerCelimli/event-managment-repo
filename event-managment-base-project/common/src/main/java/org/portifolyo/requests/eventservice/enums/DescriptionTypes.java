@@ -1,6 +1,6 @@
 package org.portifolyo.requests.eventservice.enums;
 
-public enum DescriptionTypes {
+public enum     DescriptionTypes {
 
         LINK("Link"),
         IMAGE("Image");

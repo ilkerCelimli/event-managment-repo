@@ -13,8 +13,7 @@ import java.util.Date;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
-@ToString(of = "id")
-@EqualsAndHashCode(callSuper = true,of = {"id"})
+
 public class Event extends BaseEntity {
 
     @Column
@@ -34,7 +33,18 @@ public class Event extends BaseEntity {
     @Column(name = "max_people",nullable = false)
     private int maxPeople;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private EventDescription eventDescription;
 
+    public Event(String name, Date eventDate, Integer comingPeople, Boolean isTicket, Boolean isPeopleRegistered, EventType eventType, int maxPeople, EventDescription eventDescription) {
+        this.name = name;
+        this.eventDate = eventDate;
+        this.comingPeople = comingPeople;
+        this.isTicket = isTicket;
+        this.isPeopleRegistered = isPeopleRegistered;
+        this.eventType = eventType;
+        this.maxPeople = maxPeople;
+        this.eventDescription = eventDescription;
+    }
+    public Event() {}
 }
