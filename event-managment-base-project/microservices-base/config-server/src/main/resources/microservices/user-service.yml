@@ -1,14 +1,16 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://admin:12345@localhost:27017/?authSource=admin&authMechanism=SCRAM-SHA-1
+      uri: mongodb+srv://Meloonia:2bfb85101@user-service.vj9bcnu.mongodb.net/?retryWrites=true&w=majority
+      #?authSource=admin&authMechanism=SCRAM-SHA-1
+      #uri: mongodb+srv://Meloonia:6572'ilker'@user-service.vj9bcnu.mongodb.net/?retryWrites=true&w=majority
       database: users
 
-      # username: admin
-      #password: 12345
+      #username: admin
+      #password: pass
       #database: users
       #port: 27017
       #host: localhost
-      #authentication-database: admin
+      authentication-database: admin
 server:
   port: 9011

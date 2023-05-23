@@ -22,8 +22,6 @@ public class EventDescriptionMapper {
          //   links.setIsDeleted(false);
             images.add(links);
         });
-        e.setImageAndLinksSet(images);
-
         return e;
     }
 }

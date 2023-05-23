@@ -109,11 +109,13 @@ public class UserService {
     }
     @RabbitListener(queues = "user-queue")
     public void handleMessage(byte[] message) {
-        try (ByteArrayInputStream bis = new ByteArrayInputStream(message);
+        OrganizatorRequest organizatorRequest = (OrganizatorRequest) SerializationUtils.deserialize(message);
+ /*       try (ByteArrayInputStream bis = new ByteArrayInputStream(message);
              ObjectInputStream ois = new ObjectInputStream(bis)) {
             OrganizatorRequest deserializedUser = (OrganizatorRequest) ois.readObject();
             handleOrganizator(deserializedUser);
         } catch (IOException | ClassNotFoundException | MessagingException e) {
             throw new RuntimeException(e);
-        }
+        }*/
+        System.out.println(organizatorRequest);
     }}

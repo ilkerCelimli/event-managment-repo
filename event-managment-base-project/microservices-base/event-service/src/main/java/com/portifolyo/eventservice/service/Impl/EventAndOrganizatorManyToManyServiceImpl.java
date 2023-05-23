@@ -2,11 +2,12 @@ package com.portifolyo.eventservice.service.Impl;
 
 import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.EventAndOrganizatorManyToMany;
+import com.portifolyo.eventservice.entity.Organizator;
+import com.portifolyo.eventservice.exceptions.NotFoundException;
 import com.portifolyo.eventservice.repository.EventAndOrganizatorManyToManyRepository;
 import com.portifolyo.eventservice.service.BaseServiceImpl;
 import com.portifolyo.eventservice.service.EventAndOrganizatorManyToManyService;
 import com.portifolyo.eventservice.service.OrganizatorService;
-import com.portifolyo.eventservice.util.mapper.OrganizatorRequestMapper;
 import org.apache.commons.lang.SerializationUtils;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -32,10 +33,19 @@ public class EventAndOrganizatorManyToManyServiceImpl extends BaseServiceImpl<Ev
     public void saveOrganizator(List<OrganizatorRequest> o, Event e) {
 
         o.forEach(i -> {
-            EventAndOrganizatorManyToMany f =
-                    this.eventAndOrganizatorManyToManyRepository.
-                            save(new EventAndOrganizatorManyToMany(e,organizatorService.handleOrganizator(i)));
+                        Organizator or  = this.organizatorService.findOrganizatorByEmailEntity(i.email());
+                        if(or != null) {
+                            this.eventAndOrganizatorManyToManyRepository.save(new EventAndOrganizatorManyToMany(e,or));
+                            return;
+
+            }
+                      this.eventAndOrganizatorManyToManyRepository.
+                    save(new EventAndOrganizatorManyToMany(e,organizatorService.handleOrganizator(i)));
+
             rabbitTemplate.convertAndSend("user-exchange","user-routing", SerializationUtils.serialize(i));
+
         });
     }
+
+
 }
