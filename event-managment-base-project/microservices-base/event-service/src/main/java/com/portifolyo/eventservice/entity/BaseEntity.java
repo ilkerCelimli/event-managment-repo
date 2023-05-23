@@ -16,12 +16,12 @@ public abstract class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-/*    @CreatedDate
+ /*   @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date",nullable = false)
+    @Column(name = "created_date",nullable = false)*/
     private Date createdDate;
     @Column(name = "is_deleted")
-    private Boolean isDeleted = false;*/
+    private Boolean isDeleted = false;
 
 
 

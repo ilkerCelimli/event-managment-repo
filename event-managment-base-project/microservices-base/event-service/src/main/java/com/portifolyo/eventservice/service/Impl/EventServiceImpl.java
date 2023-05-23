@@ -5,29 +5,34 @@ import com.portifolyo.eventservice.entity.EventAndOrganizatorManyToMany;
 import com.portifolyo.eventservice.exceptions.GenericException;
 import com.portifolyo.eventservice.repository.EventAndOrganizatorManyToManyRepository;
 import com.portifolyo.eventservice.repository.EventRepository;
+import com.portifolyo.eventservice.repository.ImageAndLinksRepository;
+import com.portifolyo.eventservice.repository.projections.EventAreaInfo;
+import com.portifolyo.eventservice.repository.projections.EventInfo;
+import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
 import com.portifolyo.eventservice.service.*;
+import com.portifolyo.eventservice.util.mapper.EventInfomapper;
 import jakarta.transaction.Transactional;
-import org.apache.logging.log4j.util.Strings;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
-import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.temporal.TemporalField;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
-public class EventServiceImpl extends BaseServiceImpl<Event> implements com.portifolyo.eventservice.service.EventService {
+public class EventServiceImpl extends BaseServiceImpl<Event> implements EventService {
     private final EventRepository eventRepository;
     private final EventAreaService eventAreaService;
     private final OrganizatorService organizatorService;
     private final EventAndOrganizatorManyToManyRepository eventAndOrganizatorManyToManyRepository;
     private final EventDescriptionService eventDescriptionService;
     private final EventAndOrganizatorManyToManyService eventAndOrganizatorManyToManyService;
+    private final ImageAndLinksRepository imageAndLinksRepository;
 
 
 
-    public EventServiceImpl(EventRepository eventRepository, EventAreaService eventAreaService, OrganizatorService organizatorService, EventAndOrganizatorManyToManyRepository eventAndOrganizatorManyToManyRepository, EventDescriptionService eventDescriptionService, EventAndOrganizatorManyToManyService eventAndOrganizatorManyToManyService) {
+    public EventServiceImpl(EventRepository eventRepository, EventAreaService eventAreaService, OrganizatorService organizatorService, EventAndOrganizatorManyToManyRepository eventAndOrganizatorManyToManyRepository, EventDescriptionService eventDescriptionService, EventAndOrganizatorManyToManyService eventAndOrganizatorManyToManyService, ImageAndLinksRepository imageAndLinksRepository) {
         super(eventRepository);
         this.eventRepository = eventRepository;
         this.eventAreaService = eventAreaService;
@@ -35,6 +40,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements com.port
         this.eventAndOrganizatorManyToManyRepository = eventAndOrganizatorManyToManyRepository;
         this.eventDescriptionService = eventDescriptionService;
         this.eventAndOrganizatorManyToManyService = eventAndOrganizatorManyToManyService;
+        this.imageAndLinksRepository = imageAndLinksRepository;
     }
 
     @Override
@@ -43,6 +49,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements com.port
         if(event.maxPeople() > event.eventAreaRequest().areaCapacity()) throw new GenericException("area capacity is not small max people",404);
         if(event.comingPeople() > event.eventAreaRequest().areaCapacity()) throw new GenericException("area capacity is not small coming people",404);
         if(event.eventDate().before(Date.from(Instant.now()))) throw new GenericException("event date is not now",404);
+
        Event e =  save(new Event(event.eventName(),event.eventDate(),event.comingPeople(),event.isTicket(),
                 event.isPeopleIsRegistered(),event.eventType(),event.maxPeople(), eventDescriptionService.eventDescriptionHandler(event.description())));
         eventAndOrganizatorManyToManyService.saveOrganizator(event.organizatorLists(),e);
@@ -68,5 +75,30 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements com.port
            if(event.description().description() != null) e.getEventDescription().setDescrtiption(event.description().description());
        }
        update(e);
+    }
+
+    @Override
+    @Transactional
+    public void eventInActiveHandle(String eventId) {
+        eventRepository.updateIsDeletedById(true,eventId);
+    }
+
+    @Override
+    public List<EventInfo> findEventsByOrganizatorMail(String email) {
+        List<EventInfo> list = new ArrayList<>();
+        List<EventAndOrganizatorManyToMany> m = this.eventAndOrganizatorManyToManyRepository.findByOrganizator_Email(email);
+        m.forEach(i -> {
+            EventInfo eventInfo = EventInfomapper.toEntity(i.getEvent());
+            EventAreaInfo info = this.eventAreaService.findEventArea(eventInfo.getId());
+            eventInfo.setEventAreaInfo(info);
+            List<OrganizatorInfo> organizatorInfos = new ArrayList<>();
+            organizatorInfos.add(this.organizatorService.findOrganizatorByEmail(email));
+            eventInfo.setOrganizatorInfos(organizatorInfos);
+            eventInfo.getEventDescription().setImageAndLinksList(this.imageAndLinksRepository.findByEventDescription_Id(eventInfo.getEventDescription().getId()));
+            list.add(eventInfo);
+        });
+
+
+        return list;
     }
 }
