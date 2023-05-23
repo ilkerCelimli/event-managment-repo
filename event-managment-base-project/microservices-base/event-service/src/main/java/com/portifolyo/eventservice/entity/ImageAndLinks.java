@@ -1,12 +1,9 @@
 package com.portifolyo.eventservice.entity;
 
+import lombok.*;
 import org.portifolyo.requests.eventservice.enums.DescriptionTypes;
 import org.portifolyo.requests.eventservice.enums.EventType;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -14,6 +11,8 @@ import lombok.ToString;
 @Setter
 @ToString(of = "id")
 @EqualsAndHashCode(callSuper = true,of = {"id"})
+@AllArgsConstructor
+@NoArgsConstructor
 public class ImageAndLinks extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -8,6 +8,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -35,6 +37,7 @@ public class Event extends BaseEntity {
 
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private EventDescription eventDescription;
+
 
     public Event(String name, Date eventDate, Integer comingPeople, Boolean isTicket, Boolean isPeopleRegistered, EventType eventType, int maxPeople, EventDescription eventDescription) {
         this.name = name;
