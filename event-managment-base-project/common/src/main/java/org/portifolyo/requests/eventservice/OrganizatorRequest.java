@@ -22,5 +22,5 @@ public record OrganizatorRequest (
         @NotBlank(message = EMAIL_IS_NOT_BLANK)
         String email,
         String tcNo
-) implements Serializable {
+) implements Serializable  {
 }

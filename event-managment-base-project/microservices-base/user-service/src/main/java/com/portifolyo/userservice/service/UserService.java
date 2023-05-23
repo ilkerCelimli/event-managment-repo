@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -80,14 +81,14 @@ public class UserService {
 
     public UserInfo findUserByEmail(String email) {
         Optional<UserInfo> user = this.userRepository.findUserByEmailAndIsActiveTrue(email);
-        return user.isPresent() ? user.get(): null;
+        return user.orElse(null);
     }
     @Transactional
     public void handleOrganizator(OrganizatorRequest organizatorRequest) throws MessagingException {
         UserInfo userInfo = findUserByEmail(organizatorRequest.email());
         if(userInfo == null) {
             User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
-                    RandomStringGenerator.randomStringGenerator(),new Date("1900-01-01"),true);
+                    RandomStringGenerator.randomStringGenerator(),new Date(0L),true);
             this.userRepository.save(u);
             emailService.sendMail(u);
         }
@@ -109,13 +110,13 @@ public class UserService {
     }
     @RabbitListener(queues = "user-queue")
     public void handleMessage(byte[] message) {
-        OrganizatorRequest organizatorRequest = (OrganizatorRequest) SerializationUtils.deserialize(message);
- /*       try (ByteArrayInputStream bis = new ByteArrayInputStream(message);
-             ObjectInputStream ois = new ObjectInputStream(bis)) {
+
+       try (ByteArrayInputStream bis = new ByteArrayInputStream(message);
+            ObjectInputStream ois = new ObjectInputStream(bis)) {
             OrganizatorRequest deserializedUser = (OrganizatorRequest) ois.readObject();
+           System.out.println(deserializedUser);
             handleOrganizator(deserializedUser);
-        } catch (IOException | ClassNotFoundException | MessagingException e) {
-            throw new RuntimeException(e);
-        }*/
-        System.out.println(organizatorRequest);
+        } catch (IOException | ClassNotFoundException | RuntimeException | MessagingException e) {
+           System.out.println(e.getMessage());
+       }
     }}

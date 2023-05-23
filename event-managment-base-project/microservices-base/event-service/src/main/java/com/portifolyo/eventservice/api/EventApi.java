@@ -36,7 +36,7 @@ public class EventApi {
     @DeleteMapping("/")
     public ResponseEntity<GenericResponse<Void>> inActiveEvent(@RequestParam String id){
         this.eventService.eventInActiveHandle(id);
-        return ResponseEntity.ok(new GenericResponse<Void>(200,"deleted"));
+        return ResponseEntity.ok(new GenericResponse<>(200,"deleted"));
     }
 
 
@@ -46,6 +46,7 @@ public class EventApi {
         return ResponseEntity.ok(new GenericResponse<>(200,"Success",eventInfo));
 
     }
+
 
     
 
