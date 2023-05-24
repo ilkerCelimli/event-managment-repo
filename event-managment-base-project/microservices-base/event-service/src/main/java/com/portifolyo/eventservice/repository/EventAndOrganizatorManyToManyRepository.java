@@ -15,4 +15,5 @@ public interface EventAndOrganizatorManyToManyRepository extends BaseRepository<
 
 
 
+
 }

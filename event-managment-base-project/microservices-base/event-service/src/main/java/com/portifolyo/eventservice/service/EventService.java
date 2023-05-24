@@ -2,6 +2,7 @@ package com.portifolyo.eventservice.service;
 
 import com.portifolyo.eventservice.repository.projections.EventInfo;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
+import org.portifolyo.requests.eventservice.OrganizatorRequest;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ public interface EventService {
     void eventInActiveHandle(String eventId);
 
     List<EventInfo> findEventsByOrganizatorMail(String email);
+
+    void addOrganizatorByEvent(String eventId, OrganizatorRequest organizatorRequest);
 }

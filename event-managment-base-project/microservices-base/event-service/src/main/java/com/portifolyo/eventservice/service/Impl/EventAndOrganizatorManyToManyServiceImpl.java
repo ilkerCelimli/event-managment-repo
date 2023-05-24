@@ -48,4 +48,5 @@ public class EventAndOrganizatorManyToManyServiceImpl extends BaseServiceImpl<Ev
     }
 
 
+
 }

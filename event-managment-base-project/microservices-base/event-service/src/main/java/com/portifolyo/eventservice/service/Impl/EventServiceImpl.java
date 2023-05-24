@@ -3,6 +3,7 @@ package com.portifolyo.eventservice.service.Impl;
 import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.EventAndOrganizatorManyToMany;
 import com.portifolyo.eventservice.exceptions.GenericException;
+import com.portifolyo.eventservice.exceptions.NotFoundException;
 import com.portifolyo.eventservice.repository.EventAndOrganizatorManyToManyRepository;
 import com.portifolyo.eventservice.repository.EventRepository;
 import com.portifolyo.eventservice.repository.ImageAndLinksRepository;
@@ -11,14 +12,17 @@ import com.portifolyo.eventservice.repository.projections.EventInfo;
 import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
 import com.portifolyo.eventservice.service.*;
 import com.portifolyo.eventservice.util.mapper.EventInfomapper;
+import feign.FeignException;
 import jakarta.transaction.Transactional;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
+import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EventServiceImpl extends BaseServiceImpl<Event> implements EventService {
@@ -100,5 +104,12 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
 
 
         return list;
+    }
+
+    @Override
+    public void addOrganizatorByEvent(String eventId, OrganizatorRequest organizatorRequest) {
+        Optional<Event> event = this.eventRepository.findById(eventId);
+        event.orElseThrow(() -> new NotFoundException(eventId));
+        this.eventAndOrganizatorManyToManyService.saveOrganizator(List.of(organizatorRequest),event.get());
     }
 }
