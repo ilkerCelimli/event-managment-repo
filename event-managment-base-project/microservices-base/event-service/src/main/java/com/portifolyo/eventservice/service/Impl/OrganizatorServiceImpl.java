@@ -8,7 +8,9 @@ import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
 import com.portifolyo.eventservice.service.BaseServiceImpl;
 import com.portifolyo.eventservice.service.OrganizatorService;
 import com.portifolyo.eventservice.util.mapper.OrganizatorRequestMapper;
+import jakarta.transaction.Transactional;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -16,10 +18,12 @@ import java.util.Optional;
 @Service
 public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> implements OrganizatorService {
     private final OrganizatorRepository organizatorRepository;
+    private final RabbitTemplate rabbitTemplate;
     private final String emailRegexPattern = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-    public OrganizatorServiceImpl(OrganizatorRepository organizatorRepository) {
+    public OrganizatorServiceImpl(OrganizatorRepository organizatorRepository, RabbitTemplate rabbitTemplate) {
         super(organizatorRepository);
         this.organizatorRepository = organizatorRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -27,6 +31,8 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
         if(!organizatorRequest.email().matches(emailRegexPattern)) throw new GenericException("Email pattern not matched",404);
        return save(OrganizatorRequestMapper.toEntity(organizatorRequest));
     }
+
+
 
     @Override
     public OrganizatorInfo findOrganizatorByEmail(String email) {
@@ -42,7 +48,25 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
     }
 
     @Override
-    public Boolean isExistsOrganizator(String email) {
-        return this.organizatorRepository.existsByEmail(email);
+    @Transactional
+    public OrganizatorInfo updateOrganizator(OrganizatorRequest or, String id) {
+        Optional<Organizator> o = this.organizatorRepository.findById(id);
+        o.orElseThrow(() -> new NotFoundException(id));
+        if(or.email() != null) o.get().setEmail(or.email());
+        if(or.name() != null) o.get().setName(or.name());
+        if(or.surname() != null) o.get().setSurname(or.surname());
+        if(or.tcNo() != null) o.get().setTcNo(or.tcNo());
+        if(or.phoneNumber() != null) o.get().setPhoneNumber(or.phoneNumber());
+        save(o.get());
+        this.rabbitTemplate.convertAndSend("user-queue",or);
+        return this.findOrganizatorByEmail(or.email());
     }
+
+    @Override
+    public void deleteOrganizator(String id) {
+        organizatorRepository.updateIsDeletedById(true,id);
+
+    }
+
+
 }

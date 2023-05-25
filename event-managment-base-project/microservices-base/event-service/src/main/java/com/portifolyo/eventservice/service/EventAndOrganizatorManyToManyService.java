@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface EventAndOrganizatorManyToManyService {
 
-    void saveOrganizator(List<OrganizatorRequest> o, Event e);
-    //List<EventAndOrganizatorManyToManyInfo> findEventsByOrganiator(String email);
-}
+    void saveOrganizator(List<OrganizatorRequest> o, Event e);}
