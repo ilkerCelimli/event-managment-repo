@@ -7,7 +7,10 @@ import org.portifolyo.requests.eventservice.OrganizatorRequest;
 public interface OrganizatorService {
 
     Organizator handleOrganizator(OrganizatorRequest organizatorRequest);
+
     OrganizatorInfo findOrganizatorByEmail(String email);
     Organizator findOrganizatorByEmailEntity(String email);
-    Boolean isExistsOrganizator(String email);
+    OrganizatorInfo updateOrganizator(OrganizatorRequest or,String id);
+
+    void deleteOrganizator(String id);
 }

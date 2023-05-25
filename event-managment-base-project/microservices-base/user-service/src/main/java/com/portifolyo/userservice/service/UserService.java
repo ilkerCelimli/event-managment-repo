@@ -9,11 +9,11 @@ import com.portifolyo.userservice.util.converter.UserRegisterRequestConverter;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang.SerializationUtils;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.requests.userservice.UserInfo;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.utils.SerializationUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,13 +85,18 @@ public class UserService {
     }
     @Transactional
     public void handleOrganizator(OrganizatorRequest organizatorRequest) throws MessagingException {
-        UserInfo userInfo = findUserByEmail(organizatorRequest.email());
-        if(userInfo == null) {
+        Optional<User> user = this.userRepository.findUserByEmail(organizatorRequest.email());
+        if(user.isEmpty()) {
             User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
                     RandomStringGenerator.randomStringGenerator(),new Date(0L),true);
             this.userRepository.save(u);
             emailService.sendMail(u);
+            return;
         }
+        if(organizatorRequest.email() != null) user.get().setEmail(organizatorRequest.email());
+        if(organizatorRequest.name() != null) user.get().setName(organizatorRequest.name());
+        if(organizatorRequest.surname() != null) user.get().setSurname(organizatorRequest.surname());
+        this.userRepository.save(user.get());
     }
 
 
@@ -114,7 +119,6 @@ public class UserService {
        try (ByteArrayInputStream bis = new ByteArrayInputStream(message);
             ObjectInputStream ois = new ObjectInputStream(bis)) {
             OrganizatorRequest deserializedUser = (OrganizatorRequest) ois.readObject();
-           System.out.println(deserializedUser);
             handleOrganizator(deserializedUser);
         } catch (IOException | ClassNotFoundException | RuntimeException | MessagingException e) {
            System.out.println(e.getMessage());
