@@ -16,6 +16,7 @@ import feign.FeignException;
 import jakarta.transaction.Transactional;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -88,9 +89,10 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
-    public List<EventInfo> findEventsByOrganizatorMail(String email) {
+    public List<EventInfo> findEventsByOrganizatorMail(String email,Integer page,Integer size) {
         List<EventInfo> list = new ArrayList<>();
-        List<EventAndOrganizatorManyToMany> m = this.eventAndOrganizatorManyToManyRepository.findByOrganizator_Email(email);
+        List<EventAndOrganizatorManyToMany> m =
+                this.eventAndOrganizatorManyToManyRepository.findByOrganizator_Email(email, PageRequest.of(page,size));
         m.forEach(i -> {
             EventInfo eventInfo = EventInfomapper.toEntity(i.getEvent());
             EventAreaInfo info = this.eventAreaService.findEventArea(eventInfo.getId());
@@ -111,5 +113,10 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
         Optional<Event> event = this.eventRepository.findById(eventId);
         event.orElseThrow(() -> new NotFoundException(eventId));
         this.eventAndOrganizatorManyToManyService.saveOrganizator(List.of(organizatorRequest),event.get());
+    }
+
+    @Override
+    public Event findById(String id) {
+        return super.findById(id);
     }
 }
