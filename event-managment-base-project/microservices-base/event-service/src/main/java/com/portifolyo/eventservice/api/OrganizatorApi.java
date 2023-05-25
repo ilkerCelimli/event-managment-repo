@@ -5,6 +5,7 @@ import com.portifolyo.eventservice.repository.projections.EventInfo;
 import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
 import com.portifolyo.eventservice.service.EventService;
 import com.portifolyo.eventservice.service.OrganizatorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.response.GenericResponse;
@@ -22,7 +23,7 @@ public class OrganizatorApi {
     private final OrganizatorService organizatorService;
     @PostMapping("/addOrganizatorByEvent")
     public ResponseEntity<GenericResponse<List<EventInfo>>> findOrganizatorForEvents(
-            @RequestBody OrganizatorRequest o
+            @RequestBody @Valid OrganizatorRequest o
             ,@RequestParam String eventId){
         eventService.addOrganizatorByEvent(eventId,o);
         return ResponseEntity.ok(new GenericResponse<>(200,"success",null));

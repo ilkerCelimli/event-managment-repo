@@ -2,6 +2,7 @@ package com.portifolyo.eventservice.api;
 
 import com.portifolyo.eventservice.service.TicketService;
 import feign.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.eventservice.TicketRequest;
 import org.portifolyo.response.GenericResponse;
@@ -17,7 +18,7 @@ public class TicketApi {
 
 
     @PostMapping("/")
-    public ResponseEntity<GenericResponse<Void>> addTicket(@RequestBody TicketRequest ticketRequest){
+    public ResponseEntity<GenericResponse<Void>> addTicket(@RequestBody @Valid TicketRequest ticketRequest){
         this.ticketService.handleTicketRequest(ticketRequest);
         return ResponseEntity.ok(new GenericResponse<>(200,"Success"));
     }
