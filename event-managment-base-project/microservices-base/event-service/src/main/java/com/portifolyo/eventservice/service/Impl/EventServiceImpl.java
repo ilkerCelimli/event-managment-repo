@@ -16,9 +16,12 @@ import feign.FeignException;
 import jakarta.transaction.Transactional;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
+import org.portifolyo.util.UpdateHelper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,21 +68,29 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     public void updateEventRequestHandle(EventSaveRequest event,String eventId) {
        // TODO refactor this.
 
-        Event e =  findById(eventId);
-
-       if(event.isTicket() != e.getIsTicket()) e.setIsTicket(event.isTicket());
+        try {
+           UpdateHelper<EventSaveRequest,Event> updateHelper = new UpdateHelper<>();
+            Event e =  updateHelper.updateHelper(event,findById(eventId));
+            if(event.description() != null) {
+                e.getEventDescription().setDescrtiption(event.description().description());
+            }
+            update(e);
+        }
+        catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException ex){
+            System.out.println(ex);
+        }
+    /*   if(event.isTicket() != e.getIsTicket()) e.setIsTicket(event.isTicket());
        if(event.isPeopleIsRegistered() != e.getIsPeopleRegistered()) e.setIsPeopleRegistered(event.isPeopleIsRegistered());
        if(event.eventName() != null) e.setName(event.eventName());
-       if(!event.eventDate().before(Date.from(Instant.now())) && event.eventDate().getTime() != Instant.now().getEpochSecond()){
+       if(event.eventDate() != null &&!event.eventDate().before(Date.from(Instant.now())) && event.eventDate().getTime() != Instant.now().getEpochSecond()){
            e.setEventDate(event.eventDate());
        }
-       if(!event.eventType().equals(e.getEventType())) e.setEventType(event.eventType());
+       if(event.eventType() != null &&!event.eventType().equals(e.getEventType())) e.setEventType(event.eventType());
        if(event.maxPeople() != null) e.setMaxPeople(event.maxPeople());
        if(event.comingPeople() != null) e.setComingPeople(event.comingPeople());
        if(event.description() != null) {
            if(event.description().description() != null) e.getEventDescription().setDescrtiption(event.description().description());
-       }
-       update(e);
+       }*/
     }
 
     @Override

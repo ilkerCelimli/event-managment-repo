@@ -9,7 +9,7 @@ public class EventInfomapper {
    public static EventInfo toEntity(Event e){
         EventInfo event = new EventInfo();
         event.setId(e.getId());
-        event.setName(e.getName());
+        event.setName(e.getEventName());
         event.setEventDate(e.getEventDate());
         event.setEventType(e.getEventType());
         event.setMaxPeople(e.getMaxPeople());
