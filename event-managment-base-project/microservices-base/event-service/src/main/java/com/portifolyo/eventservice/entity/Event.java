@@ -18,8 +18,8 @@ import java.util.Set;
 
 public class Event extends BaseEntity {
 
-    @Column
-    private String name;
+    @Column(name = "name")
+    private String eventName;
     @Column(name = "event_date",nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date eventDate;
@@ -39,8 +39,8 @@ public class Event extends BaseEntity {
     private EventDescription eventDescription;
 
 
-    public Event(String name, Date eventDate, Integer comingPeople, Boolean isTicket, Boolean isPeopleRegistered, EventType eventType, int maxPeople, EventDescription eventDescription) {
-        this.name = name;
+    public Event(String eventName, Date eventDate, Integer comingPeople, Boolean isTicket, Boolean isPeopleRegistered, EventType eventType, int maxPeople, EventDescription eventDescription) {
+        this.eventName = eventName;
         this.eventDate = eventDate;
         this.comingPeople = comingPeople;
         this.isTicket = isTicket;
