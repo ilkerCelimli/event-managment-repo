@@ -1,8 +1,6 @@
-package org.portifolyo.util;
+package org.portifolyo.utils;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.hibernate.validator.internal.util.ReflectionHelper;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

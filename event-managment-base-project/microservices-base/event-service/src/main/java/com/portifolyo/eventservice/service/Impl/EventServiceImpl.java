@@ -2,6 +2,7 @@ package com.portifolyo.eventservice.service.Impl;
 
 import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.EventAndOrganizatorManyToMany;
+import com.portifolyo.eventservice.entity.ImageAndLinks;
 import com.portifolyo.eventservice.exceptions.GenericException;
 import com.portifolyo.eventservice.exceptions.NotFoundException;
 import com.portifolyo.eventservice.repository.EventAndOrganizatorManyToManyRepository;
@@ -12,14 +13,12 @@ import com.portifolyo.eventservice.repository.projections.EventInfo;
 import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
 import com.portifolyo.eventservice.service.*;
 import com.portifolyo.eventservice.util.mapper.EventInfomapper;
-import feign.FeignException;
 import jakarta.transaction.Transactional;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
-import org.portifolyo.util.UpdateHelper;
+import org.portifolyo.utils.UpdateHelper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
@@ -129,5 +128,10 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     @Override
     public Event findById(String id) {
         return super.findById(id);
+    }
+
+    @Override
+    public void addimages(String eventid, List<ImageAndLinks> imageAndLinks) {
+        this.eventDescriptionService.addImages(findById(eventid),imageAndLinks);
     }
 }

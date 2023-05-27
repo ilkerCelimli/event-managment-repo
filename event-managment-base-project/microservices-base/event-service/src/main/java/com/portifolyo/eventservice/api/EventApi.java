@@ -1,6 +1,7 @@
 package com.portifolyo.eventservice.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.portifolyo.eventservice.entity.ImageAndLinks;
 import com.portifolyo.eventservice.repository.projections.EventInfo;
 import com.portifolyo.eventservice.service.EventService;
 import jakarta.validation.Valid;
@@ -48,5 +49,10 @@ public class EventApi {
 
     }
 
+    @PostMapping("/addImagesByEvent")
+    public ResponseEntity<GenericResponse<Void>> addImagesByEvent(@RequestParam String id, @RequestBody List<ImageAndLinks> imageAndLinks){
+        this.eventService.addimages(id,imageAndLinks);
+        return ResponseEntity.ok(new GenericResponse<>(200,"success"));
+    }
 
 }
