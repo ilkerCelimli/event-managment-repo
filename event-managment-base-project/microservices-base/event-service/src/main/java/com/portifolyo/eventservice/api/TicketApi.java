@@ -1,5 +1,6 @@
 package com.portifolyo.eventservice.api;
 
+import com.portifolyo.eventservice.repository.projections.TicketInfo;
 import com.portifolyo.eventservice.service.TicketService;
 import feign.Response;
 import jakarta.validation.Valid;
@@ -8,6 +9,8 @@ import org.portifolyo.requests.eventservice.TicketRequest;
 import org.portifolyo.response.GenericResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/ticket")
 @RestController
@@ -35,5 +38,14 @@ public class TicketApi {
         return ResponseEntity.ok(new GenericResponse<>(200,"is deleted"));
     }
 
+    @GetMapping("/findTickets")
+    public ResponseEntity<GenericResponse<List<TicketInfo>>> findTickets(@RequestParam Integer size,@RequestParam Integer page,@RequestParam String eventId){
+        return  ResponseEntity.ok(
+                new GenericResponse<>(
+                        200,"sucesss",
+                        this.ticketService.findTickets(page,size,eventId)
+                )
+        );
+    }
 
 }

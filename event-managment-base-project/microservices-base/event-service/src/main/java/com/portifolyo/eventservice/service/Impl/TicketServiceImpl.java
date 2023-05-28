@@ -2,15 +2,18 @@ package com.portifolyo.eventservice.service.Impl;
 
 import com.portifolyo.eventservice.entity.ComingPeople;
 import com.portifolyo.eventservice.repository.ComingPeopleRepository;
+import com.portifolyo.eventservice.repository.projections.TicketInfo;
 import com.portifolyo.eventservice.service.BaseServiceImpl;
 import com.portifolyo.eventservice.service.EventService;
 import com.portifolyo.eventservice.service.TicketService;
 import com.portifolyo.eventservice.util.mapper.TicketRequestMapper;
 import org.portifolyo.requests.eventservice.TicketRequest;
 import org.portifolyo.utils.UpdateHelper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 @Service
 public class TicketServiceImpl extends BaseServiceImpl<ComingPeople> implements TicketService {
@@ -59,5 +62,10 @@ public class TicketServiceImpl extends BaseServiceImpl<ComingPeople> implements 
 
 
 
+    }
+
+    @Override
+    public List<TicketInfo> findTickets(Integer page, Integer size, String eventId) {
+        return this.comingPeopleRepository.findByEvent_IdOrderByCreatedDateDesc(eventId, PageRequest.of(page,size));
     }
 }
