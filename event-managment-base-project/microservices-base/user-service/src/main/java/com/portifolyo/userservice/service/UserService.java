@@ -1,9 +1,12 @@
 package com.portifolyo.userservice.service;
 
 import com.portifolyo.userservice.entity.User;
+import com.portifolyo.userservice.exception.apiexceptions.BannedUserException;
 import com.portifolyo.userservice.exception.apiexceptions.EmailIsExistsException;
 import com.portifolyo.userservice.exception.apiexceptions.EmailIsNotFoundException;
+import com.portifolyo.userservice.exception.apiexceptions.PasswordNotMatchesException;
 import com.portifolyo.userservice.repository.UserRepository;
+import com.portifolyo.userservice.util.JwtUtil;
 import com.portifolyo.userservice.util.RandomStringGenerator;
 import com.portifolyo.userservice.util.converter.UserRegisterRequestConverter;
 import jakarta.mail.MessagingException;
@@ -12,7 +15,9 @@ import lombok.extern.log4j.Log4j2;
 import org.aspectj.weaver.ast.Or;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.requests.userservice.UserInfo;
+import org.portifolyo.requests.userservice.UserLoginRequest;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
+import org.portifolyo.response.TokenResponse;
 import org.portifolyo.utils.DeserializeHelper;
 import org.portifolyo.utils.UpdateHelper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -39,6 +44,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final JwtUtil jwtUtil;
 
     @Transactional
     public User saveUser(UserRegisterRequest userRegisterRequest) throws MessagingException {
@@ -115,6 +121,21 @@ public class UserService {
         }, EmailIsNotFoundException::new);
 
     }
+
+    public TokenResponse tokenResponse(UserLoginRequest userLoginRequest){
+       User u = this.userRepository.findUserByEmail(userLoginRequest.email()).orElseThrow(EmailIsNotFoundException::new);
+       if(!u.getIsActive()) throw new BannedUserException(userLoginRequest.email());
+       if(!passwordEncoder.matches(userLoginRequest.password(),u.getPassword())) throw new PasswordNotMatchesException();
+       String token = jwtUtil.generate(userLoginRequest);
+       return new TokenResponse(token);
+    }
+
+    public TokenResponse tokenResponse(String token){
+        String email = this.jwtUtil.validate(token).getClaim("email").asString();
+        return new TokenResponse(jwtUtil.generate(email));
+    }
+
+
     @RabbitListener(queues = "user-queue")
     public void handleMessage(byte[] message) throws MessagingException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         OrganizatorRequest organizatorRequest = (OrganizatorRequest) DeserializeHelper.desarialize(message);

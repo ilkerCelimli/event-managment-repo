@@ -43,8 +43,8 @@ public class EventApi {
 
     @GetMapping("/findEventsByOrganizator")
     public ResponseEntity<GenericResponse<List<EventInfo>>> findEventsByOrganizator(
-            @RequestParam String organizatorId, @RequestParam Integer page, @RequestParam Integer size ){
-        List<EventInfo> eventInfo = this.eventService.findEventsByOrganizatorMail(organizatorId,page,size);
+            @RequestParam String id, @RequestParam Integer page, @RequestParam Integer size ){
+        List<EventInfo> eventInfo = this.eventService.findEventsByOrganizatorMail(id,page,size);
         return ResponseEntity.ok(GenericResponse.SUCCESS(eventInfo));
 
     }

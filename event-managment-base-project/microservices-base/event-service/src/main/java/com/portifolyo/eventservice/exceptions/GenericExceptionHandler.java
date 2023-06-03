@@ -15,7 +15,7 @@ public class GenericExceptionHandler {
 
     @ExceptionHandler(FeignException.UnprocessableEntity.class)
     public ResponseEntity<GenericResponse<Void>> NotFoundUserExceptionHandler(Exception ex) {
-        return ResponseEntity.badRequest().body(GenericResponse.BAD_REQUEST());
+        return ResponseEntity.badRequest().body(GenericResponse.BAD_REQUEST(ex.getMessage()));
     }
 
     @ExceptionHandler(GenericException.class)

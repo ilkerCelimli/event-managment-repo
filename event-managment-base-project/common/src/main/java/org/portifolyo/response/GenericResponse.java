@@ -37,8 +37,8 @@ public class GenericResponse<T> {
         return new GenericResponse<>(200,"success");
     }
 
-    public static GenericResponse<Void> BAD_REQUEST(){
-        return new GenericResponse<>(404,"fail");
+    public static GenericResponse<Void> BAD_REQUEST(String message){
+        return new GenericResponse<>(400,message);
     }
 
 

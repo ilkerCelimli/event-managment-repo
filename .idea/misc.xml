@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/event-managment-base-project/microservices-base/event-service/pom.xml" />
         <option value="$PROJECT_DIR$/event-managment-base-project/microservices-base/user-service/pom.xml" />
         <option value="$PROJECT_DIR$/event-managment-base-project/common/pom.xml" />
+        <option value="$PROJECT_DIR$/event-managment-base-project/microservices-base/gateway-server/pom.xml" />
       </list>
     </option>
   </component>

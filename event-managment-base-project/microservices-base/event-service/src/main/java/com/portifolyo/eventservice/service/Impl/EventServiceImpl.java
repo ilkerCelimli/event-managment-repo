@@ -79,18 +79,6 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
         catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException ex){
             System.out.println(ex);
         }
-    /*   if(event.isTicket() != e.getIsTicket()) e.setIsTicket(event.isTicket());
-       if(event.isPeopleIsRegistered() != e.getIsPeopleRegistered()) e.setIsPeopleRegistered(event.isPeopleIsRegistered());
-       if(event.eventName() != null) e.setName(event.eventName());
-       if(event.eventDate() != null &&!event.eventDate().before(Date.from(Instant.now())) && event.eventDate().getTime() != Instant.now().getEpochSecond()){
-           e.setEventDate(event.eventDate());
-       }
-       if(event.eventType() != null &&!event.eventType().equals(e.getEventType())) e.setEventType(event.eventType());
-       if(event.maxPeople() != null) e.setMaxPeople(event.maxPeople());
-       if(event.comingPeople() != null) e.setComingPeople(event.comingPeople());
-       if(event.description() != null) {
-           if(event.description().description() != null) e.getEventDescription().setDescrtiption(event.description().description());
-       }*/
     }
 
     @Override
@@ -100,16 +88,16 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
-    public List<EventInfo> findEventsByOrganizatorMail(String email,Integer page,Integer size) {
+    public List<EventInfo> findEventsByOrganizatorMail(String id,Integer page,Integer size) {
         List<EventInfo> list = new ArrayList<>();
         List<EventAndOrganizatorManyToMany> m =
-                this.eventAndOrganizatorManyToManyRepository.findByOrganizator_Email(email,PageRequest.of(page,size));
+                this.eventAndOrganizatorManyToManyRepository.findByOrganizator_Id(id,PageRequest.of(page,size));
         m.forEach(i -> {
             EventInfo eventInfo = EventInfomapper.toEntity(i.getEvent());
             EventAreaInfo info = this.eventAreaService.findEventArea(eventInfo.getId());
             eventInfo.setEventAreaInfo(info);
             List<OrganizatorInfo> organizatorInfos = new ArrayList<>();
-            organizatorInfos.add(this.organizatorService.findOrganizatorByEmail(email));
+            organizatorInfos.add(this.organizatorService.findOrganizatorByEmail(i.getOrganizator().getEmail()));
             eventInfo.setOrganizatorInfos(organizatorInfos);
             eventInfo.getEventDescription().setImageAndLinksList(this.imageAndLinksRepository.findByEventDescription_Id(eventInfo.getEventDescription().getId()));
             list.add(eventInfo);
