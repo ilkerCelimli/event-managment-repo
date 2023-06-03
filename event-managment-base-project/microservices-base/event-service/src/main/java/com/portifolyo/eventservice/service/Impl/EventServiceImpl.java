@@ -103,7 +103,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     public List<EventInfo> findEventsByOrganizatorMail(String email,Integer page,Integer size) {
         List<EventInfo> list = new ArrayList<>();
         List<EventAndOrganizatorManyToMany> m =
-                this.eventAndOrganizatorManyToManyRepository.findByOrganizator_Email(email, PageRequest.of(page,size));
+                this.eventAndOrganizatorManyToManyRepository.findByOrganizator_Email(email,PageRequest.of(page,size));
         m.forEach(i -> {
             EventInfo eventInfo = EventInfomapper.toEntity(i.getEvent());
             EventAreaInfo info = this.eventAreaService.findEventArea(eventInfo.getId());

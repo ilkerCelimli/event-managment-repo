@@ -6,7 +6,7 @@
         <groupId>com.portifolyo</groupId>
         <version>0.0.1-SNAPSHOT</version>
         <artifactId>event-managment-base-project</artifactId>
-        <relativePath>../pom.xml </relativePath> <!-- lookup parent from repository -->
+        <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <artifactId>microservices-base</artifactId>
     <version>0.0.1-SNAPSHOT</version>

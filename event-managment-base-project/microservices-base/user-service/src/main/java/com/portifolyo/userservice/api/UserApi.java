@@ -24,18 +24,18 @@ public class UserApi {
     @PostMapping("/")
     public ResponseEntity<GenericResponse<User>> saveUser(@RequestBody UserRegisterRequest userRegisterRequest) throws MessagingException {
         User u = this.userService.saveUser(userRegisterRequest);
-        return ResponseEntity.ok(new GenericResponse<>(200,"created User",u));
+        return ResponseEntity.ok(GenericResponse.SUCCESS(u));
     }
 
     @GetMapping("/activeuser")
     public ResponseEntity<GenericResponse<Void>> activeUser(@RequestParam String code) {
         this.userService.activiteUser(code);
-        return ResponseEntity.ok(new GenericResponse<>(200,"User Activited"));
+        return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
     @GetMapping("/")
     public ResponseEntity<GenericResponse<List<UserInfo>>> findUsers() {
-        return ResponseEntity.ok(new GenericResponse<>(200,null,this.userService.findAllUser()));
+        return ResponseEntity.ok(GenericResponse.SUCCESS(this.userService.findAllUser()));
     }
 
     @PutMapping("/")

@@ -2,7 +2,6 @@ package com.portifolyo.eventservice.api;
 
 import com.portifolyo.eventservice.repository.projections.TicketInfo;
 import com.portifolyo.eventservice.service.TicketService;
-import feign.Response;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.eventservice.TicketRequest;
@@ -21,31 +20,26 @@ public class TicketApi {
 
 
     @PostMapping("/")
-    public ResponseEntity<GenericResponse<Void>> addTicket(@RequestBody @Valid TicketRequest ticketRequest){
+    public ResponseEntity<GenericResponse<Void>> addTicket(@RequestBody @Valid TicketRequest ticketRequest) {
         this.ticketService.handleTicketRequest(ticketRequest);
-        return ResponseEntity.ok(new GenericResponse<>(200,"Success"));
+        return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
     @PutMapping("/")
-    public ResponseEntity<GenericResponse<TicketRequest>> updateTicket(@RequestBody TicketRequest ticketRequest){
+    public ResponseEntity<GenericResponse<TicketRequest>> updateTicket(@RequestBody TicketRequest ticketRequest) {
         TicketRequest t = this.ticketService.updateTicket(ticketRequest);
-        return ResponseEntity.ok(new GenericResponse<>(200,"Success",t));
+        return ResponseEntity.ok(GenericResponse.SUCCESS(t));
     }
 
     @DeleteMapping("/")
-    public ResponseEntity<GenericResponse<Void>> deleteTicket(@RequestParam String id){
+    public ResponseEntity<GenericResponse<Void>> deleteTicket(@RequestParam String id) {
         this.ticketService.deleteTicket(id);
-        return ResponseEntity.ok(new GenericResponse<>(200,"is deleted"));
+        return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
     @GetMapping("/findTickets")
-    public ResponseEntity<GenericResponse<List<TicketInfo>>> findTickets(@RequestParam Integer size,@RequestParam Integer page,@RequestParam String eventId){
-        return  ResponseEntity.ok(
-                new GenericResponse<>(
-                        200,"sucesss",
-                        this.ticketService.findTickets(page,size,eventId)
-                )
-        );
+    public ResponseEntity<GenericResponse<List<TicketInfo>>> findTickets(@RequestParam Integer size, @RequestParam Integer page, @RequestParam String eventId) {
+        return ResponseEntity.ok(GenericResponse.SUCCESS(this.ticketService.findTickets(page, size, eventId)));
     }
 
 }

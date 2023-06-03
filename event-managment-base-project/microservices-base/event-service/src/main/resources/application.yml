@@ -8,3 +8,6 @@ spring:
   cloud:
     config:
       name: event-service
+  mvc:
+    throw-exception-if-no-handler-found: true
+    static-path-pattern: /static

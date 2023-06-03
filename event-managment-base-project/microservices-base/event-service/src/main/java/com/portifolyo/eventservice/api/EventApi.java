@@ -23,7 +23,7 @@ public class EventApi {
     @PostMapping("/")
     public ResponseEntity<GenericResponse<Void>> saveEvent(@Valid @RequestBody EventSaveRequest request) {
         this.eventService.saveEventRequestHandle(request);
-        return ResponseEntity.ok(new GenericResponse<>(200,"Success"));
+        return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
     @PutMapping("/")
@@ -31,13 +31,13 @@ public class EventApi {
                                                                  @RequestBody
                                                                  EventSaveRequest request,@RequestParam String id){
         this.eventService.updateEventRequestHandle(request,id);
-        return ResponseEntity.ok(new GenericResponse<>(200,"Success"));
+        return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
     @DeleteMapping("/")
     public ResponseEntity<GenericResponse<Void>> inActiveEvent(@RequestParam String id){
         this.eventService.eventInActiveHandle(id);
-        return ResponseEntity.ok(new GenericResponse<>(200,"deleted"));
+        return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
 
@@ -45,14 +45,15 @@ public class EventApi {
     public ResponseEntity<GenericResponse<List<EventInfo>>> findEventsByOrganizator(
             @RequestParam String organizatorId, @RequestParam Integer page, @RequestParam Integer size ){
         List<EventInfo> eventInfo = this.eventService.findEventsByOrganizatorMail(organizatorId,page,size);
-        return ResponseEntity.ok(new GenericResponse<>(200,"Success",eventInfo));
+        return ResponseEntity.ok(GenericResponse.SUCCESS(eventInfo));
 
     }
 
     @PostMapping("/addImagesByEvent")
     public ResponseEntity<GenericResponse<Void>> addImagesByEvent(@RequestParam String id, @RequestBody List<ImageAndLinks> imageAndLinks){
         this.eventService.addimages(id,imageAndLinks);
-        return ResponseEntity.ok(new GenericResponse<>(200,"success"));
+        return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
+
 
 }
