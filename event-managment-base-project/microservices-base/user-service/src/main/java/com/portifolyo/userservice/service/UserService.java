@@ -1,17 +1,25 @@
 package com.portifolyo.userservice.service;
 
 import com.portifolyo.userservice.entity.User;
+import com.portifolyo.userservice.exception.apiexceptions.BannedUserException;
 import com.portifolyo.userservice.exception.apiexceptions.EmailIsExistsException;
 import com.portifolyo.userservice.exception.apiexceptions.EmailIsNotFoundException;
+import com.portifolyo.userservice.exception.apiexceptions.PasswordNotMatchesException;
 import com.portifolyo.userservice.repository.UserRepository;
+import com.portifolyo.userservice.util.JwtUtil;
 import com.portifolyo.userservice.util.RandomStringGenerator;
 import com.portifolyo.userservice.util.converter.UserRegisterRequestConverter;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.aspectj.weaver.ast.Or;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.requests.userservice.UserInfo;
+import org.portifolyo.requests.userservice.UserLoginRequest;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
+import org.portifolyo.response.TokenResponse;
+import org.portifolyo.utils.DeserializeHelper;
+import org.portifolyo.utils.UpdateHelper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.utils.SerializationUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +44,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final JwtUtil jwtUtil;
 
     @Transactional
     public User saveUser(UserRegisterRequest userRegisterRequest) throws MessagingException {
@@ -84,7 +94,7 @@ public class UserService {
         return user.orElse(null);
     }
     @Transactional
-    public void handleOrganizator(OrganizatorRequest organizatorRequest) throws MessagingException {
+    public void handleOrganizator(OrganizatorRequest organizatorRequest) throws MessagingException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         Optional<User> user = this.userRepository.findUserByEmail(organizatorRequest.email());
         if(user.isEmpty()) {
             User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
@@ -93,10 +103,8 @@ public class UserService {
             emailService.sendMail(u);
             return;
         }
-        if(organizatorRequest.email() != null) user.get().setEmail(organizatorRequest.email());
-        if(organizatorRequest.name() != null) user.get().setName(organizatorRequest.name());
-        if(organizatorRequest.surname() != null) user.get().setSurname(organizatorRequest.surname());
-        this.userRepository.save(user.get());
+        UpdateHelper<OrganizatorRequest,User> updateHelper = new UpdateHelper<>();
+        this.userRepository.save(updateHelper.updateHelper(organizatorRequest,user.get()));
     }
 
 
@@ -113,14 +121,27 @@ public class UserService {
         }, EmailIsNotFoundException::new);
 
     }
-    @RabbitListener(queues = "user-queue")
-    public void handleMessage(byte[] message) {
 
-       try (ByteArrayInputStream bis = new ByteArrayInputStream(message);
-            ObjectInputStream ois = new ObjectInputStream(bis)) {
-            OrganizatorRequest deserializedUser = (OrganizatorRequest) ois.readObject();
-            handleOrganizator(deserializedUser);
-        } catch (IOException | ClassNotFoundException | RuntimeException | MessagingException e) {
-           System.out.println(e.getMessage());
-       }
+    public TokenResponse tokenResponse(UserLoginRequest userLoginRequest){
+       User u = this.userRepository.findUserByEmail(userLoginRequest.email()).orElseThrow(EmailIsNotFoundException::new);
+       if(!u.getIsActive()) throw new BannedUserException(userLoginRequest.email());
+       if(!passwordEncoder.matches(userLoginRequest.password(),u.getPassword())) throw new PasswordNotMatchesException();
+       String token = jwtUtil.generate(userLoginRequest);
+       return new TokenResponse(token);
+    }
+
+    public TokenResponse tokenResponse(String token){
+        String email = this.jwtUtil.validate(token).getClaim("email").asString();
+        return new TokenResponse(jwtUtil.generate(email));
+    }
+
+
+    @RabbitListener(queues = "user-queue")
+    public void handleMessage(byte[] message) throws MessagingException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+        OrganizatorRequest organizatorRequest = (OrganizatorRequest) DeserializeHelper.desarialize(message);
+        if(organizatorRequest != null){
+            handleOrganizator(organizatorRequest);
+            return;
+        }
+        throw new RuntimeException();
     }}
