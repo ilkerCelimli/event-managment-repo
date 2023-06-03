@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://Meloonia:2bfb85101@user-service.vj9bcnu.mongodb.net/?retryWrites=true&w=majority
+      uri: ${MONGO_URI}
       #?authSource=admin&authMechanism=SCRAM-SHA-1
       #uri: mongodb+srv://Meloonia:6572'ilker'@user-service.vj9bcnu.mongodb.net/?retryWrites=true&w=majority
       database: users
