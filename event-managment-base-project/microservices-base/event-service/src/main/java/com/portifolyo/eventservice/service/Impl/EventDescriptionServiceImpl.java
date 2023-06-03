@@ -1,5 +1,6 @@
 package com.portifolyo.eventservice.service.Impl;
 
+import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.EventDescription;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
 import com.portifolyo.eventservice.repository.EventDescriptionRepository;
@@ -9,6 +10,7 @@ import com.portifolyo.eventservice.service.EventDescriptionService;
 import com.portifolyo.eventservice.util.mapper.EventDescriptionMapper;
 import org.portifolyo.requests.eventservice.EventDescriptionRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,6 +37,14 @@ public class EventDescriptionServiceImpl extends BaseServiceImpl<EventDescriptio
         List<ImageAndLinks> images = new ArrayList<>();
         list.imageAndLinksReqeusts().forEach(i -> images.add(new ImageAndLinks(e,i.item(),i.descriptionTypes())));
         this.imageAndLinksService.saveAll(images);
+
         return e;
+    }
+
+    @Override
+    public void addImages(Event event, List<ImageAndLinks> images) {
+        EventDescription desc = event.getEventDescription();
+        images.forEach(i -> i.setEventDescription(desc));
+        this.imageAndLinksService.saveAll(images);
     }
 }

@@ -11,8 +11,8 @@ public interface EventAndOrganizatorManyToManyRepository extends BaseRepository<
     @Query("select e from EventAndOrganizatorManyToMany e where e.event.id = ?1")
     List<EventAndOrganizatorManyToMany> findOrganizatorsByEventId(String id);
 
-    @Query("select e from EventAndOrganizatorManyToMany e where e.organizator.email = ?1")
-    List<EventAndOrganizatorManyToMany> findByOrganizator_Email(String email, Pageable page);
+    @Query("select e from EventAndOrganizatorManyToMany e where e.organizator.id = ?1")
+    List<EventAndOrganizatorManyToMany> findByOrganizator_Id(String id, Pageable page);
 
 
 

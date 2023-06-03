@@ -2,6 +2,7 @@ package com.portifolyo.eventservice.service.Impl;
 
 import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.EventAndOrganizatorManyToMany;
+import com.portifolyo.eventservice.entity.ImageAndLinks;
 import com.portifolyo.eventservice.exceptions.GenericException;
 import com.portifolyo.eventservice.exceptions.NotFoundException;
 import com.portifolyo.eventservice.repository.EventAndOrganizatorManyToManyRepository;
@@ -10,16 +11,15 @@ import com.portifolyo.eventservice.repository.ImageAndLinksRepository;
 import com.portifolyo.eventservice.repository.projections.EventAreaInfo;
 import com.portifolyo.eventservice.repository.projections.EventInfo;
 import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
+import com.portifolyo.eventservice.repository.projections.TicketInfo;
 import com.portifolyo.eventservice.service.*;
 import com.portifolyo.eventservice.util.mapper.EventInfomapper;
-import feign.FeignException;
 import jakarta.transaction.Transactional;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
-import org.portifolyo.util.UpdateHelper;
+import org.portifolyo.utils.UpdateHelper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.time.Instant;
@@ -79,18 +79,6 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
         catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException ex){
             System.out.println(ex);
         }
-    /*   if(event.isTicket() != e.getIsTicket()) e.setIsTicket(event.isTicket());
-       if(event.isPeopleIsRegistered() != e.getIsPeopleRegistered()) e.setIsPeopleRegistered(event.isPeopleIsRegistered());
-       if(event.eventName() != null) e.setName(event.eventName());
-       if(event.eventDate() != null &&!event.eventDate().before(Date.from(Instant.now())) && event.eventDate().getTime() != Instant.now().getEpochSecond()){
-           e.setEventDate(event.eventDate());
-       }
-       if(event.eventType() != null &&!event.eventType().equals(e.getEventType())) e.setEventType(event.eventType());
-       if(event.maxPeople() != null) e.setMaxPeople(event.maxPeople());
-       if(event.comingPeople() != null) e.setComingPeople(event.comingPeople());
-       if(event.description() != null) {
-           if(event.description().description() != null) e.getEventDescription().setDescrtiption(event.description().description());
-       }*/
     }
 
     @Override
@@ -100,16 +88,16 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
-    public List<EventInfo> findEventsByOrganizatorMail(String email,Integer page,Integer size) {
+    public List<EventInfo> findEventsByOrganizatorMail(String id,Integer page,Integer size) {
         List<EventInfo> list = new ArrayList<>();
         List<EventAndOrganizatorManyToMany> m =
-                this.eventAndOrganizatorManyToManyRepository.findByOrganizator_Email(email, PageRequest.of(page,size));
+                this.eventAndOrganizatorManyToManyRepository.findByOrganizator_Id(id,PageRequest.of(page,size));
         m.forEach(i -> {
             EventInfo eventInfo = EventInfomapper.toEntity(i.getEvent());
             EventAreaInfo info = this.eventAreaService.findEventArea(eventInfo.getId());
             eventInfo.setEventAreaInfo(info);
             List<OrganizatorInfo> organizatorInfos = new ArrayList<>();
-            organizatorInfos.add(this.organizatorService.findOrganizatorByEmail(email));
+            organizatorInfos.add(this.organizatorService.findOrganizatorByEmail(i.getOrganizator().getEmail()));
             eventInfo.setOrganizatorInfos(organizatorInfos);
             eventInfo.getEventDescription().setImageAndLinksList(this.imageAndLinksRepository.findByEventDescription_Id(eventInfo.getEventDescription().getId()));
             list.add(eventInfo);
@@ -130,4 +118,11 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     public Event findById(String id) {
         return super.findById(id);
     }
+
+    @Override
+    public void addimages(String eventid, List<ImageAndLinks> imageAndLinks) {
+        this.eventDescriptionService.addImages(findById(eventid),imageAndLinks);
+    }
+
+
 }

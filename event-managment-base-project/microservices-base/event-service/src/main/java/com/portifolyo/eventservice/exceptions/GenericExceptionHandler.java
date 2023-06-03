@@ -7,22 +7,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @RestControllerAdvice
-public class ExceptionHandler {
+public class GenericExceptionHandler {
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(FeignException.UnprocessableEntity.class)
-    public ResponseEntity<String> NotFoundUserExceptionHandler(Exception ex) {
-        return ResponseEntity.badRequest().body("Email Sistemde Bulunamadı");
+    @ExceptionHandler(FeignException.UnprocessableEntity.class)
+    public ResponseEntity<GenericResponse<Void>> NotFoundUserExceptionHandler(Exception ex) {
+        return ResponseEntity.badRequest().body(GenericResponse.BAD_REQUEST(ex.getMessage()));
     }
 
-    @ResponseBody
-    @org.springframework.web.bind.annotation.ExceptionHandler(HttpMediaTypeNotAcceptableException.class)
-    public String handleHttpMediaTypeNotAcceptableException() {
-        return "acceptable MIME type:" + MediaType.APPLICATION_JSON_VALUE;
-    }
-
-    @org.springframework.web.bind.annotation.ExceptionHandler(GenericException.class)
+    @ExceptionHandler(GenericException.class)
     public ResponseEntity<GenericResponse<?>> generalExceptionHandler(GenericException ex) {
         GenericResponse<?> response = new GenericResponse<>(ex.getStatusCode(),ex.getMessage(),null);
         return ResponseEntity.badRequest().body(response);

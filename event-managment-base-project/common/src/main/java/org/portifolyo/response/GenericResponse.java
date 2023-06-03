@@ -17,6 +17,7 @@ public class GenericResponse<T> {
         this.statusCode = statusCode;
     }
 
+
     public Integer getStatusCode() {
         return statusCode;
     }
@@ -28,4 +29,17 @@ public class GenericResponse<T> {
     public T getData() {
         return data;
     }
+
+    public static <T> GenericResponse<T> SUCCESS(T data){
+        return new GenericResponse<>(200,"sucess",data);
+    }
+    public static <T> GenericResponse<T> SUCCESS(){
+        return new GenericResponse<>(200,"success");
+    }
+
+    public static GenericResponse<Void> BAD_REQUEST(String message){
+        return new GenericResponse<>(400,message);
+    }
+
+
 }

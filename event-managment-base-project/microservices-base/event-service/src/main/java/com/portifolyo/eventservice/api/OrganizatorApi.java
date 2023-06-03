@@ -21,26 +21,27 @@ public class OrganizatorApi {
 
     private final EventService eventService;
     private final OrganizatorService organizatorService;
+
     @PostMapping("/addOrganizatorByEvent")
     public ResponseEntity<GenericResponse<List<EventInfo>>> findOrganizatorForEvents(
             @RequestBody @Valid OrganizatorRequest o
-            ,@RequestParam String eventId){
-        eventService.addOrganizatorByEvent(eventId,o);
-        return ResponseEntity.ok(new GenericResponse<>(200,"success",null));
+            , @RequestParam String eventId) {
+        eventService.addOrganizatorByEvent(eventId, o);
+        return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
     @PutMapping("/")
     public ResponseEntity<GenericResponse<OrganizatorInfo>> updateOrganizator(
             @JsonInclude(JsonInclude.Include.NON_NULL)
-            @RequestBody OrganizatorRequest request,@RequestParam String organizatorId) {
-           OrganizatorInfo organizatorInfo = organizatorService.updateOrganizator(request,organizatorId);
+            @RequestBody OrganizatorRequest request, @RequestParam String organizatorId) {
+        OrganizatorInfo organizatorInfo = organizatorService.updateOrganizator(request, organizatorId);
 
-        return ResponseEntity.ok(new GenericResponse<>(200,"success",organizatorInfo));
+        return ResponseEntity.ok(GenericResponse.SUCCESS(organizatorInfo));
     }
 
     @DeleteMapping("/")
     public ResponseEntity<GenericResponse<Void>> deleteOrganizator(@RequestParam String organizatorId) {
         this.organizatorService.deleteOrganizator(organizatorId);
-        return ResponseEntity.ok(new GenericResponse<>(200,"success"));
+        return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 }

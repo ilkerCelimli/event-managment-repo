@@ -10,7 +10,7 @@ import com.portifolyo.eventservice.service.OrganizatorService;
 import com.portifolyo.eventservice.util.mapper.OrganizatorRequestMapper;
 import jakarta.transaction.Transactional;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
-import org.portifolyo.util.UpdateHelper;
+import org.portifolyo.utils.UpdateHelper;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
