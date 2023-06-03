@@ -10,8 +10,6 @@ spring:
 
 email:
     host: smtp.gmail.com
-    username: Meloonia52@gmail.com
-    password: ckxkwsewgvfmszpo #knxlunkzdwsfatxj
     port: 587
     properties:
       mail:
