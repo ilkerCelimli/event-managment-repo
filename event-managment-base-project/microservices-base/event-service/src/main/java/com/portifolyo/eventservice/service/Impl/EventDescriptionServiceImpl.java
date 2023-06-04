@@ -30,9 +30,6 @@ public class EventDescriptionServiceImpl extends BaseServiceImpl<EventDescriptio
     @Override
     public EventDescription eventDescriptionHandler(EventDescriptionRequest list) {
         EventDescription eventDescription = EventDescriptionMapper.toEntity(list);
-     /*
-        Set<ImageAndLinks> images = eventDescription.getImageAndLinksSet();
-        eventDescription.setImageAndLinksSet(null);*/
         EventDescription e = save(eventDescription);
         List<ImageAndLinks> images = new ArrayList<>();
         list.imageAndLinksReqeusts().forEach(i -> images.add(new ImageAndLinks(e,i.item(),i.descriptionTypes())));
