@@ -17,7 +17,7 @@ public class ConfigSecurity {
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, AuthFilter authFilter){
         http.csrf().disable();
         http.authorizeExchange()
-                .pathMatchers("/user/register","/user/login","user/refresh")
+                .pathMatchers("/user/registerUser","/user/login","user/refresh")
                 .permitAll()
                 .anyExchange().authenticated();
 
