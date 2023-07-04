@@ -2,7 +2,6 @@ package com.portifolyo.userservice.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.portifolyo.userservice.entity.User;
-import com.portifolyo.userservice.service.EmailService;
 import com.portifolyo.userservice.service.UserService;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;

@@ -1,6 +1,5 @@
 package com.portifolyo.userservice.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +28,7 @@ public class User {
     @Field
     private Date birtday;
     @Field
-    private Boolean isActive;
+    private boolean isActive;
 
     @Field
     private String activitionCode;

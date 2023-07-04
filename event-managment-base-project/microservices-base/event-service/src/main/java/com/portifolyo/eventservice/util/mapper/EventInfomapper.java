@@ -19,10 +19,10 @@ public class EventInfomapper {
         EventDescriptionInfo desc = new EventDescriptionInfo();
         desc.setDescrtiption(e.getEventDescription().getDescrtiption());
         desc.setId(e.getEventDescription().getId());
-       // desc.setImageAndLinksList(e.getEventDescription().getImageAndLinksSet());
         desc.setIsDeleted(e.getEventDescription().getIsDeleted());
         event.setEventDescription(desc);
         return event;
     }
+    private EventInfomapper(){}
 
 }

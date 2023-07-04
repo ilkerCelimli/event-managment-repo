@@ -4,7 +4,7 @@ import com.portifolyo.eventservice.entity.ComingPeople;
 import org.portifolyo.requests.eventservice.TicketRequest;
 
 public class TicketRequestMapper {
-
+    private TicketRequestMapper(){}
     public static ComingPeople toEntity(TicketRequest ticketRequest){
         return new ComingPeople(ticketRequest.name(), ticketRequest.surname(),  ticketRequest.phoneNumber(),ticketRequest.email(), ticketRequest.tcNo());
     }

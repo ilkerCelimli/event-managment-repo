@@ -17,9 +17,11 @@ public class EventDescriptionMapper {
             ImageAndLinks links = new ImageAndLinks();
             links.setItem(i.item());
             links.setDescriptionTypes(i.descriptionTypes());
-         //   links.setIsDeleted(false);
             images.add(links);
         });
         return e;
+    }
+
+    private EventDescriptionMapper() {
     }
 }

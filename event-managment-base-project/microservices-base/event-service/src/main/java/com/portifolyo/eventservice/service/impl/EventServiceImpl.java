@@ -1,4 +1,4 @@
-package com.portifolyo.eventservice.service.Impl;
+package com.portifolyo.eventservice.service.impl;
 
 import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.EventAndOrganizatorManyToMany;
@@ -14,6 +14,7 @@ import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
 import com.portifolyo.eventservice.service.*;
 import com.portifolyo.eventservice.util.mapper.EventInfomapper;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.utils.UpdateHelper;
@@ -25,9 +26,9 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Slf4j
 public class EventServiceImpl extends BaseServiceImpl<Event> implements EventService {
     private final EventRepository eventRepository;
     private final EventAreaService eventAreaService;
@@ -65,8 +66,6 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
 
     @Override
     public void updateEventRequestHandle(EventSaveRequest event,String eventId) {
-       // TODO refactor this.
-
         try {
            UpdateHelper<EventSaveRequest,Event> updateHelper = new UpdateHelper<>();
             Event e =  updateHelper.updateHelper(event,findById(eventId));
@@ -76,7 +75,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
             update(e);
         }
         catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException ex){
-            System.out.println(ex);
+            log.error(ex.getMessage());
         }
     }
 
@@ -108,9 +107,8 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
 
     @Override
     public void addOrganizatorByEvent(String eventId, OrganizatorRequest organizatorRequest) {
-        Optional<Event> event = this.eventRepository.findById(eventId);
-        event.orElseThrow(() -> new NotFoundException(eventId));
-        this.eventAndOrganizatorManyToManyService.saveOrganizator(List.of(organizatorRequest),event.get());
+        Event event = this.eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(eventId));
+        this.eventAndOrganizatorManyToManyService.saveOrganizator(List.of(organizatorRequest),event);
     }
 
     @Override

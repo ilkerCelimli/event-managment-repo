@@ -12,7 +12,6 @@ import com.portifolyo.userservice.util.converter.UserRegisterRequestConverter;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.aspectj.weaver.ast.Or;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.requests.userservice.UserInfo;
 import org.portifolyo.requests.userservice.UserLoginRequest;
@@ -21,15 +20,11 @@ import org.portifolyo.response.TokenResponse;
 import org.portifolyo.utils.DeserializeHelper;
 import org.portifolyo.utils.UpdateHelper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.utils.SerializationUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Date;
@@ -63,23 +58,20 @@ public class UserService {
     public void activiteUser(String activitionCode) {
         Optional<User> u = this.userRepository.findUserByActivitionCode(activitionCode);
         u.ifPresent(i -> {
-            i.setIsActive(true);
+            i.setActive(true);
             this.userRepository.save(i);
         });
     }
 
     @Transactional
     public void updateUser(UserRegisterRequest userRegisterRequest) {
-
-        Optional<User> opt = this.userRepository.findUserByEmail(userRegisterRequest.email());
-        opt.ifPresentOrElse((i -> {
+        User opt = this.userRepository.findUserByEmail(userRegisterRequest.email()).orElseThrow(EmailIsExistsException::new);
             UpdateHelper<UserRegisterRequest,User> updateHelper = new UpdateHelper<>();
-
             try {
-                this.userRepository.save(updateHelper.updateHelper(userRegisterRequest,i));
+                this.userRepository.save(updateHelper.updateHelper(userRegisterRequest,opt));
             } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e ) {
+                log.error(e.getMessage());
             }
-        }), EmailIsNotFoundException::new);
     }
 
     public List<UserInfo> findAllUser() {
@@ -113,7 +105,7 @@ public class UserService {
     public void deleteUser(String email) {
         Optional<User> user = this.userRepository.findUserByEmail(email);
         user.ifPresentOrElse(i -> {
-            i.setIsActive(false);
+            i.setActive(false);
             this.userRepository.save(i);
         }, EmailIsNotFoundException::new);
 
@@ -121,7 +113,7 @@ public class UserService {
 
     public TokenResponse tokenResponse(UserLoginRequest userLoginRequest){
        User u = this.userRepository.findUserByEmail(userLoginRequest.email()).orElseThrow(EmailIsNotFoundException::new);
-       if(!u.getIsActive()) throw new BannedUserException(userLoginRequest.email());
+       if(!u.isActive()) throw new BannedUserException(userLoginRequest.email());
        if(!passwordEncoder.matches(userLoginRequest.password(),u.getPassword())) throw new PasswordNotMatchesException();
        String token = jwtUtil.generate(userLoginRequest);
        return new TokenResponse(token);
@@ -132,13 +124,11 @@ public class UserService {
         return new TokenResponse(jwtUtil.generate(email));
     }
 
-
+    @Transactional
     @RabbitListener(queues = "user-queue")
     public void handleMessage(byte[] message) throws MessagingException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         OrganizatorRequest organizatorRequest = (OrganizatorRequest) DeserializeHelper.desarialize(message);
         if(organizatorRequest != null){
             handleOrganizator(organizatorRequest);
-            return;
         }
-        throw new RuntimeException();
     }}
