@@ -69,5 +69,4 @@ public class UserApi {
                ResponseEntity.ok().build();
     }
 
-
 }

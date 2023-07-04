@@ -3,7 +3,6 @@ package com.portifolyo.eventservice.service;
 import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
 import com.portifolyo.eventservice.repository.projections.EventInfo;
-import com.portifolyo.eventservice.repository.projections.TicketInfo;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 

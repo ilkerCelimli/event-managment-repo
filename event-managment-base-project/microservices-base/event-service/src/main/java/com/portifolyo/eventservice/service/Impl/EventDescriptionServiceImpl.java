@@ -10,13 +10,9 @@ import com.portifolyo.eventservice.service.EventDescriptionService;
 import com.portifolyo.eventservice.util.mapper.EventDescriptionMapper;
 import org.portifolyo.requests.eventservice.EventDescriptionRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class EventDescriptionServiceImpl extends BaseServiceImpl<EventDescription> implements EventDescriptionService {

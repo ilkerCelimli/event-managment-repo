@@ -2,12 +2,8 @@ package com.portifolyo.eventservice.exceptions;
 
 import feign.FeignException;
 import org.portifolyo.response.GenericResponse;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @RestControllerAdvice

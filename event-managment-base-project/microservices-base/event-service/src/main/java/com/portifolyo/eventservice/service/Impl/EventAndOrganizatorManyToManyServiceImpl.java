@@ -3,7 +3,6 @@ package com.portifolyo.eventservice.service.Impl;
 import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.EventAndOrganizatorManyToMany;
 import com.portifolyo.eventservice.entity.Organizator;
-import com.portifolyo.eventservice.exceptions.NotFoundException;
 import com.portifolyo.eventservice.repository.EventAndOrganizatorManyToManyRepository;
 import com.portifolyo.eventservice.service.BaseServiceImpl;
 import com.portifolyo.eventservice.service.EventAndOrganizatorManyToManyService;

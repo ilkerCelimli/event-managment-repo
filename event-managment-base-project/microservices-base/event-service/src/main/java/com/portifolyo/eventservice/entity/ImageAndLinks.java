@@ -2,7 +2,6 @@ package com.portifolyo.eventservice.entity;
 
 import lombok.*;
 import org.portifolyo.requests.eventservice.enums.DescriptionTypes;
-import org.portifolyo.requests.eventservice.enums.EventType;
 import jakarta.persistence.*;
 
 @Entity

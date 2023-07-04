@@ -1,6 +1,5 @@
 package com.portifolyo.eventservice.repository.projections;
 
-import com.portifolyo.eventservice.entity.Organizator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -31,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -72,16 +73,12 @@ public class UserService {
 
         Optional<User> opt = this.userRepository.findUserByEmail(userRegisterRequest.email());
         opt.ifPresentOrElse((i -> {
-            if (userRegisterRequest.birtday() != null) i.setBirtday(userRegisterRequest.birtday());
+            UpdateHelper<UserRegisterRequest,User> updateHelper = new UpdateHelper<>();
 
-            if (userRegisterRequest.name() != null) i.setName(userRegisterRequest.name());
-
-            if (userRegisterRequest.surname() != null) i.setSurname(userRegisterRequest.surname());
-
-            if (userRegisterRequest.password() != null)
-                i.setPassword(passwordEncoder.encode(userRegisterRequest.password()));
-
-            this.userRepository.save(i);
+            try {
+                this.userRepository.save(updateHelper.updateHelper(userRegisterRequest,i));
+            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e ) {
+            }
         }), EmailIsNotFoundException::new);
     }
 

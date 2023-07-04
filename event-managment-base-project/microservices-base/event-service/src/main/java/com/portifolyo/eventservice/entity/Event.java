@@ -2,14 +2,10 @@ package com.portifolyo.eventservice.entity;
 
 import org.portifolyo.requests.eventservice.enums.EventType;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)

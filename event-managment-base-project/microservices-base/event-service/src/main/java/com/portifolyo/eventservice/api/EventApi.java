@@ -55,5 +55,4 @@ public class EventApi {
         return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
-
 }

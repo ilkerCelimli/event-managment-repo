@@ -2,8 +2,8 @@ package org.portifolyo.response;
 
 
 public class GenericResponse<T> {
-    private Integer statusCode;
-    private String message;
+    private final Integer statusCode;
+    private final String message;
     private T data;
 
 

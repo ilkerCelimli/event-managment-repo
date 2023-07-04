@@ -1,7 +1,6 @@
 package com.portifolyo.eventservice.repository;
 
 import com.portifolyo.eventservice.entity.EventAndOrganizatorManyToMany;
-import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 

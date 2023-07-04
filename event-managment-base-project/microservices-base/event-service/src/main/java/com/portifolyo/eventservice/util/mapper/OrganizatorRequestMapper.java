@@ -3,9 +3,6 @@ package com.portifolyo.eventservice.util.mapper;
 import com.portifolyo.eventservice.entity.Organizator;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class OrganizatorRequestMapper {
 
 
