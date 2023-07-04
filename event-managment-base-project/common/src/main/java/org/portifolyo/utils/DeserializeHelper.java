@@ -1,11 +1,8 @@
 package org.portifolyo.utils;
 
-import org.portifolyo.requests.eventservice.OrganizatorRequest;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.lang.reflect.InvocationTargetException;
 
 public class DeserializeHelper {
 

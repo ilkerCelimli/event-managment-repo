@@ -4,9 +4,7 @@ import com.portifolyo.eventservice.entity.EventDescription;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
 import org.portifolyo.requests.eventservice.EventDescriptionRequest;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class EventDescriptionMapper {

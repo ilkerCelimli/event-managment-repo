@@ -54,6 +54,11 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
     public OrganizatorInfo updateOrganizator(OrganizatorRequest or, String id) {
         Optional<Organizator> o = this.organizatorRepository.findById(id);
         o.orElseThrow(() -> new NotFoundException(id));
+/*        if(or.email() != null) o.get().setEmail(or.email());
+        if(or.name() != null) o.get().setName(or.name());
+        if(or.surname() != null) o.get().setSurname(or.surname());
+        if(or.tcNo() != null) o.get().setTcNo(or.tcNo());
+        if(or.phoneNumber() != null) o.get().setPhoneNumber(or.phoneNumber());*/
         UpdateHelper<OrganizatorRequest,Organizator> updateHelper = new UpdateHelper<>();
         try {
            Organizator updated = updateHelper.updateHelper(or,o.get());

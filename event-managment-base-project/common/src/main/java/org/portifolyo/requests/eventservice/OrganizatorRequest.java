@@ -3,7 +3,6 @@ package org.portifolyo.requests.eventservice;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import org.portifolyo.requests.eventservice.messages.OrganizatorRequestMessages;
 
 import java.io.Serializable;
 

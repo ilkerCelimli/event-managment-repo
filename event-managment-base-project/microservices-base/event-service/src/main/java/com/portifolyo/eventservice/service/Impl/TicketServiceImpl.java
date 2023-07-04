@@ -43,6 +43,12 @@ public class TicketServiceImpl extends BaseServiceImpl<ComingPeople> implements 
     public TicketRequest updateTicket(TicketRequest ticketRequest) {
         ComingPeople c = findById(ticketRequest.eventId());
 
+/*        if(ticketRequest.email() != null) c.setEmail(ticketRequest.email());
+        if(ticketRequest.name() != null) c.setName(ticketRequest.name());
+        if(ticketRequest.surname() != null) c.setSurname(ticketRequest.surname());
+        if(ticketRequest.tcNo() != null) c.setTcNo(ticketRequest.tcNo());
+        if(ticketRequest.phoneNumber() != null) c.setPhoneNumber(ticketRequest.phoneNumber());*/
+
         UpdateHelper<TicketRequest, ComingPeople> updateHelper = new UpdateHelper<>();
         try {
             ComingPeople updated = updateHelper.updateHelper(ticketRequest,c);

@@ -10,13 +10,9 @@ import com.portifolyo.eventservice.service.EventDescriptionService;
 import com.portifolyo.eventservice.util.mapper.EventDescriptionMapper;
 import org.portifolyo.requests.eventservice.EventDescriptionRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class EventDescriptionServiceImpl extends BaseServiceImpl<EventDescription> implements EventDescriptionService {
@@ -30,6 +26,9 @@ public class EventDescriptionServiceImpl extends BaseServiceImpl<EventDescriptio
     @Override
     public EventDescription eventDescriptionHandler(EventDescriptionRequest list) {
         EventDescription eventDescription = EventDescriptionMapper.toEntity(list);
+     /*
+        Set<ImageAndLinks> images = eventDescription.getImageAndLinksSet();
+        eventDescription.setImageAndLinksSet(null);*/
         EventDescription e = save(eventDescription);
         List<ImageAndLinks> images = new ArrayList<>();
         list.imageAndLinksReqeusts().forEach(i -> images.add(new ImageAndLinks(e,i.item(),i.descriptionTypes())));

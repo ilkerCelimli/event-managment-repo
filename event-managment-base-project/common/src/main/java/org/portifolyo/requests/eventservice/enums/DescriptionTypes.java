@@ -8,7 +8,7 @@ public enum     DescriptionTypes {
     DescriptionTypes(String image) {
     this.image = image;
     }
-    private String image;
+    private final String image;
 
     public String getText() {
         return this.image;

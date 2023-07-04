@@ -11,7 +11,6 @@ import com.portifolyo.eventservice.repository.ImageAndLinksRepository;
 import com.portifolyo.eventservice.repository.projections.EventAreaInfo;
 import com.portifolyo.eventservice.repository.projections.EventInfo;
 import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
-import com.portifolyo.eventservice.repository.projections.TicketInfo;
 import com.portifolyo.eventservice.service.*;
 import com.portifolyo.eventservice.util.mapper.EventInfomapper;
 import jakarta.transaction.Transactional;
