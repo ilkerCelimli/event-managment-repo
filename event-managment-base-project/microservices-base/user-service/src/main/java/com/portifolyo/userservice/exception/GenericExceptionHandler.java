@@ -4,20 +4,14 @@ import com.portifolyo.userservice.exception.apiexceptions.BannedUserException;
 import com.portifolyo.userservice.exception.apiexceptions.EmailIsExistsException;
 import com.portifolyo.userservice.exception.apiexceptions.PasswordNotMatchesException;
 import jakarta.mail.MessagingException;
-import org.apache.coyote.Response;
 import org.portifolyo.response.GenericResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class GenericException {
+public class GenericExceptionHandler {
 
     @ExceptionHandler(EmailIsExistsException.class)
     public ResponseEntity<GenericResponse<Void>> emailIsExistsExceptionHandler(Exception ex) {

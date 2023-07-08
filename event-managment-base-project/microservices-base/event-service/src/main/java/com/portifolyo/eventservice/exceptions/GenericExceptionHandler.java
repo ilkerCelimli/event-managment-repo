@@ -10,13 +10,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GenericExceptionHandler {
 
     @ExceptionHandler(FeignException.UnprocessableEntity.class)
-    public ResponseEntity<GenericResponse<Void>> NotFoundUserExceptionHandler(Exception ex) {
+    public ResponseEntity<GenericResponse<Void>> notFoundUserExceptionHandler(Exception ex) {
         return ResponseEntity.badRequest().body(GenericResponse.BAD_REQUEST(ex.getMessage()));
     }
 
     @ExceptionHandler(GenericException.class)
-    public ResponseEntity<GenericResponse<?>> generalExceptionHandler(GenericException ex) {
-        GenericResponse<?> response = new GenericResponse<>(ex.getStatusCode(),ex.getMessage(),null);
+    public ResponseEntity<GenericResponse<Void>> generalExceptionHandler(GenericException ex) {
+        GenericResponse<Void> response = new GenericResponse<>(ex.getStatusCode(),ex.getMessage(),null);
         return ResponseEntity.badRequest().body(response);
     }
 

@@ -1,4 +1,4 @@
-package com.portifolyo.eventservice.service.Impl;
+package com.portifolyo.eventservice.service.impl;
 
 import com.portifolyo.eventservice.entity.Organizator;
 import com.portifolyo.eventservice.exceptions.GenericException;
@@ -9,23 +9,22 @@ import com.portifolyo.eventservice.service.BaseServiceImpl;
 import com.portifolyo.eventservice.service.OrganizatorService;
 import com.portifolyo.eventservice.util.mapper.OrganizatorRequestMapper;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.utils.UpdateHelper;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> implements OrganizatorService {
     private final OrganizatorRepository organizatorRepository;
-    private final RabbitTemplate rabbitTemplate;
-    private final String emailRegexPattern = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
-    public OrganizatorServiceImpl(OrganizatorRepository organizatorRepository, RabbitTemplate rabbitTemplate) {
+    private static String emailRegexPattern = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+    public OrganizatorServiceImpl(OrganizatorRepository organizatorRepository) {
         super(organizatorRepository);
         this.organizatorRepository = organizatorRepository;
-        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -38,9 +37,7 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
 
     @Override
     public OrganizatorInfo findOrganizatorByEmail(String email) {
-        Optional<OrganizatorInfo> organizatorInfo = this.organizatorRepository.findByEmail(email);
-        organizatorInfo.orElseThrow(() -> new NotFoundException(email));
-        return organizatorInfo.get();
+        return this.organizatorRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(email));
     }
 
     @Override
@@ -52,21 +49,15 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
     @Override
     @Transactional
     public OrganizatorInfo updateOrganizator(OrganizatorRequest or, String id) {
-        Optional<Organizator> o = this.organizatorRepository.findById(id);
-        o.orElseThrow(() -> new NotFoundException(id));
-/*        if(or.email() != null) o.get().setEmail(or.email());
-        if(or.name() != null) o.get().setName(or.name());
-        if(or.surname() != null) o.get().setSurname(or.surname());
-        if(or.tcNo() != null) o.get().setTcNo(or.tcNo());
-        if(or.phoneNumber() != null) o.get().setPhoneNumber(or.phoneNumber());*/
+       Organizator o = this.organizatorRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
         UpdateHelper<OrganizatorRequest,Organizator> updateHelper = new UpdateHelper<>();
         try {
-           Organizator updated = updateHelper.updateHelper(or,o.get());
+           Organizator updated = updateHelper.updateHelper(or,o);
            save(updated);
            return this.findOrganizatorByEmail(updated.getEmail());
         }
         catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException ex) {
-            System.out.println(ex);
+            log.error(ex.getMessage());
         }
         return null;
     }

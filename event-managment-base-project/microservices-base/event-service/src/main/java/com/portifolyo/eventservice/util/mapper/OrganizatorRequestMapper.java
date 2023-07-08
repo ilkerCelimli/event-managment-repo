@@ -5,7 +5,7 @@ import org.portifolyo.requests.eventservice.OrganizatorRequest;
 
 public class OrganizatorRequestMapper {
 
-
+    private OrganizatorRequestMapper(){}
     public static Organizator toEntity(OrganizatorRequest req) {
 
        return new Organizator(req.name(),req.surname(),req.phoneNumber(),req.email(),req.tcNo());

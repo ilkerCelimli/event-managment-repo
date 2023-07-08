@@ -1,4 +1,4 @@
-package com.portifolyo.eventservice.service.Impl;
+package com.portifolyo.eventservice.service.impl;
 
 import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.EventAndOrganizatorManyToMany;

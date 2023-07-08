@@ -30,9 +30,7 @@ public class BaseServiceImpl<T extends BaseEntity> {
     }
 
     protected T findById(String id) {
-        Optional<T> entity = this.baseRepository.findById(id);
-        entity.orElseThrow(() -> new NotFoundException(id));
-        return entity.get();
+        return this.baseRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
     protected List<T> findAll() {
