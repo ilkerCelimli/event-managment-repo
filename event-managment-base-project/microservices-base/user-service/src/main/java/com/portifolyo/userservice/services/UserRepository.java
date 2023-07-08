@@ -1,4 +1,4 @@
-package com.portifolyo.userservice.repository;
+package com.portifolyo.userservice.services;
 
 import com.portifolyo.userservice.entity.User;
 import org.portifolyo.requests.userservice.UserInfo;
@@ -16,8 +16,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     Optional<User> findUserByEmail(String email);
 
     Boolean existsUserByEmail(String email);
-
-    // S findByEmailExists(String email);
     List<UserInfo> findAllByIsActiveTrue();
 
     Optional<UserInfo> findUserByEmailAndIsActiveTrue(String email);

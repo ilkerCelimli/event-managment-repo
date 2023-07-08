@@ -1,11 +1,8 @@
 package com.portifolyo.userservice.service;
 
 import com.portifolyo.userservice.entity.User;
-import com.portifolyo.userservice.exception.apiexceptions.BannedUserException;
-import com.portifolyo.userservice.exception.apiexceptions.EmailIsExistsException;
-import com.portifolyo.userservice.exception.apiexceptions.EmailIsNotFoundException;
-import com.portifolyo.userservice.exception.apiexceptions.PasswordNotMatchesException;
-import com.portifolyo.userservice.repository.UserRepository;
+import com.portifolyo.userservice.exception.apiexceptions.*;
+import com.portifolyo.userservice.services.UserRepository;
 import com.portifolyo.userservice.util.JwtUtil;
 import com.portifolyo.userservice.util.RandomStringGenerator;
 import com.portifolyo.userservice.util.converter.UserRegisterRequestConverter;
@@ -26,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.lang.reflect.InvocationTargetException;
-import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -56,22 +53,22 @@ public class UserService {
 
     @Transactional
     public void activiteUser(String activitionCode) {
-        Optional<User> u = this.userRepository.findUserByActivitionCode(activitionCode);
-        u.ifPresent(i -> {
-            i.setActive(true);
-            this.userRepository.save(i);
-        });
+        User u = this.userRepository.findUserByActivitionCode(activitionCode)
+                .orElseThrow(() -> new NotFoundException("Activition Code"));
+        u.setActive(true);
+        this.userRepository.save(u);
+
     }
 
     @Transactional
     public void updateUser(UserRegisterRequest userRegisterRequest) {
         User opt = this.userRepository.findUserByEmail(userRegisterRequest.email()).orElseThrow(EmailIsExistsException::new);
-            UpdateHelper<UserRegisterRequest,User> updateHelper = new UpdateHelper<>();
-            try {
-                this.userRepository.save(updateHelper.updateHelper(userRegisterRequest,opt));
-            } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e ) {
-                log.error(e.getMessage());
-            }
+        UpdateHelper<UserRegisterRequest, User> updateHelper = new UpdateHelper<>();
+        try {
+            this.userRepository.save(updateHelper.updateHelper(userRegisterRequest, opt));
+        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            log.error(e.getMessage());
+        }
     }
 
     public List<UserInfo> findAllUser() {
@@ -82,18 +79,19 @@ public class UserService {
         Optional<UserInfo> user = this.userRepository.findUserByEmailAndIsActiveTrue(email);
         return user.orElse(null);
     }
+
     @Transactional
     public void handleOrganizator(OrganizatorRequest organizatorRequest) throws MessagingException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
-        Optional<User> user = this.userRepository.findUserByEmail(organizatorRequest.email());
-        if(user.isEmpty()) {
+        User user = this.userRepository.findUserByEmail(organizatorRequest.email()).orElse(new User());
+        if (user.getId() == null) {
             User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
-                    RandomStringGenerator.randomStringGenerator(),new Date(0L),true);
+                    RandomStringGenerator.randomStringGenerator(), LocalDateTime.of(1900, 1, 1, 1, 1, 1, 1), true);
             this.userRepository.save(u);
             emailService.sendMail(u);
             return;
         }
-        UpdateHelper<OrganizatorRequest,User> updateHelper = new UpdateHelper<>();
-        this.userRepository.save(updateHelper.updateHelper(organizatorRequest,user.get()));
+        UpdateHelper<OrganizatorRequest, User> updateHelper = new UpdateHelper<>();
+        this.userRepository.save(updateHelper.updateHelper(organizatorRequest, user));
     }
 
 
@@ -111,15 +109,16 @@ public class UserService {
 
     }
 
-    public TokenResponse tokenResponse(UserLoginRequest userLoginRequest){
-       User u = this.userRepository.findUserByEmail(userLoginRequest.email()).orElseThrow(EmailIsNotFoundException::new);
-       if(!u.isActive()) throw new BannedUserException(userLoginRequest.email());
-       if(!passwordEncoder.matches(userLoginRequest.password(),u.getPassword())) throw new PasswordNotMatchesException();
-       String token = jwtUtil.generate(userLoginRequest);
-       return new TokenResponse(token);
+    public TokenResponse tokenResponse(UserLoginRequest userLoginRequest) {
+        User u = this.userRepository.findUserByEmail(userLoginRequest.email()).orElseThrow(EmailIsNotFoundException::new);
+        if (!u.isActive()) throw new BannedUserException(userLoginRequest.email());
+        if (!passwordEncoder.matches(userLoginRequest.password(), u.getPassword()))
+            throw new PasswordNotMatchesException();
+        String token = jwtUtil.generate(userLoginRequest);
+        return new TokenResponse(token);
     }
 
-    public TokenResponse tokenResponse(String token){
+    public TokenResponse tokenResponse(String token) {
         String email = this.jwtUtil.validate(token).getClaim("email").asString();
         return new TokenResponse(jwtUtil.generate(email));
     }
@@ -128,7 +127,8 @@ public class UserService {
     @RabbitListener(queues = "user-queue")
     public void handleMessage(byte[] message) throws MessagingException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
         OrganizatorRequest organizatorRequest = (OrganizatorRequest) DeserializeHelper.desarialize(message);
-        if(organizatorRequest != null){
+        if (organizatorRequest != null) {
             handleOrganizator(organizatorRequest);
         }
-    }}
+    }
+}

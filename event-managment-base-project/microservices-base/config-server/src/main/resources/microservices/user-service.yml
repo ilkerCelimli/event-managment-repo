@@ -1,19 +1,29 @@
 spring:
+  profiles:
+    active: development
   data:
     mongodb:
-      #uri: mongodb://admin:12345@localhost:27017/?retryWrites=true&w=majority&authSource=admin
-      #?authSource=admin&authMechanism=SCRAM-SHA-1
-      uri: mongodb+srv://Meloonia:mbS10w1ENsX5CMIl@user-service.vj9bcnu.mongodb.net/?retryWrites=true&w=majority
-      #database: user-service
-      #uri: mongodb+srv://admin:12345@localhost:27017/?retryWrites=true&w=majority
-
-      #username: admin
-      #password: pass
-      database: users
-      #port: 27017
-      #host: localhost
+      username: root
+      password: root
+      database: user-service
+      port: 27017
+      host: localhost
 server:
   port: 9011
 
 jwt:
   secret-key: RandomKey
+
+---
+spring:
+  data:
+    mongodb:
+      username: root
+      passowrd: root
+      database: test
+      host: localhost
+      port: 27017
+      authentication-database: admin
+  profiles:
+    active: test
+
