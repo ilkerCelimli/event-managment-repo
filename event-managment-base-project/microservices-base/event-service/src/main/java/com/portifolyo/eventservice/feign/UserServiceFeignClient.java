@@ -1,6 +1,6 @@
 package com.portifolyo.eventservice.feign;
 
-import org.portifolyo.requests.userservice.UserInfo;
+import org.portifolyo.response.UserInfo;
 import org.portifolyo.response.GenericResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

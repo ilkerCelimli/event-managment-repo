@@ -1,7 +1,7 @@
 package com.portifolyo.userservice.services;
 
 import com.portifolyo.userservice.entity.User;
-import org.portifolyo.requests.userservice.UserInfo;
+import org.portifolyo.response.UserInfo;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

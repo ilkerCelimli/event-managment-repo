@@ -10,7 +10,7 @@ import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
-import org.portifolyo.requests.userservice.UserInfo;
+import org.portifolyo.response.UserInfo;
 import org.portifolyo.requests.userservice.UserLoginRequest;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
 import org.portifolyo.response.TokenResponse;

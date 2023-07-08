@@ -1,6 +1,9 @@
 package org.portifolyo.requests.userservice;
 
+import jakarta.validation.constraints.NotNull;
+
 public record ForgotPasswordRequest(
-        String email
+      @NotNull
+      String email
 ) {
 }

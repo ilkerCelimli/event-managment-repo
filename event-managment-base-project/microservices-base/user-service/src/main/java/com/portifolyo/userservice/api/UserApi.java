@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.portifolyo.userservice.entity.User;
 import com.portifolyo.userservice.service.UserService;
 import jakarta.mail.MessagingException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.portifolyo.requests.userservice.UserInfo;
+import org.portifolyo.response.UserInfo;
 import org.portifolyo.requests.userservice.UserLoginRequest;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
 import org.portifolyo.response.GenericResponse;
@@ -23,13 +24,13 @@ public class UserApi {
 
 
     @PostMapping("/register")
-    public ResponseEntity<GenericResponse<User>> saveUser(@RequestBody UserRegisterRequest userRegisterRequest) throws MessagingException {
+    public ResponseEntity<GenericResponse<User>> saveUser(@RequestBody @Valid UserRegisterRequest userRegisterRequest) throws MessagingException {
         User u = this.userService.saveUser(userRegisterRequest);
         return ResponseEntity.ok(GenericResponse.SUCCESS(u));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<GenericResponse<TokenResponse>> login(@RequestBody UserLoginRequest userLoginRequest){
+    public ResponseEntity<GenericResponse<TokenResponse>> login(@RequestBody @Valid UserLoginRequest userLoginRequest){
        TokenResponse tokenResponse =  this.userService.tokenResponse(userLoginRequest);
        return ResponseEntity.ok(GenericResponse.SUCCESS(tokenResponse));
     }

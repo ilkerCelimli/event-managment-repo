@@ -1,5 +1,6 @@
 package org.portifolyo.requests.eventservice;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.portifolyo.requests.eventservice.enums.EventType;
@@ -23,6 +24,7 @@ public record EventSaveRequest(
         EventType eventType,
         Integer maxPeople,
         @NotNull(message = EVENT_AREA_IS_NOT_NULL)
+        @Valid
         EventAreaRequest eventAreaRequest,
         EventDescriptionRequest description
 ) {

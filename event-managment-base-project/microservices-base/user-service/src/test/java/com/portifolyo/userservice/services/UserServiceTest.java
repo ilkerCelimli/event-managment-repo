@@ -9,7 +9,7 @@ import com.portifolyo.userservice.util.RandomGenerator;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.portifolyo.requests.userservice.UserInfo;
+import org.portifolyo.response.UserInfo;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
 import org.portifolyo.utils.UpdateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-import java.util.Random;
 
 
 @DataMongoTest

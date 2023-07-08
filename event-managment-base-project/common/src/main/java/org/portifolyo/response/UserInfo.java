@@ -1,4 +1,4 @@
-package org.portifolyo.requests.userservice;
+package org.portifolyo.response;
 
 public record UserInfo(
         String id,
