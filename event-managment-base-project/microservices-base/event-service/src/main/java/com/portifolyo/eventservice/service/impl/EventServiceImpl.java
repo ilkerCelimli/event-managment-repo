@@ -16,6 +16,7 @@ import com.portifolyo.eventservice.util.mapper.EventSaveRequestMapper;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.utils.UpdateHelper;
+import org.springframework.beans.MethodInvocationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,17 +48,24 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
-    public void updateEventRequestHandle(EventSaveRequest event, String eventId) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public void updateEventRequestHandle(EventSaveRequest event, String eventId){
         Event e = this.eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(
                 String.format("%s event id not found",eventId)
         ));
         UpdateHelper<EventSaveRequest,Event> updateHelper = new UpdateHelper<>();
-       Event updated = updateHelper.updateHelper(event,e);
-        if(e != null) {
-            this.save(updated);
-            return;
-        }
-        throw new GenericException("Update problems",500);
+       try {
+           Event updated = updateHelper.updateHelper(event,e);
+           if(e != null) {
+               this.save(updated);
+               return;
+           }
+           throw new GenericException("Update problems",500);
+       }
+       catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException exception){
+           throw new GenericException("Update problems",500);
+       }
+
+
     }
 
     @Override

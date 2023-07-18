@@ -39,15 +39,6 @@ public class EventApi {
         return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
-
-    @GetMapping("/findEventsByOrganizator")
-    public ResponseEntity<GenericResponse<List<EventInfo>>> findEventsByOrganizator(
-            @RequestParam String id, @RequestParam Integer page, @RequestParam Integer size ){
-        List<EventInfo> eventInfo = this.eventService.findEventsByOrganizatorMail(id,page,size);
-        return ResponseEntity.ok(GenericResponse.SUCCESS(eventInfo));
-
-    }
-
     @PostMapping("/addImagesByEvent")
     public ResponseEntity<GenericResponse<Void>> addImagesByEvent(@RequestParam String id, @RequestBody List<ImageAndLinks> imageAndLinks){
         this.eventService.addimages(id,imageAndLinks);

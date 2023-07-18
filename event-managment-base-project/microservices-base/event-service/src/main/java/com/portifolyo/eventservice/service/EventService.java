@@ -12,7 +12,7 @@ import java.util.List;
 public interface EventService {
 
     void saveEventRequestHandle(EventSaveRequest event);
-    void updateEventRequestHandle(EventSaveRequest event,String eventId) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException;
+    void updateEventRequestHandle(EventSaveRequest event,String eventId);
 
     void eventInActiveHandle(String eventId);
 
