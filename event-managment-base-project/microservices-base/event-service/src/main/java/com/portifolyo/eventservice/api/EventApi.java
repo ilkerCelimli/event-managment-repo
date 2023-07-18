@@ -2,9 +2,11 @@ package com.portifolyo.eventservice.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
+import com.portifolyo.eventservice.repository.projections.EventDto;
 import com.portifolyo.eventservice.service.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.response.GenericResponse;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +45,11 @@ public class EventApi {
     public ResponseEntity<GenericResponse<Void>> addImagesByEvent(@RequestParam String id, @RequestBody List<ImageAndLinks> imageAndLinks){
         this.eventService.addimages(id,imageAndLinks);
         return ResponseEntity.ok(GenericResponse.SUCCESS());
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<GenericResponse<List<EventDto>>> findEvents(@RequestBody TableRequest tableRequest){
+        return ResponseEntity.ok(GenericResponse.SUCCESS(this.eventService.findEvents(tableRequest)));
     }
 
 }
