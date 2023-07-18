@@ -1,6 +1,7 @@
 package com.portifolyo.userservice.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 @ToString(of = "id")
+@SuperBuilder
 public class User {
 
     @MongoId

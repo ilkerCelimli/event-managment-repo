@@ -1,8 +1,8 @@
-package com.portifolyo.userservice.service;
+package com.portifolyo.userservice.services;
 
 import com.portifolyo.userservice.entity.User;
 import com.portifolyo.userservice.exception.apiexceptions.*;
-import com.portifolyo.userservice.services.UserRepository;
+import com.portifolyo.userservice.repository.UserRepository;
 import com.portifolyo.userservice.util.JwtUtil;
 import com.portifolyo.userservice.util.RandomStringGenerator;
 import com.portifolyo.userservice.util.converter.UserRegisterRequestConverter;
@@ -42,10 +42,9 @@ public class UserService {
     @Transactional
     public User saveUser(UserRegisterRequest userRegisterRequest) throws MessagingException {
         if (!findEmailIsExists(userRegisterRequest.email())) {
-            User u = userRegisterRequestConverter.toEntity(userRegisterRequest);
-            this.userRepository.save(u);
+            User u = this.userRepository.save(userRegisterRequestConverter.toEntity(userRegisterRequest));
             log.info("saved user date {},id {}", new Date(), u.getId());
-            emailService.sendMail(u);
+           // emailService.sendMail(u);
             return u;
         }
         throw new EmailIsExistsException();

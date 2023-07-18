@@ -2,7 +2,6 @@ package com.portifolyo.eventservice.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
-import com.portifolyo.eventservice.repository.projections.EventInfo;
 import com.portifolyo.eventservice.service.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

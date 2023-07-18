@@ -12,5 +12,11 @@ spring:
   cache:
     type: redis
 
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: prometheus
+
 server:
   port: 9001

@@ -1,4 +1,4 @@
-package com.portifolyo.userservice.service;
+package com.portifolyo.userservice.services;
 
 import com.portifolyo.userservice.entity.User;
 import jakarta.mail.MessagingException;

@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
@@ -16,7 +19,7 @@ public class EventDescription extends BaseEntity {
     @Column(name = "description",nullable = false)
     private String descrtiption;
 
-/*    @OneToMany(mappedBy = "eventDescription",fetch = FetchType.EAGER ,cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
-    private Set<ImageAndLinks> imageAndLinksSet = new HashSet<>();*/
+   @OneToMany(mappedBy = "eventDescription",fetch = FetchType.EAGER ,cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
+    private Set<ImageAndLinks> imageAndLinksSet = new HashSet<>();
 
 }

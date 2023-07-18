@@ -11,4 +11,6 @@ public interface EventRepository extends BaseRepository<Event> {
     @Query("update Event e set e.isDeleted = ?1 where e.id = ?2")
     int updateIsDeletedById(Boolean isDeleted, String id);
 
+
+
 }

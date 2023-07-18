@@ -1,18 +1,23 @@
 package com.portifolyo.eventservice.repository.projections;
 
+import lombok.Builder;
+import lombok.Getter;
+
 /**
  * A Projection for the {@link com.portifolyo.eventservice.entity.Organizator} entity
  */
-public interface OrganizatorInfo {
-    String getId();
+@Getter
+@Builder
+public class OrganizatorInfo {
+    String id;
 
-    String getName();
+    String name;
 
-    String getSurname();
+    String surName;
 
-    String getPhoneNumber();
+    String phoneNumber;
 
-    String getEmail();
+    String mail;
 
-    String getTcNo();
+    String tcNo;
 }

@@ -8,10 +8,10 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
 email:
-    host: smtp.gmail.com
-    username: Meloonia52@gmail.com
-    password: ckxkwsewgvfmszpo
-    port: 587
+    host: ${email.host}
+    username: ${email.username}
+    password: ${email.password}
+    port: ${email.port}
     properties:
       mail:
         stmp:

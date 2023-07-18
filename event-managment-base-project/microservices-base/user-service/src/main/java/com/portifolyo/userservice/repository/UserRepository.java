@@ -1,4 +1,4 @@
-package com.portifolyo.userservice.services;
+package com.portifolyo.userservice.repository;
 
 import com.portifolyo.userservice.entity.User;
 import org.portifolyo.response.UserInfo;
