@@ -19,17 +19,24 @@ public class EmailService {
     private final TemplateEngine templateEngine;
 
 
-    public String sendMail(User u) throws MessagingException {
+    public String sendMail(User u){
         Context context = new Context();
         context.setVariable("user",u);
         String process = templateEngine.process("email",context);
-        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
-        mimeMessageHelper.setSubject("Hoşgeldiniz "+ u.getName());
-        mimeMessageHelper.setText(process,true);
-        mimeMessageHelper.setTo(u.getEmail());
-        javaMailSender.send(mimeMessageHelper.getMimeMessage());
-        return "sent";
+        try{
+
+            MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
+            mimeMessageHelper.setSubject("Hoşgeldiniz "+ u.getName());
+            mimeMessageHelper.setText(process,true);
+            mimeMessageHelper.setTo(u.getEmail());
+            javaMailSender.send(mimeMessageHelper.getMimeMessage());
+            return "sent";
+        }
+        catch (MessagingException e){
+            return null;
+        }
+
     }
 
 }

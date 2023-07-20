@@ -77,13 +77,12 @@ public class UserService {
     }
 
     @Transactional
-    public void handleOrganizator(OrganizatorRequest organizatorRequest) throws MessagingException {
+    public void handleOrganizator(OrganizatorRequest organizatorRequest) {
         User user = this.userRepository.findUserByEmail(organizatorRequest.email()).orElse(new User());
         if (user.getId() == null) {
             User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
                     RandomStringGenerator.randomStringGenerator(), LocalDateTime.of(1900, 1, 1, 1, 1, 1, 1), true);
             this.userRepository.save(u);
-           // emailService.sendMail(u);
             return;
         }
         UpdateHelper<OrganizatorRequest, User> updateHelper = new UpdateHelper<>();
@@ -121,7 +120,7 @@ public class UserService {
 
     @Transactional
     @RabbitListener(queues = "user-queue")
-    public void handleMessage(byte[] message) throws MessagingException {
+    public void handleMessage(byte[] message)  {
        OrganizatorRequest organizatorRequest = (OrganizatorRequest) DeserializeHelper.desarialize(message);
         if (organizatorRequest != null) {
             handleOrganizator(organizatorRequest);
