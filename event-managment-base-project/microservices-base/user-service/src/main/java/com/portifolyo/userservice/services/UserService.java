@@ -17,6 +17,7 @@ import org.portifolyo.response.TokenResponse;
 import org.portifolyo.utils.DeserializeHelper;
 import org.portifolyo.utils.UpdateHelper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.utils.SerializationUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +41,7 @@ public class UserService {
     private final JwtUtil jwtUtil;
 
     @Transactional
-    public User saveUser(UserRegisterRequest userRegisterRequest) throws MessagingException {
+    public User saveUser(UserRegisterRequest userRegisterRequest) {
         if (!findEmailIsExists(userRegisterRequest.email())) {
             User u = this.userRepository.save(userRegisterRequestConverter.toEntity(userRegisterRequest));
             log.info("saved user date {},id {}", new Date(), u.getId());
@@ -82,7 +83,7 @@ public class UserService {
             User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
                     RandomStringGenerator.randomStringGenerator(), LocalDateTime.of(1900, 1, 1, 1, 1, 1, 1), true);
             this.userRepository.save(u);
-            emailService.sendMail(u);
+           // emailService.sendMail(u);
             return;
         }
         UpdateHelper<OrganizatorRequest, User> updateHelper = new UpdateHelper<>();
@@ -121,7 +122,7 @@ public class UserService {
     @Transactional
     @RabbitListener(queues = "user-queue")
     public void handleMessage(byte[] message) throws MessagingException {
-        OrganizatorRequest organizatorRequest = (OrganizatorRequest) DeserializeHelper.desarialize(message);
+       OrganizatorRequest organizatorRequest = (OrganizatorRequest) DeserializeHelper.desarialize(message);
         if (organizatorRequest != null) {
             handleOrganizator(organizatorRequest);
         }

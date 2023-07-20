@@ -17,6 +17,8 @@ import com.portifolyo.eventservice.util.mapper.EventDtoMapper;
 import com.portifolyo.eventservice.util.mapper.OrganizatorRequestMapper;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.utils.SerializationUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -31,12 +33,14 @@ public class EventAndOrganizatorServiceImpl extends BaseServiceImpl<EventAndOrga
 
     final EventAreaService eventAreaService;
     final OrganizatorRepository organizatorRepository;
+    final RabbitTemplate rabbitTemplate;
 
-    public EventAndOrganizatorServiceImpl(EventAndOrganizatorManyToManyRepository repository, EventAreaService eventAreaService, OrganizatorRepository organizatorRepository) {
+    public EventAndOrganizatorServiceImpl(EventAndOrganizatorManyToManyRepository repository, EventAreaService eventAreaService, OrganizatorRepository organizatorRepository, RabbitTemplate rabbitTemplate) {
         super(repository);
         this.repository = repository;
         this.eventAreaService = eventAreaService;
         this.organizatorRepository = organizatorRepository;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     @Override
@@ -44,6 +48,7 @@ public class EventAndOrganizatorServiceImpl extends BaseServiceImpl<EventAndOrga
         o.forEach(i -> {
             Optional<Organizator> organizator =  organizatorRepository.findOrganizatorByEmailEquals(i.email());
            Organizator ref = organizator.orElse(OrganizatorRequestMapper.toEntity(i));
+           if(ref.getId() == null) rabbitTemplate.convertAndSend("user-exchange","user-router", SerializationUtils.serialize(i));
            EventAndOrganizatorManyToMany entity = new EventAndOrganizatorManyToMany();
            entity.setOrganizator(ref);
            entity.setEvent(e);
