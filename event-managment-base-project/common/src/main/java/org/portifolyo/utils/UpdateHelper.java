@@ -9,7 +9,7 @@ import java.lang.reflect.RecordComponent;
 public class UpdateHelper<S,T> {
 
 
-    public  T updateHelper(S source,T target) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    public  T updateHelper(S source,T target) {
 
        try {
            RecordComponent[] rc = source.getClass().getRecordComponents();

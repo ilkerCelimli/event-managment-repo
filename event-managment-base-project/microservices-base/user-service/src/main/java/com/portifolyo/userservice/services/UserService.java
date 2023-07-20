@@ -63,11 +63,7 @@ public class UserService {
     public void updateUser(UserRegisterRequest userRegisterRequest) {
         User opt = this.userRepository.findUserByEmail(userRegisterRequest.email()).orElseThrow(EmailIsExistsException::new);
         UpdateHelper<UserRegisterRequest, User> updateHelper = new UpdateHelper<>();
-        try {
             this.userRepository.save(updateHelper.updateHelper(userRegisterRequest, opt));
-        } catch (IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            log.error(e.getMessage());
-        }
     }
 
     public List<UserInfo> findAllUser() {
@@ -80,7 +76,7 @@ public class UserService {
     }
 
     @Transactional
-    public void handleOrganizator(OrganizatorRequest organizatorRequest) throws MessagingException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public void handleOrganizator(OrganizatorRequest organizatorRequest) throws MessagingException {
         User user = this.userRepository.findUserByEmail(organizatorRequest.email()).orElse(new User());
         if (user.getId() == null) {
             User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
@@ -124,7 +120,7 @@ public class UserService {
 
     @Transactional
     @RabbitListener(queues = "user-queue")
-    public void handleMessage(byte[] message) throws MessagingException, InvocationTargetException, IllegalAccessException, NoSuchMethodException {
+    public void handleMessage(byte[] message) throws MessagingException {
         OrganizatorRequest organizatorRequest = (OrganizatorRequest) DeserializeHelper.desarialize(message);
         if (organizatorRequest != null) {
             handleOrganizator(organizatorRequest);

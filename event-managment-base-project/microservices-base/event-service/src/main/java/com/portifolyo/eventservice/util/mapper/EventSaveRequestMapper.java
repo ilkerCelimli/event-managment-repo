@@ -8,7 +8,6 @@ import org.portifolyo.requests.eventservice.ImageAndLinksReqeust;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class EventSaveRequestMapper {
 
@@ -21,7 +20,7 @@ public class EventSaveRequestMapper {
         ref.setComingPeople(request.comingPeople());
         ref.setIsPeopleRegistered(request.isPeopleIsRegistered());
         ref.setIsTicket(request.isTicket());
-
+        ref.setEventName(request.eventName());
         EventDescription eventDescription = new EventDescription();
         eventDescription.setDescrtiption(request.description().description());
         Set<ImageAndLinks> images = new HashSet<>();

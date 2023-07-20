@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface EventRepository extends BaseRepository<Event> {
     @Transactional
     @Modifying
-    @Query("update Event e set e.isDeleted = ?1 where e.id = ?2")
+    @Query("update Event e set e.deleted = ?1 where e.id = ?2")
     int updateIsDeletedById(Boolean isDeleted, String id);
 
 

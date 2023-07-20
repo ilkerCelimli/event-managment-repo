@@ -19,7 +19,7 @@ public class EventDescription extends BaseEntity {
     @Column(name = "description",nullable = false)
     private String descrtiption;
 
-   @OneToMany(mappedBy = "eventDescription",fetch = FetchType.EAGER ,cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
+   @OneToMany(mappedBy = "eventDescription",fetch = FetchType.EAGER ,cascade = CascadeType.ALL)
     private Set<ImageAndLinks> imageAndLinksSet = new HashSet<>();
 
 }

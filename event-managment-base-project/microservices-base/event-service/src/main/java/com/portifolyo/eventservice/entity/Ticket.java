@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ComingPeople extends BaseEntity {
+public class Ticket extends BaseEntity {
 
     @Column(nullable = false)
     private String name;
@@ -24,7 +24,7 @@ public class ComingPeople extends BaseEntity {
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
-    public ComingPeople(String name, String surname, String phoneNumber, String email, String tcNo) {
+    public Ticket(String name, String surname, String phoneNumber, String email, String tcNo) {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;

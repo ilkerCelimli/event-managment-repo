@@ -34,7 +34,7 @@ public class EventDescriptionMapper {
         }
         eventDescriptionInfo.setCreatedDate(req.getCreatedDate());
         eventDescriptionInfo.setImageAndLinksList(set);
-        eventDescriptionInfo.setIsDeleted(req.getIsDeleted());
+        eventDescriptionInfo.setIsDeleted(req.getDeleted());
         eventDescriptionInfo.setId(req.getId());
         return eventDescriptionInfo;
     }

@@ -25,7 +25,7 @@ public class EventAreaServiceImpl extends BaseServiceImpl<EventArea> implements 
     public void handleEventAreaRequest(EventAreaRequest areaRequest, Event e) {
         EventArea eventArea = EventAreaMapper.toEntity(areaRequest);
         eventArea.setEvent(e);
-        super.save(eventArea);
+        save(eventArea);
     }
 
     @Override

@@ -14,8 +14,8 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 public class ImageAndLinks extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_description_id",nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "event_description_id",nullable = true)
     private EventDescription eventDescription;
     @Column(name = "item",nullable = false)
     private String item;

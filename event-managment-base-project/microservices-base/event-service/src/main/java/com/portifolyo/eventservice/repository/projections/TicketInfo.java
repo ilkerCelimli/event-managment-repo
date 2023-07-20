@@ -1,11 +1,12 @@
 package com.portifolyo.eventservice.repository.projections;
 
+import com.portifolyo.eventservice.entity.Ticket;
 import org.portifolyo.requests.eventservice.enums.EventType;
 
 import java.util.Date;
 
 /**
- * Projection for {@link com.portifolyo.eventservice.entity.ComingPeople}
+ * Projection for {@link Ticket}
  */
 public interface TicketInfo {
     String getId();

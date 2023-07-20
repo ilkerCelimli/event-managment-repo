@@ -4,16 +4,17 @@ import com.portifolyo.eventservice.entity.Organizator;
 import com.portifolyo.eventservice.exceptions.GenericException;
 import com.portifolyo.eventservice.exceptions.NotFoundException;
 import com.portifolyo.eventservice.repository.OrganizatorRepository;
+import com.portifolyo.eventservice.repository.projections.OrganizatorEventsInfos;
 import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
 import com.portifolyo.eventservice.service.BaseServiceImpl;
 import com.portifolyo.eventservice.service.EventAndOrganizatorManyToManyService;
 import com.portifolyo.eventservice.service.OrganizatorService;
 import com.portifolyo.eventservice.util.mapper.OrganizatorRequestMapper;
+import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.utils.UpdateHelper;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.InvocationTargetException;
 
 @Service
 public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> implements OrganizatorService {
@@ -42,6 +43,7 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
                 .name(organizator.getName())
                 .phoneNumber(organizator.getPhoneNumber())
                 .surName(organizator.getSurname())
+                .mail(organizator.getEmail())
                 .build();
     }
 
@@ -53,13 +55,13 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
 
     @Override
     public OrganizatorInfo updateOrganizator(OrganizatorRequest or, String id) {
-        try{
             UpdateHelper<OrganizatorRequest,Organizator> updateHelper = new UpdateHelper<>();
             Organizator organizator = this.organizatorRepository.findById(id).orElseThrow(() -> new NotFoundException(
                     String.format("%s id not found",id)
             ));
             Organizator updated = updateHelper.updateHelper(or,organizator);
             if(updated == null) throw new GenericException("update problem",500);
+            save(updated);
             return OrganizatorInfo.builder()
                     .id(updated.getId())
                     .tcNo(updated.getTcNo())
@@ -68,18 +70,15 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
                     .mail(updated.getEmail())
                     .phoneNumber(updated.getPhoneNumber()).build();
 
-        }
-        catch (InvocationTargetException | IllegalAccessException | NoSuchMethodException exception){
-            throw new GenericException("Update problems",500);
-        }
-
     }
 
     @Override
     public void deleteOrganizator(String id) {
-        Organizator organizator = this.organizatorRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("Not found %s",id)));
-        organizator.setIsDeleted(true);
-        save(organizator);
+        this.organizatorRepository.updateIsDeletedById(true,id);
+    }
+
+    @Override
+    public OrganizatorEventsInfos findOrganizatorEvents(String email, TableRequest tableRequest) {
+        return this.organizatorManyToManyService.complitionOrganizatorEvents(email,tableRequest);
     }
 }

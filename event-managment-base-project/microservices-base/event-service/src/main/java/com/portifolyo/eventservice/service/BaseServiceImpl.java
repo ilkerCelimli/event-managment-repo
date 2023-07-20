@@ -39,7 +39,7 @@ public class BaseServiceImpl<T extends BaseEntity> {
 
     protected void delete(String id) {
         T entity = findById(id);
-        entity.setIsDeleted(true);
+        entity.setDeleted(true);
         this.baseRepository.save(entity);
     }
 
