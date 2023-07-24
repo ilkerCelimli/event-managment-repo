@@ -1,8 +1,8 @@
 package com.portifolyo.eventservice.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.portifolyo.requests.eventservice.enums.DescriptionTypes;
-import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)

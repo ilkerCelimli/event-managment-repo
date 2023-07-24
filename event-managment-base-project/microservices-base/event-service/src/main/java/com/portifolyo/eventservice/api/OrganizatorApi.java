@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-    @RequestMapping("/organizator")
+@RequestMapping("/organizator")
 @RequiredArgsConstructor
 public class OrganizatorApi {
 

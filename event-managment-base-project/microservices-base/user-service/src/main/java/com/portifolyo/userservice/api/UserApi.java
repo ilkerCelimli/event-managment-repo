@@ -3,7 +3,7 @@ package com.portifolyo.userservice.api;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.portifolyo.userservice.entity.User;
 import com.portifolyo.userservice.services.UserService;
-import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.userservice.UserLoginRequest;
@@ -11,6 +11,7 @@ import org.portifolyo.requests.userservice.UserRegisterRequest;
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.TokenResponse;
 import org.portifolyo.response.UserInfo;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +31,9 @@ public class UserApi {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<GenericResponse<TokenResponse>> login(@RequestBody @Valid UserLoginRequest userLoginRequest){
+    public ResponseEntity<GenericResponse<TokenResponse>> login(@RequestBody @Valid UserLoginRequest userLoginRequest, HttpServletResponse response){
        TokenResponse tokenResponse =  this.userService.tokenResponse(userLoginRequest);
+       response.addHeader(HttpHeaders.AUTHORIZATION, tokenResponse.getToken());
        return ResponseEntity.ok(GenericResponse.SUCCESS(tokenResponse));
     }
 

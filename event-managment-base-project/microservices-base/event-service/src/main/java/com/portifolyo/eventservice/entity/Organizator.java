@@ -1,6 +1,9 @@
 package com.portifolyo.eventservice.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import lombok.Data;
 
 @Inheritance(strategy = InheritanceType.JOINED)

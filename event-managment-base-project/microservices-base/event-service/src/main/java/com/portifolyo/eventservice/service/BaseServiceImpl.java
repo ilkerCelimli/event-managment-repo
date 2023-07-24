@@ -6,7 +6,6 @@ import com.portifolyo.eventservice.repository.BaseRepository;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
-import java.util.Optional;
 
 @Log4j2
 public class BaseServiceImpl<T extends BaseEntity> {

@@ -14,6 +14,7 @@ import org.portifolyo.requests.userservice.UserRegisterRequest;
 import org.portifolyo.response.TokenResponse;
 import org.portifolyo.response.UserInfo;
 import org.portifolyo.utils.DeserializeHelper;
+import org.portifolyo.utils.JsonTokenUtils;
 import org.portifolyo.utils.UpdateHelper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -105,13 +106,13 @@ public class UserService {
         if (!u.isActive()) throw new BannedUserException(userLoginRequest.email());
         if (!passwordEncoder.matches(userLoginRequest.password(), u.getPassword()))
             throw new PasswordNotMatchesException();
-        String token = jwtUtil.generate(userLoginRequest);
+        String token = JsonTokenUtils.generate(userLoginRequest);
         return new TokenResponse(token);
     }
 
     public TokenResponse tokenResponse(String token) {
-        String email = this.jwtUtil.validate(token).getClaim("email").asString();
-        return new TokenResponse(jwtUtil.generate(email));
+        String email = JsonTokenUtils.validate(token).getClaim("email").asString();
+        return new TokenResponse(JsonTokenUtils.generate(email));
     }
 
     @Transactional

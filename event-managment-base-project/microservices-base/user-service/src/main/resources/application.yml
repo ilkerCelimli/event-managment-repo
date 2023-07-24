@@ -5,6 +5,8 @@ spring:
   cloud:
     config:
       name: user-service
+  cache:
+    type: redis
   config:
     import: optional:configserver:http://localhost:8888
 email:

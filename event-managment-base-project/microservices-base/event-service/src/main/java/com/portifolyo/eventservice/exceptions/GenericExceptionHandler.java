@@ -3,8 +3,8 @@ package com.portifolyo.eventservice.exceptions;
 import feign.FeignException;
 import org.portifolyo.response.GenericResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class GenericExceptionHandler {

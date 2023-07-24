@@ -1,10 +1,11 @@
 package com.portifolyo.eventservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.portifolyo.requests.eventservice.enums.EventType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.portifolyo.requests.eventservice.enums.EventType;
+
 import java.time.LocalDateTime;
 
 @Entity

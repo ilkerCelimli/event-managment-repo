@@ -4,10 +4,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.portifolyo.requests.eventservice.enums.EventType;
-import static org.portifolyo.requests.eventservice.messages.EventSaveRequestMessage.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.portifolyo.requests.eventservice.messages.EventSaveRequestMessage.*;
 
 public record EventSaveRequest(
         @NotNull(message = ORGANIZATOR_LIST_IS_NOT_NULL)

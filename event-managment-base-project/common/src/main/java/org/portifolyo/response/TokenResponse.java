@@ -9,6 +9,6 @@ public class TokenResponse {
     }
 
     public String getToken(){
-        return this.token;
+        return "Bearer "+ this.token;
     }
 }
