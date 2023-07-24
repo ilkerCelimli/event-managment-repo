@@ -6,24 +6,20 @@ import com.portifolyo.userservice.repository.UserRepository;
 import com.portifolyo.userservice.util.JwtUtil;
 import com.portifolyo.userservice.util.RandomStringGenerator;
 import com.portifolyo.userservice.util.converter.UserRegisterRequestConverter;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
-import org.portifolyo.response.UserInfo;
 import org.portifolyo.requests.userservice.UserLoginRequest;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
 import org.portifolyo.response.TokenResponse;
+import org.portifolyo.response.UserInfo;
 import org.portifolyo.utils.DeserializeHelper;
 import org.portifolyo.utils.UpdateHelper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.utils.SerializationUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import java.lang.reflect.InvocationTargetException;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;

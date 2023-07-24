@@ -8,10 +8,10 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
 email:
-    host: ${email.host}
-    username: ${email.username}
-    password: ${email.password}
-    port: ${email.port}
+    host: ${email_host}
+    username: ${email_username}
+    password: ${email_password}
+    port: ${email_port}
     properties:
       mail:
         stmp:

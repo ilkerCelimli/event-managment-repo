@@ -6,11 +6,11 @@ import com.portifolyo.userservice.services.UserService;
 import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.portifolyo.response.UserInfo;
 import org.portifolyo.requests.userservice.UserLoginRequest;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.TokenResponse;
+import org.portifolyo.response.UserInfo;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +24,7 @@ public class UserApi {
 
 
     @PostMapping("/register")
-    public ResponseEntity<GenericResponse<User>> saveUser(@RequestBody @Valid UserRegisterRequest userRegisterRequest) throws MessagingException {
+    public ResponseEntity<GenericResponse<User>> saveUser(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
         User u = this.userService.saveUser(userRegisterRequest);
         return ResponseEntity.ok(GenericResponse.SUCCESS(u));
     }

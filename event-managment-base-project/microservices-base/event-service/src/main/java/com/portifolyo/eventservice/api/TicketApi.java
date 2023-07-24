@@ -38,9 +38,9 @@ public class TicketApi {
         return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
-    @GetMapping("/findTickets")
-    public ResponseEntity<GenericResponse<List<TicketInfo>>> findTickets(@RequestBody TableRequest tableRequest, @RequestParam String eventId) {
-        return ResponseEntity.ok(GenericResponse.SUCCESS(this.ticketService.findTickets(tableRequest, eventId)));
+    @GetMapping("/findTicket/{id}")
+    public ResponseEntity<GenericResponse<List<TicketInfo>>> findTickets(@RequestBody TableRequest tableRequest, @PathVariable String id) {
+        return ResponseEntity.ok(GenericResponse.SUCCESS(this.ticketService.findTickets(tableRequest,id)));
     }
 
 }

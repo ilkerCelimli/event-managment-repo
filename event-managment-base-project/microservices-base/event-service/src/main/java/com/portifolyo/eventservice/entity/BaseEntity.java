@@ -22,6 +22,7 @@ public abstract class BaseEntity {
     @Column(name = "created_date",nullable = false)
     private LocalDateTime createdDate;
     @Column(name = "is_deleted")
+
     private Boolean deleted = false;
 
 

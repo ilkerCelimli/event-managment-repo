@@ -7,14 +7,16 @@ import com.portifolyo.userservice.services.UserService;
 import com.portifolyo.userservice.util.RandomGenerator;
 import jakarta.mail.MessagingException;
 import jakarta.ws.rs.NotFoundException;
-import org.junit.jupiter.api.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class UserServiceTest extends BaseTestClass {
     @Autowired

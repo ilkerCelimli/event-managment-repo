@@ -18,8 +18,8 @@ import java.util.List;
 @Service
 public class TicketServiceImpl extends BaseServiceImpl<Ticket> implements TicketService {
 
-   private final TicketRepository ticketRepository;
-   private final EventService eventService;
+    private final TicketRepository ticketRepository;
+    private final EventService eventService;
 
     public TicketServiceImpl(TicketRepository ticketRepository, EventService eventService) {
         super(ticketRepository);
@@ -29,9 +29,9 @@ public class TicketServiceImpl extends BaseServiceImpl<Ticket> implements Ticket
 
     @Override
     public void handleTicketRequest(TicketRequest ticketRequest) {
-       Ticket ticket = TicketRequestMapper.toEntity(ticketRequest);
-       ticket.setEvent(this.eventService.findById(ticketRequest.eventId()));
-       super.save(ticket);
+        Ticket ticket = TicketRequestMapper.toEntity(ticketRequest);
+        ticket.setEvent(this.eventService.findById(ticketRequest.eventId()));
+        super.save(ticket);
     }
 
     @Override
@@ -43,16 +43,16 @@ public class TicketServiceImpl extends BaseServiceImpl<Ticket> implements Ticket
     }
 
     @Override
-    public TicketRequest updateTicket(String id ,TicketRequest ticketRequest) {
-        UpdateHelper<TicketRequest,Ticket> updateHelper = new UpdateHelper<>();
+    public TicketRequest updateTicket(String id, TicketRequest ticketRequest) {
+        UpdateHelper<TicketRequest, Ticket> updateHelper = new UpdateHelper<>();
 
-        Ticket updated = updateHelper.updateHelper(ticketRequest,findById(id));
+        Ticket updated = updateHelper.updateHelper(ticketRequest, findById(id));
         updated = update(updated);
         return TicketRequestMapper.toDto(updated);
     }
 
     @Override
     public List<TicketInfo> findTickets(TableRequest tableRequest, String eventId) {
-        return this.ticketRepository.findTicketsInfo(eventId,PageRequest.of(tableRequest.getPage(), tableRequest.getSize()));
+        return this.ticketRepository.findByDeletedFalseAndEvent_IdOrderByCreatedDateAsc(eventId, PageRequest.of(tableRequest.getPage(), tableRequest.getSize()));
     }
 }
