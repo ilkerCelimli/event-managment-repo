@@ -10,6 +10,7 @@ import com.portifolyo.eventservice.repository.EventRepository;
 import com.portifolyo.eventservice.repository.ImageAndLinksRepository;
 import com.portifolyo.eventservice.repository.projections.EventAreaInfo;
 import com.portifolyo.eventservice.repository.projections.EventDto;
+import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
 import com.portifolyo.eventservice.service.BaseServiceImpl;
 import com.portifolyo.eventservice.service.EventAndOrganizatorManyToManyService;
 import com.portifolyo.eventservice.service.EventAreaService;
@@ -79,6 +80,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     public void eventInActiveHandle(String eventId) {
         this.eventRepository.updateIsDeletedById(true,eventId);
     }
+
     @Override
     public Event findById(String id) {
         return this.eventRepository.findById(id).orElseThrow(()
@@ -105,4 +107,12 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
 
         return result;
     }
+
+    @Override
+    public EventDto findEventById(String id) {
+        Event e = this.eventRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("%s bulunamadı",id)));
+        List<OrganizatorInfo> list = this.eventAndOrganizatorManyToManyService.findOrganizatorsByEventId(id);
+        return EventDtoMapper.toDto(e,this.eventAreaService.findEventArea(id),list);
+    }
+
 }

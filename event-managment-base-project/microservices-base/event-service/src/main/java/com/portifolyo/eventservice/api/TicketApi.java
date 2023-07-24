@@ -4,6 +4,7 @@ import com.portifolyo.eventservice.repository.projections.TicketInfo;
 import com.portifolyo.eventservice.service.TicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.TicketRequest;
 import org.portifolyo.response.GenericResponse;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +26,9 @@ public class TicketApi {
         return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
-    @PutMapping("/")
-    public ResponseEntity<GenericResponse<TicketRequest>> updateTicket(@RequestBody TicketRequest ticketRequest) {
-        TicketRequest t = this.ticketService.updateTicket(ticketRequest);
+    @PutMapping("/{id}")
+    public ResponseEntity<GenericResponse<TicketRequest>> updateTicket(@PathVariable String id,@RequestBody TicketRequest ticketRequest) {
+        TicketRequest t = this.ticketService.updateTicket(id,ticketRequest);
         return ResponseEntity.ok(GenericResponse.SUCCESS(t));
     }
 
@@ -38,8 +39,8 @@ public class TicketApi {
     }
 
     @GetMapping("/findTickets")
-    public ResponseEntity<GenericResponse<List<TicketInfo>>> findTickets(@RequestParam Integer size, @RequestParam Integer page, @RequestParam String eventId) {
-        return ResponseEntity.ok(GenericResponse.SUCCESS(this.ticketService.findTickets(page, size, eventId)));
+    public ResponseEntity<GenericResponse<List<TicketInfo>>> findTickets(@RequestBody TableRequest tableRequest, @RequestParam String eventId) {
+        return ResponseEntity.ok(GenericResponse.SUCCESS(this.ticketService.findTickets(tableRequest, eventId)));
     }
 
 }

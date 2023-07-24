@@ -27,6 +27,7 @@ public record EventSaveRequest(
         @NotNull(message = EVENT_AREA_IS_NOT_NULL)
         @Valid
         EventAreaRequest eventAreaRequest,
+        @Valid
         EventDescriptionRequest description
 ) {
 }

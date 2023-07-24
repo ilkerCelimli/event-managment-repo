@@ -1,12 +1,11 @@
 package com.portifolyo.eventservice.service;
 
+import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
 import com.portifolyo.eventservice.repository.projections.EventDto;
-import jakarta.persistence.Table;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 public interface EventService {
@@ -19,5 +18,8 @@ public interface EventService {
     void addimages(String eventid, List<ImageAndLinks> imageAndLinks);
 
     List<EventDto> findEvents(TableRequest request);
+
+    EventDto findEventById(String id);
+    Event findById(String id);
 
 }

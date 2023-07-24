@@ -52,4 +52,9 @@ public class EventApi {
         return ResponseEntity.ok(GenericResponse.SUCCESS(this.eventService.findEvents(tableRequest)));
     }
 
+    @GetMapping("/findeventsbyid/{id}")
+    public ResponseEntity<GenericResponse<EventDto>> findEventsById(@PathVariable String id){
+        return ResponseEntity.ok(GenericResponse.SUCCESS(this.eventService.findEventById(id)));
+    }
+
 }
