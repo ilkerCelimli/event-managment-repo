@@ -9,6 +9,7 @@ import java.util.Date;
 
 public class JsonTokenUtils {
 
+    private JsonTokenUtils(){}
 
     private static final Algorithm algorithm = Algorithm.HMAC256("MySuperSecretKey".getBytes());
 
