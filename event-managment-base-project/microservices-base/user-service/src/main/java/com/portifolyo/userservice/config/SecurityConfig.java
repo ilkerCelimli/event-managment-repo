@@ -22,9 +22,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, CustomAuthenticationEntryPoint authenticationEntryPoint, JwtFilter jwtFilter, AccessDeniedErrorPoint accessDeniedErrorPoint) throws Exception {
         http.csrf().disable();
         http.sessionManagement(i -> i.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.authorizeHttpRequests(i ->i.requestMatchers("/user/login","/user/register","/user/refresh","/user/activeuser","/actuator/metrics").permitAll()
-                .requestMatchers("user/finduser").hasAnyRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE,"/").hasAnyRole("ADMIN")
+        http.authorizeHttpRequests(i ->i.requestMatchers("/user/login","user/register","/user/refresh","/user/activeuser","/actuator/metrics","/user/addrole").permitAll()
+                .requestMatchers(HttpMethod.GET,"/user/finduser").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.DELETE,"/").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.GET,"/").hasRole("ADMIN")
                 .anyRequest().authenticated());
         http.exceptionHandling(i ->{
             i.authenticationEntryPoint(authenticationEntryPoint);

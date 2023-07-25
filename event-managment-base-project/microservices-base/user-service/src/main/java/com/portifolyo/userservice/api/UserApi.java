@@ -1,7 +1,10 @@
 package com.portifolyo.userservice.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.portifolyo.userservice.entity.Roles;
 import com.portifolyo.userservice.entity.User;
+import com.portifolyo.userservice.enums.Role;
+import com.portifolyo.userservice.repository.RoleRepository;
 import com.portifolyo.userservice.services.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -23,7 +26,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserApi {
     private final UserService userService;
-
+    private final RoleRepository roleRepository;
+    @PostMapping("/addrole")
+    public ResponseEntity<Void> addRole(){
+        this.roleRepository.save(new Roles(null, Role.ROLE_ADMIN.getValue()));
+        return ResponseEntity.ok().build();
+    }
 
     @PostMapping("/register")
     public ResponseEntity<GenericResponse<User>> saveUser(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
@@ -62,13 +70,11 @@ public class UserApi {
     }
 
     @DeleteMapping("/")
-    @PreAuthorize("ADMIN")
     public ResponseEntity<GenericResponse<Void>> deleteUser(@RequestParam String email) {
          this.userService.deleteUser(email);
          return ResponseEntity.ok(new GenericResponse<>(200,"user inactived"));
     }
-    @GetMapping(value = "/finduser")
-    @PreAuthorize("ADMIN")
+    @GetMapping("/finduser")
     public ResponseEntity<GenericResponse<UserInfo>>findUserByEmail(@RequestParam String email){
         UserInfo u = this.userService.findUserByEmail(email);
        return u != null ? ResponseEntity.ok(new GenericResponse<>(200,null,u)) :

@@ -8,13 +8,9 @@ spring:
       database: user-service
       port: 27017
       host: localhost
+      authentication-database: admin
 server:
   port: 9011
-management:
-  endpoints:
-    web:
-      exposure:
-        exclude: prometheus
 jwt:
   secret-key: RandomKey
 

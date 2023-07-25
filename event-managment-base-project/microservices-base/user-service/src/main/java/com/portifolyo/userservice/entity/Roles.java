@@ -6,8 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
-@Document
+@Document(collation = "role")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,6 +16,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class Roles {
 
   @Field
+  @MongoId
   private String id;
   @Field
   private String role;

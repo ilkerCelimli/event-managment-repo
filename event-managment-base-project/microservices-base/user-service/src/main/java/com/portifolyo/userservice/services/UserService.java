@@ -1,7 +1,10 @@
 package com.portifolyo.userservice.services;
 
+import com.portifolyo.userservice.entity.Roles;
 import com.portifolyo.userservice.entity.User;
+import com.portifolyo.userservice.enums.Role;
 import com.portifolyo.userservice.exception.apiexceptions.*;
+import com.portifolyo.userservice.repository.RoleRepository;
 import com.portifolyo.userservice.repository.UserRepository;
 import com.portifolyo.userservice.util.JwtUtil;
 import com.portifolyo.userservice.util.RandomStringGenerator;
@@ -23,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,12 +37,16 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-    private final JwtUtil jwtUtil;
+    private final RoleRepository roleRepository;
 
     @Transactional
     public User saveUser(UserRegisterRequest userRegisterRequest) {
         if (!findEmailIsExists(userRegisterRequest.email())) {
             User u = this.userRepository.save(userRegisterRequestConverter.toEntity(userRegisterRequest));
+            List<Roles> roles = new ArrayList<>();
+            userRegisterRequest.role().forEach(i -> roles.add(this.roleRepository.findById(i.id()).get()));
+            u.setRolesList(roles);
+            this.userRepository.save(u);
             log.info("saved user date {},id {}", new Date(), u.getId());
            // emailService.sendMail(u);
             return u;
