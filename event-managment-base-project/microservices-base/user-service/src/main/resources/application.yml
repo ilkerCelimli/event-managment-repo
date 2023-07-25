@@ -23,5 +23,11 @@ email:
           ssl:
             required: true
             enabled: true
-
+management:
+  server:
+    port: 9011
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, metrics, info, health, shutdown, beans
 

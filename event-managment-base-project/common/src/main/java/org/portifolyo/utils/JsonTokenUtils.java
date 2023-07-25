@@ -14,17 +14,19 @@ public class JsonTokenUtils {
 
 
 
-    public static String generate(UserLoginRequest userLoginRequest){
+    public static String generate(UserLoginRequest userLoginRequest,String[] roles){
         return JWT.create()
                 .withClaim("email",userLoginRequest.email())
+                .withArrayClaim("roles",roles)
                 .withExpiresAt(new Date(System.currentTimeMillis() + (1000*60*30)))
                 .sign(algorithm);
     }
 
-    public static String generate(String email){
+    public static String generate(String email,String[] roles){
         return JWT.create()
                 .withClaim("email",email)
                 .withExpiresAt(new Date(System.currentTimeMillis() + (30*60*60)))
+                .withArrayClaim("roles",roles)
                 .sign(algorithm);
     }
 

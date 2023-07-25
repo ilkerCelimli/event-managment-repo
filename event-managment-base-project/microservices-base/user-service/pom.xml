@@ -6,7 +6,7 @@
         <groupId>com.portifolyo</groupId>
         <artifactId>microservices-base</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath>../pom.xml </relativePath> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.portifolyo</groupId>
     <artifactId>user-service</artifactId>
@@ -31,6 +31,12 @@
             <version>6.0.2</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/io.micrometer/micrometer-registry-prometheus -->
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <version>1.11.2</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>

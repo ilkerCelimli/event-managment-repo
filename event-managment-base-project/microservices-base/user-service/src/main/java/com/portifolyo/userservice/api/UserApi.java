@@ -13,6 +13,7 @@ import org.portifolyo.response.TokenResponse;
 import org.portifolyo.response.UserInfo;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -54,17 +55,20 @@ public class UserApi {
     }
 
     @PutMapping("/")
+    @PreAuthorize("USER")
     public ResponseEntity<GenericResponse<Void>> updateUsers(@JsonInclude(JsonInclude.Include.NON_NULL) @RequestBody UserRegisterRequest request) {
         this.userService.updateUser(request);
         return ResponseEntity.ok(new GenericResponse<>(200,"User Updated"));
     }
 
     @DeleteMapping("/")
+    @PreAuthorize("ADMIN")
     public ResponseEntity<GenericResponse<Void>> deleteUser(@RequestParam String email) {
          this.userService.deleteUser(email);
          return ResponseEntity.ok(new GenericResponse<>(200,"user inactived"));
     }
     @GetMapping(value = "/finduser")
+    @PreAuthorize("ADMIN")
     public ResponseEntity<GenericResponse<UserInfo>>findUserByEmail(@RequestParam String email){
         UserInfo u = this.userService.findUserByEmail(email);
        return u != null ? ResponseEntity.ok(new GenericResponse<>(200,null,u)) :

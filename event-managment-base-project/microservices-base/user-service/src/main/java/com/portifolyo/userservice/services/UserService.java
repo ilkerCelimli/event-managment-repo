@@ -22,9 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -106,13 +104,19 @@ public class UserService {
         if (!u.isActive()) throw new BannedUserException(userLoginRequest.email());
         if (!passwordEncoder.matches(userLoginRequest.password(), u.getPassword()))
             throw new PasswordNotMatchesException();
-        String token = JsonTokenUtils.generate(userLoginRequest);
+        String[] list = new String[u.getRolesList().size()];
+        for(int i = 0;i<list.length;i++){
+            if(u.getRolesList().get(i) == null) break;
+            list[i] = u.getRolesList().get(i).getRole();
+        }
+        String token = JsonTokenUtils.generate(userLoginRequest,list);
         return new TokenResponse(token);
     }
 
     public TokenResponse tokenResponse(String token) {
         String email = JsonTokenUtils.validate(token).getClaim("email").asString();
-        return new TokenResponse(JsonTokenUtils.generate(email));
+        String[] roles = JsonTokenUtils.validate(token).getClaim("roles").asArray(String.class);
+        return new TokenResponse(JsonTokenUtils.generate(email,roles));
     }
 
     @Transactional

@@ -45,9 +45,7 @@ public class GenericResponse<T> {
     public static <T> GenericResponse<T> SUCCESS(){
         return new GenericResponse<>(200,"success");
     }
-
-    public static GenericResponse<Void> BAD_REQUEST(String message){
-        return new GenericResponse<>(400,message);
+    public static GenericResponse<Void> BAD_REQUEST(String message){return new GenericResponse<>(400,message);
     }
 
 

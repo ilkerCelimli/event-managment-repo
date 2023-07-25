@@ -6,7 +6,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import javax.management.relation.Role;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Document
 @Getter
@@ -34,6 +36,9 @@ public class User {
 
     @Field
     private String activitionCode;
+
+    @Field
+    List<Roles> rolesList;
 
     public User(String name, String surname, String email, String password, LocalDateTime birtday, Boolean isActive) {
         this.name = name;

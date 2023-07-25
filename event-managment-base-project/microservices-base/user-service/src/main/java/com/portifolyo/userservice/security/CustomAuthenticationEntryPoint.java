@@ -13,12 +13,17 @@ import java.io.IOException;
 import java.io.PrintWriter;
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+    private final ObjectMapper objectMapper;
+
+    public CustomAuthenticationEntryPoint(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.setStatus(403);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        ObjectMapper objectMapper = new ObjectMapper();
         GenericResponse<Void> genericResponse = new GenericResponse<>(403,"Authentication error");
         PrintWriter i  =response.getWriter();
         i.print(objectMapper.writeValueAsString(genericResponse));

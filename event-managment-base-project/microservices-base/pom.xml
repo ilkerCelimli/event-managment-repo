@@ -6,7 +6,7 @@
         <groupId>com.portifolyo</groupId>
         <version>0.0.1-SNAPSHOT</version>
         <artifactId>event-managment-base-project</artifactId>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath> ../pom.xml </relativePath> <!-- lookup parent from repository -->
     </parent>
     <artifactId>microservices-base</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -18,6 +18,8 @@
         <spring-cloud.version>2022.0.2</spring-cloud.version>
     </properties>
     <dependencies>
+
+
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
