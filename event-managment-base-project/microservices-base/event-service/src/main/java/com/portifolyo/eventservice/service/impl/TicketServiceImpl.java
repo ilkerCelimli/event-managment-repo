@@ -1,6 +1,8 @@
 package com.portifolyo.eventservice.service.impl;
 
+import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.Ticket;
+import com.portifolyo.eventservice.exceptions.TicketNotSellException;
 import com.portifolyo.eventservice.repository.TicketRepository;
 import com.portifolyo.eventservice.repository.projections.TicketInfo;
 import com.portifolyo.eventservice.service.BaseServiceImpl;
@@ -13,6 +15,7 @@ import org.portifolyo.utils.UpdateHelper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -30,8 +33,12 @@ public class TicketServiceImpl extends BaseServiceImpl<Ticket> implements Ticket
     @Override
     public void handleTicketRequest(TicketRequest ticketRequest) {
         Ticket ticket = TicketRequestMapper.toEntity(ticketRequest);
-        ticket.setEvent(this.eventService.findById(ticketRequest.eventId()));
-        super.save(ticket);
+        Event event = this.eventService.findById(ticketRequest.eventId());
+        if(event.getEventDate().isAfter(LocalDateTime.now())){
+            super.save(ticket);
+            return;
+        }
+        throw new TicketNotSellException();
     }
 
     @Override

@@ -12,13 +12,9 @@ public interface EventService {
 
     void saveEventRequestHandle(EventSaveRequest event);
     void updateEventRequestHandle(EventSaveRequest event,String eventId);
-
     void eventInActiveHandle(String eventId);
-
     void addimages(String eventid, List<ImageAndLinks> imageAndLinks);
-
     List<EventDto> findEvents(TableRequest request);
-
     EventDto findEventById(String id);
     Event findById(String id);
 
