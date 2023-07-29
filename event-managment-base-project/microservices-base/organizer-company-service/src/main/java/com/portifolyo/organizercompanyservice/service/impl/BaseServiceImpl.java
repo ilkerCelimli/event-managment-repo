@@ -6,6 +6,9 @@ import com.portifolyo.organizercompanyservice.service.BaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,8 +35,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
     @Override
     public T update(T entity) {
-        entity.setUpdatedDate(LocalDateTime.now());
-        return entity;
+        return this.baseRepository.save(entity);
     }
 
     @Override

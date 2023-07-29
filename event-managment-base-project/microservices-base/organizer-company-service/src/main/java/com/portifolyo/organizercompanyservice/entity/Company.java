@@ -1,11 +1,11 @@
 package com.portifolyo.organizercompanyservice.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "COMPANIES")
@@ -16,24 +16,33 @@ import lombok.experimental.SuperBuilder;
 @Setter
 public class Company extends BaseEntity {
 
+    @Column(name = "company_name", nullable = false, length = 48)
     private String companyName;
+    @Column(name = "tax_number", nullable = false)
     private String taxNumber;
-    private String userId;
+    @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
+    private Set<Place> places = new HashSet<>();
+    @OneToMany
+    private Set<Adress> companyAdresses = new HashSet<>();
+    @Column(name = "phone_number",length = 16)
+    private String phoneNumber;
+
+
 
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.getId();
     }
 
     @Override
-    public boolean equals(Object obj){
-        if(this == obj) return true;
-        if(obj.hashCode() == this.hashCode()) return true;
-        if(obj instanceof Company) return true;
-        if(this.getId().equals(obj)) return true;
+    public boolean equals(Object obj) {
+        if (this == obj
+                || obj.hashCode() == this.hashCode()
+                || obj instanceof Company
+                || this.getId().equals(obj)) return true;
         return false;
-        }
     }
+}
 
 

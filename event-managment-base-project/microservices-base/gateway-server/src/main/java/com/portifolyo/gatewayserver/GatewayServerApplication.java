@@ -10,23 +10,11 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients
 public class GatewayServerApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(GatewayServerApplication.class, args);
 	}
 
-	@Bean
-	public RouteLocator routeLocator(RouteLocatorBuilder builder){
-		return builder.routes()
-				.route(r -> r.path("/user/**")
-						.uri("http://localhost:9011/"))
-
-				.route(r -> r.path("/event/**")
-						.uri("http://localhost:9001/"))
-				.build();
-
-	}
 
 }

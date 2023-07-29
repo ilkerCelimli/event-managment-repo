@@ -26,10 +26,10 @@ public class City extends BaseEntity {
 
     @Override
     public boolean equals(Object obj){
-        if(this == obj) return true;
-        if(obj.hashCode() == this.hashCode()) return true;
-        if(obj instanceof Adress) return true;
-        if(this.getId().equals(obj)) return true;
+        if(this == obj
+                || obj.hashCode() == this.hashCode()
+                ||obj instanceof City
+                || this.getId().equals(obj)) return true;
         return false;
     }
 }
