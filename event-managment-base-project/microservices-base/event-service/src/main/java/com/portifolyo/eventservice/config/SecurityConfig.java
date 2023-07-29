@@ -28,19 +28,20 @@ public class SecurityConfig {
         httpSecurity.csrf().disable();
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests(i -> {
-           i.requestMatchers("/ticket/**").hasRole("USER");
-           i.requestMatchers(HttpMethod.PUT,"/organizator/").hasRole("USER");
-           i.requestMatchers(HttpMethod.POST,"/organizator/").hasRole("USER");
-           i.requestMatchers("/organizator/findorganizarevents","/organizator/findorganizatorbyemail").permitAll();
-           i.requestMatchers("/event/").hasRole("USER");
-           i.requestMatchers(HttpMethod.GET,"/event/").permitAll();
+            i.requestMatchers(HttpMethod.GET, "/event/").permitAll();
+            i.requestMatchers("/actuator/**").permitAll();
+            i.requestMatchers("/ticket/**").hasRole("USER");
+            i.requestMatchers(HttpMethod.PUT, "/organizator/").hasRole("USER");
+            i.requestMatchers(HttpMethod.POST, "/organizator/").hasRole("USER");
+            i.requestMatchers("/organizator/findorganizarevents", "/organizator/findorganizatorbyemail").permitAll();
+            i.requestMatchers("/event/").hasRole("USER");
         });
-        httpSecurity.exceptionHandling(i-> {
+        httpSecurity.exceptionHandling(i -> {
             i.accessDeniedHandler(accessDeniedErrorPoint);
             i.authenticationEntryPoint(authenticationEntryPoint);
         });
         httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.addFilterBefore(requestLogFilter,JwtFilter.class);
+        httpSecurity.addFilterBefore(requestLogFilter, JwtFilter.class);
         return httpSecurity.build();
     }
 

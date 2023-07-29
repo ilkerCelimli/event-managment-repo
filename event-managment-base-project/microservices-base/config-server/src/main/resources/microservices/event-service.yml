@@ -16,7 +16,8 @@ management:
   endpoints:
     web:
       exposure:
-        exclude: prometheus
+        include: prometheus, metrics, info, health, shutdown, beans
+
 
 server:
   port: 9001
