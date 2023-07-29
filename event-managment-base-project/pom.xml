@@ -13,6 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>event-managment-base-project</name>
     <description>event-managment-base-project</description>
+
     <packaging>pom</packaging>
     <properties>
         <java.version>20</java.version>

@@ -8,13 +8,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
-        <module name="gateway-server" />
-        <module name="user-service" />
+        <module name="organizer-company-service" />
         <module name="common" />
         <module name="event-service" />
+        <module name="gateway-server" />
+        <module name="user-service" />
         <module name="euraka-server" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="organizer-company-service" target="20" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -22,6 +26,7 @@
       <module name="euraka-server" options="-parameters" />
       <module name="event-service" options="-parameters" />
       <module name="gateway-server" options="-parameters" />
+      <module name="organizer-company-service" options="-parameters" />
       <module name="user-service" options="-parameters" />
     </option>
   </component>

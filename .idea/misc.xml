@@ -14,6 +14,11 @@
         <option value="$PROJECT_DIR$/event-managment-base-project/microservices-base/gateway-server/pom.xml" />
       </list>
     </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/event-managment-base-project/microservices-base/organizer-company-service/pom.xml" />
+      </set>
+    </option>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_20" default="true" project-jdk-name="openjdk-20 (2)" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
