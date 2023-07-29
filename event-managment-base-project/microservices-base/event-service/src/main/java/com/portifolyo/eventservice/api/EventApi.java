@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.response.GenericResponse;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,11 +49,13 @@ public class EventApi {
     }
 
     @GetMapping("/")
+    @Cacheable
     public ResponseEntity<GenericResponse<List<EventDto>>> findEvents(@RequestBody TableRequest tableRequest){
         return ResponseEntity.ok(GenericResponse.SUCCESS(this.eventService.findEvents(tableRequest)));
     }
 
     @GetMapping("/findeventsbyid/{id}")
+    @Cacheable(key = "#id")
     public ResponseEntity<GenericResponse<EventDto>> findEventsById(@PathVariable String id){
         return ResponseEntity.ok(GenericResponse.SUCCESS(this.eventService.findEventById(id)));
     }

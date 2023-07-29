@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.response.GenericResponse;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,7 @@ public class OrganizatorApi {
     }
 
     @GetMapping("/findorganizatorbyemail")
+    @Cacheable(key = "#email")
     public ResponseEntity<GenericResponse<OrganizatorInfo>> findOrganizatorByEmail(@RequestParam String email){
         OrganizatorInfo result = this.organizatorService.findOrganizatorByEmail(email);
         return ResponseEntity.ok(GenericResponse.SUCCESS(result));

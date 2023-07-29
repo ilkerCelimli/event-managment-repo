@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.TicketRequest;
 import org.portifolyo.response.GenericResponse;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,7 @@ public class TicketApi {
     }
 
     @GetMapping("/findTicket/{id}")
+    @Cacheable(key = "#id")
     public ResponseEntity<GenericResponse<List<TicketInfo>>> findTickets(@RequestBody TableRequest tableRequest, @PathVariable String id) {
         return ResponseEntity.ok(GenericResponse.SUCCESS(this.ticketService.findTickets(tableRequest,id)));
     }

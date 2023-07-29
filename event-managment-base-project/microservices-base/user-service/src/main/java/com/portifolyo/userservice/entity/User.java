@@ -2,11 +2,12 @@ package com.portifolyo.userservice.entity;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import javax.management.relation.Role;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,7 +34,12 @@ public class User {
     private LocalDateTime birtday;
     @Field
     private boolean isActive;
-
+    @Field
+    @CreatedDate
+    private LocalDateTime createdDate;
+    @Field
+    @LastModifiedDate
+    private LocalDateTime updatedDate;
     @Field
     private String activitionCode;
 
