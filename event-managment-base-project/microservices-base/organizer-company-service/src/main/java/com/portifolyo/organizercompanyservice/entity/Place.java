@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity(name = "PLACES")
@@ -40,10 +41,14 @@ public class Place extends BaseEntity {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj
+        return obj != null &&(this == obj
                 || obj.hashCode() == this.hashCode()
                 || obj instanceof Place
-                || this.getId().equals(obj)) return true;
-        return false;
+                || this.getId().equals(obj));
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(this.getId());
     }
 }

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Table(name = "ADRESS")
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -28,11 +30,15 @@ public class Adress extends BaseEntity {
 
     @Override
     public boolean equals(Object obj){
-        if(this == obj
+        return  obj != null && (this == obj
                 || obj.hashCode() == this.hashCode()
                 ||obj instanceof Adress
-                || this.getId().equals(obj)) return true;
-        return false;
+                || this.getId().equals(obj));
+    }
+
+    @Override
+    public int hashCode(){
+       return Objects.hash(this.getId());
     }
 
 }

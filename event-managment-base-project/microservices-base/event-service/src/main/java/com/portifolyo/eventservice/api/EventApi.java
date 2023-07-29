@@ -49,13 +49,13 @@ public class EventApi {
     }
 
     @GetMapping("/")
-    @Cacheable
+    @Cacheable(key = "#events",cacheNames = "events")
     public ResponseEntity<GenericResponse<List<EventDto>>> findEvents(@RequestBody TableRequest tableRequest){
         return ResponseEntity.ok(GenericResponse.SUCCESS(this.eventService.findEvents(tableRequest)));
     }
 
     @GetMapping("/findeventsbyid/{id}")
-    @Cacheable(key = "#id")
+    @Cacheable(key = "#id",cacheNames = "events")
     public ResponseEntity<GenericResponse<EventDto>> findEventsById(@PathVariable String id){
         return ResponseEntity.ok(GenericResponse.SUCCESS(this.eventService.findEventById(id)));
     }

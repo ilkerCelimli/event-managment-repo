@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -21,4 +23,22 @@ public class Input extends BaseEntity {
     @JoinColumn(name = "place_id")
     Place place;
 
+
+    @Override
+    public String toString() {
+        return this.getId();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj != null &&(this == obj
+                || obj.hashCode() == this.hashCode()
+                || obj instanceof Input
+                || this.getId().equals(obj));
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(this.getId());
+    }
 }

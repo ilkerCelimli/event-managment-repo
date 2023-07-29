@@ -40,7 +40,7 @@ public class TicketApi {
     }
 
     @GetMapping("/findTicket/{id}")
-    @Cacheable(key = "#id")
+    @Cacheable(key = "#id",cacheNames = "tickets")
     public ResponseEntity<GenericResponse<List<TicketInfo>>> findTickets(@RequestBody TableRequest tableRequest, @PathVariable String id) {
         return ResponseEntity.ok(GenericResponse.SUCCESS(this.ticketService.findTickets(tableRequest,id)));
     }

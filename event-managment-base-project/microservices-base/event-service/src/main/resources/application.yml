@@ -8,3 +8,5 @@ spring:
   cloud:
     config:
       name: event-service
+  cache:
+    type: redis

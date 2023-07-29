@@ -37,13 +37,14 @@ public class OrganizatorApi {
     }
 
     @GetMapping("/findorganizatorbyemail")
-    @Cacheable(key = "#email")
+    @Cacheable(key = "#email",cacheNames = "organizator")
     public ResponseEntity<GenericResponse<OrganizatorInfo>> findOrganizatorByEmail(@RequestParam String email){
         OrganizatorInfo result = this.organizatorService.findOrganizatorByEmail(email);
         return ResponseEntity.ok(GenericResponse.SUCCESS(result));
     }
 
     @GetMapping("/findorganizarevents")
+    @Cacheable(key = "#email",cacheNames = "organizator")
     public ResponseEntity<GenericResponse<OrganizatorEventsInfos>> findOrganizatorEvents(@RequestParam String email, @RequestBody TableRequest request){
 
         return ResponseEntity.ok(GenericResponse.SUCCESS(this.organizatorService.findOrganizatorEvents(email,request)));
