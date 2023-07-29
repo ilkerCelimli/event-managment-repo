@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: organizer-company-service
+  cloud:
+    config:
+      name: organizer-company
+  cache:
+    type: redis
+  config:
+    import: optional:configserver:http://localhost:8888
+

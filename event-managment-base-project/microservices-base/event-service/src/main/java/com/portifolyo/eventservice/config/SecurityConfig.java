@@ -3,6 +3,7 @@ package com.portifolyo.eventservice.config;
 import com.portifolyo.eventservice.security.AccessDeniedErrorPoint;
 import com.portifolyo.eventservice.security.CustomAuthenticationEntryPoint;
 import com.portifolyo.eventservice.security.JwtFilter;
+import com.portifolyo.eventservice.security.RequestLogFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -19,7 +20,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity, JwtFilter jwtFilter, CustomAuthenticationEntryPoint authenticationEntryPoint, AccessDeniedErrorPoint accessDeniedErrorPoint) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity,
+                                                   JwtFilter jwtFilter,
+                                                   CustomAuthenticationEntryPoint authenticationEntryPoint,
+                                                   AccessDeniedErrorPoint accessDeniedErrorPoint,
+                                                   RequestLogFilter requestLogFilter) throws Exception {
         httpSecurity.csrf().disable();
         httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.authorizeHttpRequests(i -> {
@@ -35,6 +40,7 @@ public class SecurityConfig {
             i.authenticationEntryPoint(authenticationEntryPoint);
         });
         httpSecurity.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(requestLogFilter,JwtFilter.class);
         return httpSecurity.build();
     }
 
