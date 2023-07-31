@@ -20,12 +20,15 @@ public class Company extends BaseEntity {
     private String companyName;
     @Column(name = "tax_number", nullable = false)
     private String taxNumber;
+    @Column(name = "phone_number",length = 16,nullable = false)
+    private String phoneNumber;
+    @Column(name = "company_super_admin_user_id",nullable = false)
+    private String companySuperAdminUserId;
     @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
     private Set<Place> places = new HashSet<>();
     @OneToMany
     private Set<Adress> companyAdresses = new HashSet<>();
-    @Column(name = "phone_number",length = 16)
-    private String phoneNumber;
+
 
 
 

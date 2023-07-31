@@ -6,6 +6,7 @@ import com.portifolyo.userservice.entity.User;
 import com.portifolyo.userservice.enums.Role;
 import com.portifolyo.userservice.repository.RoleRepository;
 import com.portifolyo.userservice.services.UserService;
+import com.portifolyo.userservice.util.converter.UserInfoMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +35,10 @@ public class UserApi {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<GenericResponse<User>> saveUser(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
+    public ResponseEntity<GenericResponse<UserInfo>> saveUser(@RequestBody @Valid UserRegisterRequest userRegisterRequest) {
         User u = this.userService.saveUser(userRegisterRequest);
-        return ResponseEntity.ok(GenericResponse.SUCCESS(u));
+
+        return ResponseEntity.ok(GenericResponse.SUCCESS(UserInfoMapper.toDto(u)));
     }
 
     @PostMapping("/login")

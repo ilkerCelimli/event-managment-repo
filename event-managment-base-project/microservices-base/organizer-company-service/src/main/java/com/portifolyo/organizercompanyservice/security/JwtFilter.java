@@ -33,7 +33,7 @@ public class JwtFilter extends OncePerRequestFilter {
             String[] roles = jwt.getClaim("roles").asArray(String.class);
             List<SimpleGrantedAuthority> list = new ArrayList<>();
             Arrays.stream(roles).forEach(i -> list.add(new SimpleGrantedAuthority(i)));
-            Authentication authentication = new UsernamePasswordAuthenticationToken(email,null,list);
+            Authentication authentication = new UsernamePasswordAuthenticationToken(email,header,list);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request,response);
