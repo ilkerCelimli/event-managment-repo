@@ -31,9 +31,17 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
         if (response.getStatusCode().is2xxSuccessful()
                 && response.getBody() != null
                 && response.getBody().getData() != null) {
-            UserInfo userInfo = response.getBody().getData();
-            Company company = SaveOrganizerCompanyRequestMapper.toEntity(request);
-            company.setCompanySuperAdminUserId(userInfo.id());
+            try {
+                UserInfo userInfo = response.getBody().getData();
+                Company company = SaveOrganizerCompanyRequestMapper.toEntity(request);
+                company.setCompanySuperAdminUserId(userInfo.id());
+                this.companyRepository.save(company);
+
+            }
+
+            catch (Exception e){
+                // TODO write this.
+            }
 
 
             return;
