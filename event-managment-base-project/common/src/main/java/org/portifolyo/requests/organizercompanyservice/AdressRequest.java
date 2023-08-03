@@ -1,6 +1,6 @@
 package org.portifolyo.requests.organizercompanyservice;
 
-public record Adress(
+public record AdressRequest(
         String cityId,
         String openAdress
 ) {
