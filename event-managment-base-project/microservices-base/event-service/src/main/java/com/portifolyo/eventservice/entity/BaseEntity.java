@@ -6,8 +6,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.annotation.processing.Generated;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Getter
@@ -21,9 +20,10 @@ public abstract class BaseEntity {
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_date",nullable = false)
-    private Date createdDate;
+    private LocalDateTime createdDate;
     @Column(name = "is_deleted")
-    private Boolean isDeleted = false;
+
+    private Boolean deleted = false;
 
 
 

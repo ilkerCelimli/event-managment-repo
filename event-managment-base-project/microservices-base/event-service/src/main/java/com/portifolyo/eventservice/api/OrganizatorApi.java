@@ -1,34 +1,25 @@
 package com.portifolyo.eventservice.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.portifolyo.eventservice.repository.projections.EventInfo;
+import com.portifolyo.eventservice.repository.projections.OrganizatorEventsInfos;
 import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
-import com.portifolyo.eventservice.service.EventService;
 import com.portifolyo.eventservice.service.OrganizatorService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.response.GenericResponse;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/organizator")
 @RequiredArgsConstructor
 public class OrganizatorApi {
 
-    private final EventService eventService;
     private final OrganizatorService organizatorService;
 
-    @PostMapping("/addOrganizatorByEvent")
-    public ResponseEntity<GenericResponse<List<EventInfo>>> findOrganizatorForEvents(
-            @RequestBody @Valid OrganizatorRequest o
-            , @RequestParam String eventId) {
-        eventService.addOrganizatorByEvent(eventId, o);
-        return ResponseEntity.ok(GenericResponse.SUCCESS());
-    }
 
     @PutMapping("/")
     public ResponseEntity<GenericResponse<OrganizatorInfo>> updateOrganizator(
@@ -43,5 +34,19 @@ public class OrganizatorApi {
     public ResponseEntity<GenericResponse<Void>> deleteOrganizator(@RequestParam String organizatorId) {
         this.organizatorService.deleteOrganizator(organizatorId);
         return ResponseEntity.ok(GenericResponse.SUCCESS());
+    }
+
+    @GetMapping("/findorganizatorbyemail")
+    @Cacheable(key = "#email",cacheNames = "organizator")
+    public ResponseEntity<GenericResponse<OrganizatorInfo>> findOrganizatorByEmail(@RequestParam String email){
+        OrganizatorInfo result = this.organizatorService.findOrganizatorByEmail(email);
+        return ResponseEntity.ok(GenericResponse.SUCCESS(result));
+    }
+
+    @GetMapping("/findorganizarevents")
+    @Cacheable(key = "#email",cacheNames = "organizator")
+    public ResponseEntity<GenericResponse<OrganizatorEventsInfos>> findOrganizatorEvents(@RequestParam String email, @RequestBody TableRequest request){
+
+        return ResponseEntity.ok(GenericResponse.SUCCESS(this.organizatorService.findOrganizatorEvents(email,request)));
     }
 }

@@ -8,9 +8,16 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
   cache:
     type: redis
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, metrics, info, health, shutdown, beans
+
 
 server:
   port: 9001

@@ -1,15 +1,12 @@
 package com.portifolyo.eventservice.entity;
 
-import org.portifolyo.requests.eventservice.enums.EventType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+import org.portifolyo.requests.eventservice.enums.EventType;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -22,7 +19,8 @@ public class Event extends BaseEntity {
     private String eventName;
     @Column(name = "event_date",nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date eventDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+    private LocalDateTime eventDate;
     @Column(name = "coming_people")
     private Integer comingPeople;
     @Column(name = "is_ticket")
@@ -39,7 +37,7 @@ public class Event extends BaseEntity {
     private EventDescription eventDescription;
 
 
-    public Event(String eventName, Date eventDate, Integer comingPeople, Boolean isTicket, Boolean isPeopleRegistered, EventType eventType, int maxPeople, EventDescription eventDescription) {
+    public Event(String eventName, LocalDateTime eventDate, Integer comingPeople, Boolean isTicket, Boolean isPeopleRegistered, EventType eventType, int maxPeople, EventDescription eventDescription) {
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.comingPeople = comingPeople;

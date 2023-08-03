@@ -6,7 +6,7 @@ package com.portifolyo.eventservice.repository.projections;
 public interface EventAreaInfo {
     String getId();
 
-   // Boolean isDeleted();
+    boolean isDeleted();
 
     String getAreaName();
 

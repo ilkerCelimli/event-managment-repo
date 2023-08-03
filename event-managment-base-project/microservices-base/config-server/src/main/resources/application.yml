@@ -10,6 +10,15 @@ spring:
   profiles:
     active: native
 
+
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        exclude: health,info,prometheus,threaddump
+
 server:
   port: 8888
 

@@ -2,12 +2,14 @@ package com.portifolyo.eventservice.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
-import com.portifolyo.eventservice.repository.projections.EventInfo;
+import com.portifolyo.eventservice.repository.projections.EventDto;
 import com.portifolyo.eventservice.service.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.response.GenericResponse;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,20 +42,22 @@ public class EventApi {
         return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
-
-    @GetMapping("/findEventsByOrganizator")
-    public ResponseEntity<GenericResponse<List<EventInfo>>> findEventsByOrganizator(
-            @RequestParam String id, @RequestParam Integer page, @RequestParam Integer size ){
-        List<EventInfo> eventInfo = this.eventService.findEventsByOrganizatorMail(id,page,size);
-        return ResponseEntity.ok(GenericResponse.SUCCESS(eventInfo));
-
-    }
-
     @PostMapping("/addImagesByEvent")
     public ResponseEntity<GenericResponse<Void>> addImagesByEvent(@RequestParam String id, @RequestBody List<ImageAndLinks> imageAndLinks){
         this.eventService.addimages(id,imageAndLinks);
         return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
+    @GetMapping("/")
+    @Cacheable(key = "#events",cacheNames = "events")
+    public ResponseEntity<GenericResponse<List<EventDto>>> findEvents(@RequestBody TableRequest tableRequest){
+        return ResponseEntity.ok(GenericResponse.SUCCESS(this.eventService.findEvents(tableRequest)));
+    }
+
+    @GetMapping("/findeventsbyid/{id}")
+    @Cacheable(key = "#id",cacheNames = "events")
+    public ResponseEntity<GenericResponse<EventDto>> findEventsById(@PathVariable String id){
+        return ResponseEntity.ok(GenericResponse.SUCCESS(this.eventService.findEventById(id)));
+    }
 
 }

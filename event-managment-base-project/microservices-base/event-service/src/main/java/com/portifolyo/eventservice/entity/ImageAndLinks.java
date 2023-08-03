@@ -1,9 +1,8 @@
 package com.portifolyo.eventservice.entity;
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.portifolyo.requests.eventservice.enums.DescriptionTypes;
-import org.portifolyo.requests.eventservice.enums.EventType;
-import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -15,8 +14,8 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 public class ImageAndLinks extends BaseEntity {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_description_id",nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @JoinColumn(name = "event_description_id",nullable = true)
     private EventDescription eventDescription;
     @Column(name = "item",nullable = false)
     private String item;

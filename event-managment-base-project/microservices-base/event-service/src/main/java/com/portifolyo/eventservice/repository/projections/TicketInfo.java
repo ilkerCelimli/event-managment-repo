@@ -2,17 +2,17 @@ package com.portifolyo.eventservice.repository.projections;
 
 import org.portifolyo.requests.eventservice.enums.EventType;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
- * Projection for {@link com.portifolyo.eventservice.entity.ComingPeople}
+ * Projection for {@link com.portifolyo.eventservice.entity.Ticket}
  */
 public interface TicketInfo {
     String getId();
 
-    Date getCreatedDate();
+    LocalDateTime getCreatedDate();
 
-    Boolean isIsDeleted();
+    Boolean getDeleted();
 
     String getName();
 
@@ -24,22 +24,22 @@ public interface TicketInfo {
 
     String getTcNo();
 
-    EventInfo1 getEvent();
+    TicketEventInfo getEvent();
 
     /**
      * Projection for {@link com.portifolyo.eventservice.entity.Event}
      */
-    interface EventInfo1 {
+    interface TicketEventInfo {
         String getId();
+
+        LocalDateTime getCreatedDate();
+
+        Boolean getDeleted();
 
         String getEventName();
 
-        Date getEventDate();
-
-        Boolean isIsTicket();
+        LocalDateTime getEventDate();
 
         EventType getEventType();
-
-        int getMaxPeople();
     }
 }

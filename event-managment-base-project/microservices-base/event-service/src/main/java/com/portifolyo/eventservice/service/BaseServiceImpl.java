@@ -6,7 +6,6 @@ import com.portifolyo.eventservice.repository.BaseRepository;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.List;
-import java.util.Optional;
 
 @Log4j2
 public class BaseServiceImpl<T extends BaseEntity> {
@@ -30,9 +29,7 @@ public class BaseServiceImpl<T extends BaseEntity> {
     }
 
     protected T findById(String id) {
-        Optional<T> entity = this.baseRepository.findById(id);
-        entity.orElseThrow(() -> new NotFoundException(id));
-        return entity.get();
+        return this.baseRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 
     protected List<T> findAll() {
@@ -41,7 +38,7 @@ public class BaseServiceImpl<T extends BaseEntity> {
 
     protected void delete(String id) {
         T entity = findById(id);
-        entity.setIsDeleted(true);
+        entity.setDeleted(true);
         this.baseRepository.save(entity);
     }
 

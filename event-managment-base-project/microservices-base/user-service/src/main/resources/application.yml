@@ -5,12 +5,15 @@ spring:
   cloud:
     config:
       name: user-service
+  cache:
+    type: redis
   config:
     import: optional:configserver:http://localhost:8888
-
 email:
-    host: smtp.gmail.com
-    port: 587
+    host: ${email_host}
+    username: ${email_username}
+    password: ${email_password}
+    port: ${email_port}
     properties:
       mail:
         stmp:
@@ -20,3 +23,4 @@ email:
           ssl:
             required: true
             enabled: true
+

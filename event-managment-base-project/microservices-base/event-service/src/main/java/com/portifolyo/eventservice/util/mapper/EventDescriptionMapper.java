@@ -2,11 +2,11 @@ package com.portifolyo.eventservice.util.mapper;
 
 import com.portifolyo.eventservice.entity.EventDescription;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
+import com.portifolyo.eventservice.repository.projections.EventDescriptionInfo;
 import org.portifolyo.requests.eventservice.EventDescriptionRequest;
+import org.portifolyo.requests.eventservice.ImageAndLinksReqeust;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class EventDescriptionMapper {
@@ -19,9 +19,26 @@ public class EventDescriptionMapper {
             ImageAndLinks links = new ImageAndLinks();
             links.setItem(i.item());
             links.setDescriptionTypes(i.descriptionTypes());
-         //   links.setIsDeleted(false);
             images.add(links);
         });
         return e;
+    }
+
+    public static EventDescriptionInfo toDto(EventDescription req){
+        EventDescriptionInfo eventDescriptionInfo = new EventDescriptionInfo();
+        eventDescriptionInfo.setDescription(req.getDescrtiption());
+        Set<ImageAndLinksReqeust> set = new HashSet<>();
+        for(ImageAndLinks links : req.getImageAndLinksSet()){
+            ImageAndLinksReqeust r = new ImageAndLinksReqeust(links.getItem(),links.getDescriptionTypes());
+            set.add(r);
+        }
+        eventDescriptionInfo.setCreatedDate(req.getCreatedDate());
+        eventDescriptionInfo.setImageAndLinksList(set);
+        eventDescriptionInfo.setIsDeleted(req.getDeleted());
+        eventDescriptionInfo.setId(req.getId());
+        return eventDescriptionInfo;
+    }
+
+    private EventDescriptionMapper() {
     }
 }

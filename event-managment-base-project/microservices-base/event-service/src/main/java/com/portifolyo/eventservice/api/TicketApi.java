@@ -4,8 +4,10 @@ import com.portifolyo.eventservice.repository.projections.TicketInfo;
 import com.portifolyo.eventservice.service.TicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.TicketRequest;
 import org.portifolyo.response.GenericResponse;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +27,9 @@ public class TicketApi {
         return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
-    @PutMapping("/")
-    public ResponseEntity<GenericResponse<TicketRequest>> updateTicket(@RequestBody TicketRequest ticketRequest) {
-        TicketRequest t = this.ticketService.updateTicket(ticketRequest);
+    @PutMapping("/{id}")
+    public ResponseEntity<GenericResponse<TicketRequest>> updateTicket(@PathVariable String id,@RequestBody TicketRequest ticketRequest) {
+        TicketRequest t = this.ticketService.updateTicket(id,ticketRequest);
         return ResponseEntity.ok(GenericResponse.SUCCESS(t));
     }
 
@@ -37,9 +39,10 @@ public class TicketApi {
         return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
-    @GetMapping("/findTickets")
-    public ResponseEntity<GenericResponse<List<TicketInfo>>> findTickets(@RequestParam Integer size, @RequestParam Integer page, @RequestParam String eventId) {
-        return ResponseEntity.ok(GenericResponse.SUCCESS(this.ticketService.findTickets(page, size, eventId)));
+    @GetMapping("/findTicket/{id}")
+    @Cacheable(key = "#id",cacheNames = "tickets")
+    public ResponseEntity<GenericResponse<List<TicketInfo>>> findTickets(@RequestBody TableRequest tableRequest, @PathVariable String id) {
+        return ResponseEntity.ok(GenericResponse.SUCCESS(this.ticketService.findTickets(tableRequest,id)));
     }
 
 }

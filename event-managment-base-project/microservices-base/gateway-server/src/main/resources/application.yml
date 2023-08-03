@@ -1,12 +1,20 @@
 spring:
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:localhost:8888
   application:
-    name: gateway-server
+    name: gateway-service
   cloud:
+    config:
+      name: gateway-service
     gateway:
-      discovery:
-        locator:
-          enabled: true
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user/**
+        - id: event-service
+          uri: lb://EVENT-SERVICE
+          predicates:
+            - Path=/event/**
 server:
   port: 80

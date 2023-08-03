@@ -1,19 +1,23 @@
 package com.portifolyo.userservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Document
 @Getter
 @Setter
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
+@ToString(of = "id")
+@SuperBuilder
 public class User {
 
     @MongoId
@@ -27,14 +31,22 @@ public class User {
     @Field
     private String password;
     @Field
-    private Date birtday;
+    private LocalDateTime birtday;
     @Field
-    private Boolean isActive;
-
+    private boolean isActive;
+    @Field
+    @CreatedDate
+    private LocalDateTime createdDate;
+    @Field
+    @LastModifiedDate
+    private LocalDateTime updatedDate;
     @Field
     private String activitionCode;
 
-    public User(String name, String surname,String email,String password, Date birtday, Boolean isActive) {
+    @Field
+    List<Roles> rolesList;
+
+    public User(String name, String surname, String email, String password, LocalDateTime birtday, Boolean isActive) {
         this.name = name;
         this.surname = surname;
         this.birtday = birtday;

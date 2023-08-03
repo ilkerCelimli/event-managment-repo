@@ -5,7 +5,6 @@ import com.portifolyo.userservice.entity.User;
 import com.portifolyo.userservice.util.RandomStringGenerator;
 import org.bson.types.ObjectId;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
