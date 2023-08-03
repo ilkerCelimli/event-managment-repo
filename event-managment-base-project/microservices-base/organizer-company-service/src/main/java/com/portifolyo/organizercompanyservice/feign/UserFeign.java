@@ -6,15 +6,12 @@ import org.portifolyo.response.UserInfo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "USER-SERVICE")
+@FeignClient("USER-SERVICE")
 public interface UserFeign {
-
-    UserInfo getUserInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
+    @GetMapping("/user/finduser")
+    UserInfo findUserInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                          @RequestParam String email);
     @PostMapping("/user/")
     ResponseEntity<GenericResponse<UserInfo>> registerUser(UserRegisterRequest userRegisterRequest);

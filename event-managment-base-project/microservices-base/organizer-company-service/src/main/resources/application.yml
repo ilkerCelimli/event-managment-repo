@@ -4,6 +4,7 @@ spring:
   cloud:
     config:
       name: organizer-company
+
   cache:
     type: redis
     redis:
