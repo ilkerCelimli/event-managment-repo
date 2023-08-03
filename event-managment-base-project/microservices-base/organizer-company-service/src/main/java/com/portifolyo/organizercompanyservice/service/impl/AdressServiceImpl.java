@@ -8,7 +8,9 @@ import com.portifolyo.organizercompanyservice.repository.AdressRepository;
 import com.portifolyo.organizercompanyservice.repository.CityRepository;
 import com.portifolyo.organizercompanyservice.service.AdressService;
 import org.portifolyo.requests.organizercompanyservice.AdressRequest;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AdressServiceImpl extends BaseServiceImpl<Adress> implements AdressService {
 
     private final AdressRepository adressRepository;
