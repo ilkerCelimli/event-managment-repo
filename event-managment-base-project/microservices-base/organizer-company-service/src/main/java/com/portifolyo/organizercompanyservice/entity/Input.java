@@ -1,11 +1,11 @@
 package com.portifolyo.organizercompanyservice.entity;
 
-import com.portifolyo.organizercompanyservice.enums.Inputs;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.portifolyo.requests.organizercompanyservice.InputEnum;
 
 import java.util.Objects;
 
@@ -18,7 +18,7 @@ import java.util.Objects;
 
 public class Input extends BaseEntity {
 
-    private Inputs inputs;
+    private InputEnum inputs;
     @ManyToOne
     @JoinColumn(name = "place_id")
     Place place;
@@ -31,14 +31,14 @@ public class Input extends BaseEntity {
 
     @Override
     public boolean equals(Object obj) {
-        return obj != null &&(this == obj
+        return obj != null && (this == obj
                 || obj.hashCode() == this.hashCode()
                 || obj instanceof Input
                 || this.getId().equals(obj));
     }
 
     @Override
-    public int hashCode(){
+    public int hashCode() {
         return Objects.hash(this.getId());
     }
 }

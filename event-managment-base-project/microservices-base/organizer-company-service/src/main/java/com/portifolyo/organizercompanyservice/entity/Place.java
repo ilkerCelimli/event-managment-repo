@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.portifolyo.requests.organizercompanyservice.InputEnum;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -31,7 +32,7 @@ public class Place extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Set<Input> inputs = new HashSet<>();
 
     @Override

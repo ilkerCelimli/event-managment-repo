@@ -1,13 +1,12 @@
-package com.portifolyo.organizercompanyservice.enums;
+package org.portifolyo.requests.organizercompanyservice;
 
-public enum Inputs {
-
+public enum InputEnum {
     SOUTH("SOUTH"),
     WEST("WEST"),
     NORTH("NORTH"),
     EAST("EAST");
 
-    Inputs(String value) {
+    InputEnum(String value) {
         this.value = value;
     }
 

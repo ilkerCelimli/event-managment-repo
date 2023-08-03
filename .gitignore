@@ -33,3 +33,5 @@ build/
 .vscode/
 
 /event-managment-base-project/.env*
+
+.idea
