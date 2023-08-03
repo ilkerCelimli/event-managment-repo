@@ -7,7 +7,7 @@ public record SaveOrganizerCompanyRequest(
         String companyName,
         String phoneNumber,
         UserRegisterRequest userRegisterRequest,
-        Adress adress
+        AdressRequest adressRequest
 
 ) {
 }
