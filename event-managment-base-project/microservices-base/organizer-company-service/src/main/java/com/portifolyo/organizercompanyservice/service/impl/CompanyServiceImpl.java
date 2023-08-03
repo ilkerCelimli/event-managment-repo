@@ -1,13 +1,16 @@
 package com.portifolyo.organizercompanyservice.service.impl;
 
 import com.portifolyo.organizercompanyservice.entity.Company;
+import com.portifolyo.organizercompanyservice.exception.GenericException;
 import com.portifolyo.organizercompanyservice.feign.UserFeign;
 import com.portifolyo.organizercompanyservice.repository.CompanyRepository;
 import com.portifolyo.organizercompanyservice.service.CompanyService;
 import com.portifolyo.organizercompanyservice.util.SaveOrganizerCompanyRequestMapper;
 import org.portifolyo.requests.organizercompanyservice.SaveOrganizerCompanyRequest;
+import org.portifolyo.requests.userservice.RoleRequest;
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.UserInfo;
+import org.portifolyo.utils.JsonTokenUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,13 +43,13 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
             }
 
             catch (Exception e){
-                // TODO write this.
+                String[] arr = new String[]{"ROLE_USER"};
+                String token = JsonTokenUtils.generate(request.userRegisterRequest().email(),arr);
+                this.userFeign.deleteUser(token,request.userRegisterRequest().email());
+                throw new GenericException("Company not saved");
+
             }
-
-
-            return;
         }
-        // TODO refactor this expcetion
-        throw new RuntimeException();
+        throw new GenericException("Company not saved");
     }
 }

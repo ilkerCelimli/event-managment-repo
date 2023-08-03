@@ -100,10 +100,7 @@ public class UserService {
     @Transactional
     public void deleteUser(String email) {
         Optional<User> user = this.userRepository.findUserByEmail(email);
-        user.ifPresentOrElse(i -> {
-            i.setActive(false);
-            this.userRepository.save(i);
-        }, EmailIsNotFoundException::new);
+        user.ifPresentOrElse(this.userRepository::delete, EmailIsNotFoundException::new);
 
     }
 
