@@ -4,9 +4,9 @@ package org.portifolyo.response;
 import java.time.LocalDateTime;
 
 public class GenericResponse<T> {
-    private final Integer statusCode;
-    private final String message;
-    private final LocalDateTime localDateTime;
+    private  Integer statusCode;
+    private String message;
+    private  LocalDateTime localDateTime;
     private T data;
 
 
@@ -21,6 +21,8 @@ public class GenericResponse<T> {
         this.statusCode = statusCode;
         this.localDateTime = LocalDateTime.now();
     }
+
+    public GenericResponse(){}
 
 
     public Integer getStatusCode() {

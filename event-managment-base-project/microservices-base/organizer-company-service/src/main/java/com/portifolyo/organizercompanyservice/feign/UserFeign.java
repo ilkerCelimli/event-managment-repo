@@ -8,12 +8,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient("USER-SERVICE")
+@FeignClient(name = "user-feign",url = "localhost:9011")
 public interface UserFeign {
     @GetMapping("/user/finduser")
     UserInfo findUserInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                          @RequestParam String email);
-    @PostMapping("/user/")
+    @PostMapping("/user/register")
     ResponseEntity<GenericResponse<UserInfo>> registerUser(UserRegisterRequest userRegisterRequest);
 
     @DeleteMapping("/user/")

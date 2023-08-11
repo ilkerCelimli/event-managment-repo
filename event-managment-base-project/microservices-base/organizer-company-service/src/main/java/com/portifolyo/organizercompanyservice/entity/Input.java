@@ -21,7 +21,7 @@ public class Input extends BaseEntity {
     private InputEnum inputs;
     @ManyToOne
     @JoinColumn(name = "place_id")
-    Place place;
+    private Place place;
 
 
     @Override

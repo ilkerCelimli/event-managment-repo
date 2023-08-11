@@ -34,4 +34,4 @@ build/
 
 /event-managment-base-project/.env*
 
-.idea
+.idea/aws.xml

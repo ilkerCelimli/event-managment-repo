@@ -12,9 +12,13 @@ import org.portifolyo.requests.organizercompanyservice.SaveOrganizerCompanyReque
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.UserInfo;
 import org.portifolyo.utils.JsonTokenUtils;
+import org.springframework.cglib.core.Local;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+
 @Service
 public class CompanyServiceImpl extends BaseServiceImpl<Company> implements CompanyService {
 
@@ -41,6 +45,8 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
                 UserInfo userInfo = response.getBody().getData();
                 Company company = SaveOrganizerCompanyRequestMapper.toEntity(request);
                 company.setCompanySuperAdminUserId(userInfo.id());
+                company.setUpdatedDate(LocalDateTime.now());
+                company.setCreatedDate(LocalDateTime.now());
                 company = this.companyRepository.save(company);
                 this.adressService.handleAdressRequest(request.adressRequest(), company);
                 return;
