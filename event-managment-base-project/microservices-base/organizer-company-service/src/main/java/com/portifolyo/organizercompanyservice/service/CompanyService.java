@@ -6,5 +6,6 @@ import org.portifolyo.requests.organizercompanyservice.SaveOrganizerCompanyReque
 public interface CompanyService extends BaseService<Company> {
 
     void handleSaveRequest(SaveOrganizerCompanyRequest request);
+    void inActiveCompany(String organizerId,String token);
 
 }

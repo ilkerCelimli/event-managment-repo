@@ -9,9 +9,7 @@ public class Beans {
 
     @Bean
     public ObjectMapper objectMapper(){
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
-        return mapper;
+        return new ObjectMapper();
     }
 
 }

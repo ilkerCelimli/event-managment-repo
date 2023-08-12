@@ -101,7 +101,15 @@ public class UserService {
     public void deleteUser(String email) {
         Optional<User> user = this.userRepository.findUserByEmail(email);
         user.ifPresentOrElse(this.userRepository::delete, EmailIsNotFoundException::new);
+    }
 
+    @Transactional
+    public void deleteUserById(String id){
+        Optional<User> user = this.userRepository.findUserById(id);
+        user.ifPresentOrElse((ref) -> {
+            ref.setActive(false);
+            this.userRepository.save(ref);
+        }, EmailIsNotFoundException::new);
     }
 
     public TokenResponse tokenResponse(UserLoginRequest userLoginRequest) {

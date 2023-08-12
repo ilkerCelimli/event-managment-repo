@@ -13,7 +13,6 @@ public class JsonConfig {
     @Bean
     public ObjectMapper objectMapper(){
         ObjectMapper obj = new ObjectMapper();
-        obj.registerModule(new JavaTimeModule());
         return obj;
     }
 }

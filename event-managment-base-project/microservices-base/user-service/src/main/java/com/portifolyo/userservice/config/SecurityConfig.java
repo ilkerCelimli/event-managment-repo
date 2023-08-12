@@ -26,10 +26,9 @@ public class SecurityConfig {
                                            RequestLogFilter requestLogFilter) throws Exception {
         http.csrf().disable();
         http.sessionManagement(i -> i.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.authorizeHttpRequests(i ->i.requestMatchers("/user/login","/user/register","/user/refresh","/user/activeuser","/actuator/**","/user/addrole").permitAll()
+        http.authorizeHttpRequests(i ->i.requestMatchers("/user/login","/user/register","/user/refresh","/user/activeuser","/actuator/**","/user/addrole","/user/deleteById").permitAll()
                 .requestMatchers(HttpMethod.GET,"/user/finduser",
                         "/").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.DELETE,"/").hasRole("ADMIN")
                 .anyRequest().authenticated());
         http.exceptionHandling(i ->{
             i.authenticationEntryPoint(authenticationEntryPoint);

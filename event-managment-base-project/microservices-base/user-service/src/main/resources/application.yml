@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: user-service
   data:
     mongodb:
       username: root

@@ -83,4 +83,10 @@ public class UserApi {
                ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/deleteById")
+    public ResponseEntity<GenericResponse<Void>> deleteById(@RequestParam String id){
+        this.userService.deleteUserById(id);
+        return ResponseEntity.ok(GenericResponse.SUCCESS());
+    }
+
 }

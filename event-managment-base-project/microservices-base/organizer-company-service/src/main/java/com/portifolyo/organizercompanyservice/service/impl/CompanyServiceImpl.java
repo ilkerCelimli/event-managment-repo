@@ -8,12 +8,15 @@ import com.portifolyo.organizercompanyservice.repository.CompanyRepository;
 import com.portifolyo.organizercompanyservice.service.AdressService;
 import com.portifolyo.organizercompanyservice.service.CompanyService;
 import com.portifolyo.organizercompanyservice.util.SaveOrganizerCompanyRequestMapper;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.logging.log4j.util.Strings;
 import org.portifolyo.requests.organizercompanyservice.SaveOrganizerCompanyRequest;
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.UserInfo;
 import org.portifolyo.utils.JsonTokenUtils;
 import org.springframework.cglib.core.Local;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,4 +64,12 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
         }
         throw new GenericException("Company not saved");
     }
+
+    @Override
+    public void inActiveCompany(String organizerId,String token) {
+        Company company = findById(organizerId);
+        company.setActive(false);
+        this.companyRepository.save(company);
+    }
+
 }
