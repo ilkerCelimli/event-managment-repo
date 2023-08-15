@@ -1,5 +1,6 @@
 package com.portifolyo.organizercompanyservice.api;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.portifolyo.organizercompanyservice.service.CompanyService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +9,6 @@ import org.portifolyo.requests.organizercompanyservice.SaveOrganizerCompanyReque
 import org.portifolyo.response.GenericResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 @RequestMapping("/api/v1/company")
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +26,12 @@ public class CompanyApi {
     public ResponseEntity<GenericResponse<Void>> deleteCompany(@PathVariable String id, HttpServletRequest request){
         String token = request.getHeader(HttpHeaders.AUTHORIZATION);
         this.companyService.inActiveCompany(id,token);
+        return ResponseEntity.ok(GenericResponse.SUCCESS());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<GenericResponse<Void>> updateCompany(@PathVariable("id") String id, @RequestBody @JsonInclude(JsonInclude.Include.NON_NULL) SaveOrganizerCompanyRequest request ){
+        this.companyService.updateCompany(request,id);
         return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 

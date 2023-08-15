@@ -1,6 +1,5 @@
 package com.portifolyo.organizercompanyservice.service.impl;
 
-import com.portifolyo.organizercompanyservice.entity.Adress;
 import com.portifolyo.organizercompanyservice.entity.Company;
 import com.portifolyo.organizercompanyservice.exception.GenericException;
 import com.portifolyo.organizercompanyservice.feign.UserFeign;
@@ -8,15 +7,12 @@ import com.portifolyo.organizercompanyservice.repository.CompanyRepository;
 import com.portifolyo.organizercompanyservice.service.AdressService;
 import com.portifolyo.organizercompanyservice.service.CompanyService;
 import com.portifolyo.organizercompanyservice.util.SaveOrganizerCompanyRequestMapper;
-import org.apache.commons.lang3.ObjectUtils;
-import org.apache.logging.log4j.util.Strings;
 import org.portifolyo.requests.organizercompanyservice.SaveOrganizerCompanyRequest;
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.UserInfo;
 import org.portifolyo.utils.JsonTokenUtils;
-import org.springframework.cglib.core.Local;
+import org.portifolyo.utils.UpdateHelper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,10 +62,31 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
     }
 
     @Override
-    public void inActiveCompany(String organizerId,String token) {
-        Company company = findById(organizerId);
+    public void inActiveCompany(String id,String token) {
+        Company company = findById(id);
         company.setActive(false);
+
+        try {
+            this.userFeign.deleteById(token, company.getCompanySuperAdminUserId());
+
+        }
+        catch (Exception e){
+            System.err.println(e);
+            company.setActive(true);
+            throw new GenericException("User-service Authentication Error");
+        }
+        finally {
         this.companyRepository.save(company);
+        }
+    }
+
+    @Override
+    public void updateCompany(SaveOrganizerCompanyRequest request, String id) {
+        UpdateHelper<SaveOrganizerCompanyRequest,Company> helper = new UpdateHelper<>();
+        Company company = findById(id);
+        company = helper.updateHelper(request,company);
+        company.setUpdatedDate(LocalDateTime.now());
+        update(company);
     }
 
 }

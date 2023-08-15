@@ -1,6 +1,5 @@
 package com.portifolyo.organizercompanyservice.feign;
 
-import feign.Headers;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.UserInfo;
@@ -21,6 +20,6 @@ public interface UserFeign {
     ResponseEntity<GenericResponse<Void>> deleteUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,@RequestParam String email);
 
     @DeleteMapping("/deleteById")
-    ResponseEntity<GenericResponse<Void>> deleteById(@RequestParam String id);
+    ResponseEntity<GenericResponse<Void>> deleteById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam String id);
 
 }

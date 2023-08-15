@@ -6,7 +6,6 @@ import com.portifolyo.userservice.security.JwtFilter;
 import com.portifolyo.userservice.security.RequestLogFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,9 +25,7 @@ public class SecurityConfig {
                                            RequestLogFilter requestLogFilter) throws Exception {
         http.csrf().disable();
         http.sessionManagement(i -> i.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.authorizeHttpRequests(i ->i.requestMatchers("/user/login","/user/register","/user/refresh","/user/activeuser","/actuator/**","/user/addrole","/user/deleteById").permitAll()
-                .requestMatchers(HttpMethod.GET,"/user/finduser",
-                        "/").hasRole("ADMIN")
+        http.authorizeHttpRequests(i ->i.requestMatchers("/user/login","/user/register","/user/refresh","/user/activeuser","/actuator/**","/user/addrole").permitAll()
                 .anyRequest().authenticated());
         http.exceptionHandling(i ->{
             i.authenticationEntryPoint(authenticationEntryPoint);

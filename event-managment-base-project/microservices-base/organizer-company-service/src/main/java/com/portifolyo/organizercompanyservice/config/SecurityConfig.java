@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
 
@@ -29,6 +29,8 @@ public class SecurityConfig {
         http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.DELETE,"/api/v1/company/delete-company/{id}").permitAll());
         http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET,"/**/*/company/").permitAll());
+        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.PUT , "/api/v1/**").hasRole("ADMIN"));
+        http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
         http.exceptionHandling(exception -> {
             exception.authenticationEntryPoint(customAuthenticationEntryPoint);
             exception.accessDeniedHandler(accessDeniedErrorPoint);
