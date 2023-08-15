@@ -1,5 +1,6 @@
 package com.portifolyo.organizercompanyservice.service.impl;
 
+import com.fasterxml.jackson.core.JsonToken;
 import com.portifolyo.organizercompanyservice.entity.Company;
 import com.portifolyo.organizercompanyservice.exception.GenericException;
 import com.portifolyo.organizercompanyservice.feign.UserFeign;
@@ -7,6 +8,7 @@ import com.portifolyo.organizercompanyservice.repository.CompanyRepository;
 import com.portifolyo.organizercompanyservice.service.AdressService;
 import com.portifolyo.organizercompanyservice.service.CompanyService;
 import com.portifolyo.organizercompanyservice.util.SaveOrganizerCompanyRequestMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.portifolyo.requests.organizercompanyservice.SaveOrganizerCompanyRequest;
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.UserInfo;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 @Service
+@Slf4j
 public class CompanyServiceImpl extends BaseServiceImpl<Company> implements CompanyService {
 
 
@@ -40,19 +43,19 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
         if (response.getStatusCode().is2xxSuccessful()
                 && response.getBody() != null
                 && response.getBody().getData() != null) {
+            UserInfo userInfo = response.getBody().getData();
+            Company company = SaveOrganizerCompanyRequestMapper.toEntity(request);
+            company.setCompanySuperAdminUserId(userInfo.id());
+            company.setUpdatedDate(LocalDateTime.now());
+            company.setCreatedDate(LocalDateTime.now());
             try {
-                UserInfo userInfo = response.getBody().getData();
-                Company company = SaveOrganizerCompanyRequestMapper.toEntity(request);
-                company.setCompanySuperAdminUserId(userInfo.id());
-                company.setUpdatedDate(LocalDateTime.now());
-                company.setCreatedDate(LocalDateTime.now());
                 company = this.companyRepository.save(company);
                 this.adressService.handleAdressRequest(request.adressRequest(), company);
                 return;
 
             } catch (Exception e) {
                 String[] arr = new String[]{"ROLE_USER"};
-                String token = JsonTokenUtils.generate(request.userRegisterRequest().email(), arr);
+                String token = JsonTokenUtils.generate(request.userRegisterRequest().email(),arr,null);
                 this.userFeign.deleteUser(token, request.userRegisterRequest().email());
                 throw new GenericException("Company not saved");
 
@@ -71,7 +74,7 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
 
         }
         catch (Exception e){
-            System.err.println(e);
+            log.error(e.getMessage());
             company.setActive(true);
             throw new GenericException("User-service Authentication Error");
         }

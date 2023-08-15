@@ -15,20 +15,26 @@ public class JsonTokenUtils {
 
 
 
-    public static String generate(UserLoginRequest userLoginRequest,String[] roles){
+    public static String generate(UserLoginRequest userLoginRequest,String[] roles,String id){
         return JWT.create()
                 .withClaim("email",userLoginRequest.email())
                 .withArrayClaim("roles",roles)
+                .withClaim("id",id)
                 .withExpiresAt(new Date(System.currentTimeMillis() + (1000*60*30)))
                 .sign(algorithm);
     }
 
-    public static String generate(String email,String[] roles){
+    public static String generate(String email,String[] roles,String id){
         return JWT.create()
                 .withClaim("email",email)
+                .withClaim("id",id)
                 .withExpiresAt(new Date(System.currentTimeMillis() + (30*60*60)))
                 .withArrayClaim("roles",roles)
                 .sign(algorithm);
+    }
+
+    public static <T> T extractClaim(String token,String name , Class<T> clazz){
+        return JWT.decode(token).getClaim(name).as(clazz);
     }
 
     public static DecodedJWT validate(String token){

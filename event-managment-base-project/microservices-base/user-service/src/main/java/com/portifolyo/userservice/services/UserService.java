@@ -122,14 +122,14 @@ public class UserService {
             if(u.getRolesList().get(i) == null) break;
             list[i] = u.getRolesList().get(i).getRole();
         }
-        String token = JsonTokenUtils.generate(userLoginRequest,list);
+        String token = JsonTokenUtils.generate(userLoginRequest,list,u.getId());
         return new TokenResponse(token);
     }
 
     public TokenResponse tokenResponse(String token) {
         String email = JsonTokenUtils.validate(token).getClaim("email").asString();
         String[] roles = JsonTokenUtils.validate(token).getClaim("roles").asArray(String.class);
-        return new TokenResponse(JsonTokenUtils.generate(email,roles));
+        return new TokenResponse(JsonTokenUtils.generate(email,roles,JsonTokenUtils.extractClaim(token,"id", String.class)));
     }
 
     @Transactional
