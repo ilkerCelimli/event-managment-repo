@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: event-service
+  datasource:
+    url: jdbc:postgresql://localhost:10000/event-managment
+    username: admin
+    password: 12345
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: validate
+  cache:
+    type: redis
+  cloud:
+    config:
+      enabled: false
+    compatibility-verifier:
+      enabled: false
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, metrics, info, health, shutdown, beans
+
+
+server:
+  port: 9001

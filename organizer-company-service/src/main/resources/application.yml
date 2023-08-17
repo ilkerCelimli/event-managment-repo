@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: organizer-company-service
+  datasource:
+    username: admin
+    password: 12345
+    url: jdbc:postgresql://localhost:10000/organizer-company
+  jpa:
+    hibernate:
+      ddl-auto: update
+  cache:
+    type: redis
+    redis:
+      key-prefix: organizerCompanyService
+  cloud:
+    config:
+      enabled: false
+
+server:
+  port: 9022
