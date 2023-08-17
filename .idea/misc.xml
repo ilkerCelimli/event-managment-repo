@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$/common" />
+    <file type="web" url="file://$PROJECT_DIR$/euraka-server" />
+    <file type="web" url="file://$PROJECT_DIR$/event-service" />
+    <file type="web" url="file://$PROJECT_DIR$/organizer-company-service" />
+    <file type="web" url="file://$PROJECT_DIR$/user-service" />
+  </component>
   <component name="MavenCompilerTasksManager">
     <option name="beforeCompileTasks">
       <set>

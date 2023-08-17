@@ -6,4 +6,4 @@
 
 rootProject.name = 'event-service'
 include(":common")
-project(':common').projectDir = file('../../common/')
+project(':common').projectDir = file('../common/')

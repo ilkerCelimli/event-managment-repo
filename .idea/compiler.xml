@@ -7,11 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="gateway-server" />
         <module name="organizer-company-service" />
+        <module name="user-service" />
         <module name="common" />
         <module name="event-service" />
-        <module name="gateway-server" />
-        <module name="user-service" />
         <module name="euraka-server" />
       </profile>
     </annotationProcessing>
