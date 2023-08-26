@@ -9,7 +9,7 @@ import org.portifolyo.requests.organizercompanyservice.SaveOrganizerCompanyReque
 import org.portifolyo.response.GenericResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-@RequestMapping("/api/v1/company")
+@RequestMapping("/company-service/company")
 @RestController
 @RequiredArgsConstructor
 public class CompanyApi {

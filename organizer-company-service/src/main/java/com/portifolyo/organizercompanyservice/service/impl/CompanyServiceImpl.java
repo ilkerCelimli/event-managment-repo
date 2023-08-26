@@ -64,7 +64,7 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
         throw new GenericException("Company not saved");
     }
 
-    @Override
+ /*   @Override
     public void inActiveCompany(String id,String token) {
         Company company = findById(id);
         company.setActive(false);
@@ -81,9 +81,10 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
         finally {
         this.companyRepository.save(company);
         }
-    }
+    }*/
 
     @Override
+    @Transactional
     public void updateCompany(SaveOrganizerCompanyRequest request, String id) {
         UpdateHelper<SaveOrganizerCompanyRequest,Company> helper = new UpdateHelper<>();
         Company company = findById(id);
