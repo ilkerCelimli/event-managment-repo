@@ -13,7 +13,7 @@ spring:
     config:
       enabled: false
 server:
-  port: 9011
+  port: ${PORT:9011}
 jwt:
   secret-key: RandomKey
 

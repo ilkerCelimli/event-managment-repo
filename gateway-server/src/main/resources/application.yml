@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: gateway-server
+  cloud:
+    discovery:
+      enabled: true
+
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/user/**
+        - id: event-service
+          uri: lb://event-service
+          predicates:
+            - Path=/event-service/**
+        - id: organizer-company-service
+          uri: lb://organizer-company-service
+          predicates:
+            - Path=/organizer/**
+
+
+server:
+  port: 80
+  http2:
+    enabled: true
+

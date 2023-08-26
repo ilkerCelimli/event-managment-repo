@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/organizator")
+@RequestMapping("/event-service/organizator")
 @RequiredArgsConstructor
 public class OrganizatorApi {
 
