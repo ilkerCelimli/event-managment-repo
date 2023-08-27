@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
 import com.portifolyo.eventservice.repository.projections.EventDto;
 import com.portifolyo.eventservice.service.EventService;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.TableRequest;
@@ -11,6 +12,7 @@ import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.response.GenericResponse;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,13 +23,13 @@ import java.util.List;
 public class EventApi {
 
     private final EventService eventService;
-
+    @RolesAllowed("ADMIN")
     @PostMapping("/")
     public ResponseEntity<GenericResponse<Void>> saveEvent(@Valid @RequestBody EventSaveRequest request) {
         this.eventService.saveEventRequestHandle(request);
         return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
-
+    @RolesAllowed("ADMIN")
     @PutMapping("/")
     public ResponseEntity<GenericResponse<Void>> updateEvent(@JsonInclude(JsonInclude.Include.NON_NULL)
                                                                  @RequestBody

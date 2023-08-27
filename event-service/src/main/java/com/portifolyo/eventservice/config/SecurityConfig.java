@@ -7,9 +7,11 @@ import com.portifolyo.eventservice.security.RequestLogFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -17,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@EnableGlobalAuthentication
 public class SecurityConfig {
 
     @Bean
@@ -25,16 +28,12 @@ public class SecurityConfig {
                                                    CustomAuthenticationEntryPoint authenticationEntryPoint,
                                                    AccessDeniedErrorPoint accessDeniedErrorPoint,
                                                    RequestLogFilter requestLogFilter) throws Exception {
-        httpSecurity.csrf().disable();
-        httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
+        httpSecurity.sessionManagement(request -> request.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.authorizeHttpRequests(i -> {
             i.requestMatchers(HttpMethod.GET, "/event/").permitAll();
             i.requestMatchers("/actuator/**").permitAll();
-            i.requestMatchers("/ticket/**").hasRole("USER");
-            i.requestMatchers(HttpMethod.PUT, "/organizator/").hasRole("USER");
-            i.requestMatchers(HttpMethod.POST, "/organizator/").hasRole("USER");
-            i.requestMatchers("/organizator/findorganizarevents", "/organizator/findorganizatorbyemail").permitAll();
-            i.requestMatchers("/event/").hasRole("USER");
+            i.anyRequest().authenticated();
         });
         httpSecurity.exceptionHandling(i -> {
             i.accessDeniedHandler(accessDeniedErrorPoint);
