@@ -27,9 +27,9 @@ public class SecurityConfig {
                                                    JwtFilter jwtFilter,
                                                    RequestLogFilter requestLogFilter) throws Exception {
         http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.DELETE,"/api/v1/company/delete-company/{id}").permitAll());
-        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET,"/**/*/company/").permitAll());
-        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.PUT , "/api/v1/**").hasRole("ADMIN"));
+        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.DELETE,"/company-service/company/delete-company/{id}").permitAll());
+        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET,"/company-service/company").permitAll());
+        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.PUT , "/company-service/**").hasRole("ADMIN"));
         http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
         http.exceptionHandling(exception -> {
             exception.authenticationEntryPoint(customAuthenticationEntryPoint);

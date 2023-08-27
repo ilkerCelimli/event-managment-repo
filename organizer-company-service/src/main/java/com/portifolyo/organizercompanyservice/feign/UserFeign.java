@@ -8,7 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@FeignClient(name = "user-feign",url = "localhost:9011")
+@FeignClient("USER-SERVICE")
 public interface UserFeign {
     @GetMapping("/user/finduser")
     UserInfo findUserInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
@@ -19,7 +19,7 @@ public interface UserFeign {
     @DeleteMapping("/user/")
     ResponseEntity<GenericResponse<Void>> deleteUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,@RequestParam String email);
 
-    @DeleteMapping("/deleteById")
-    ResponseEntity<GenericResponse<Void>> deleteById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @RequestParam String id);
+    @DeleteMapping("/user/delete-by-id/{id}")
+    ResponseEntity<GenericResponse<Void>> deleteById(@RequestHeader(HttpHeaders.AUTHORIZATION) String token, @PathVariable String id);
 
 }

@@ -16,6 +16,12 @@
       <module name="config-server" target="20" />
       <module name="event-managment-base-project" target="20" />
       <module name="microservices-base" target="20" />
+      <module name="oauth-resource" target="17" />
+      <module name="oauth-resource.main" target="17" />
+      <module name="oauth-resource.test" target="17" />
+      <module name="oauth-server" target="17" />
+      <module name="oauth-server.main" target="17" />
+      <module name="oauth-server.test" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

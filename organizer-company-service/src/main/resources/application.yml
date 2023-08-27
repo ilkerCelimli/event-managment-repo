@@ -15,6 +15,9 @@ spring:
   cloud:
     config:
       enabled: false
+eureka:
+  client:
+    enabled: true
 
 server:
   port: 9022

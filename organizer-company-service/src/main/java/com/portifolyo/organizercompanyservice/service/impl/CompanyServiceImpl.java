@@ -64,7 +64,7 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
         throw new GenericException("Company not saved");
     }
 
- /*   @Override
+    @Override
     public void inActiveCompany(String id,String token) {
         Company company = findById(id);
         company.setActive(false);
@@ -76,12 +76,13 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
         catch (Exception e){
             log.error(e.getMessage());
             company.setActive(true);
-            throw new GenericException("User-service Authentication Error");
+            System.out.println(e.getMessage());
+           // throw new GenericException("User-service Authentication Error");
         }
         finally {
         this.companyRepository.save(company);
         }
-    }*/
+    }
 
     @Override
     @Transactional
