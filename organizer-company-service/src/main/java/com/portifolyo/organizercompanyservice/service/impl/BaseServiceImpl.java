@@ -33,6 +33,7 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
     @Override
     public T update(T entity) {
+        entity.setUpdatedDate(LocalDateTime.now());
         return this.baseRepository.save(entity);
     }
 

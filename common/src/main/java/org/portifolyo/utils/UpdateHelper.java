@@ -1,6 +1,7 @@
 package org.portifolyo.utils;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.portifolyo.annotations.DontUpdate;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -18,7 +19,7 @@ public class UpdateHelper<S,T> {
            for(RecordComponent s : rc){
                if(s.getAccessor().invoke(source) != null) {
                    for(Field t : targetFields) {
-                       if(t.getName().contains(s.getName())){
+                       if(t.getName().contains(s.getName()) && !t.isAnnotationPresent(DontUpdate.class)){
                            String fieldName = t.getName().substring(1);
                            String methodName = "set"+String.valueOf(t.getName().charAt(0)).toUpperCase()+fieldName;
                            methodName = methodName.replace("İ","I");

@@ -2,6 +2,7 @@ package com.portifolyo.organizercompanyservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.portifolyo.annotations.DontUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @DontUpdate
     private String id;
 
     @Column(name = "created_time",updatable = false)

@@ -8,4 +8,6 @@ public interface PlacesService extends BaseService<Place> {
     void handlePlaceRequest(SavePlaceRequest savePlaceRequest);
 
     void updatePlaceBusyStatus(boolean update,String placeId);
+
+    void updatePlaceHandler(SavePlaceRequest savePlaceRequest,String id);
 }
