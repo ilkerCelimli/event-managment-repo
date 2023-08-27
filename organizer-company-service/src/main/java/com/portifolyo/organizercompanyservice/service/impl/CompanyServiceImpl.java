@@ -71,16 +71,13 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
 
         try {
             this.userFeign.deleteById(token, company.getCompanySuperAdminUserId());
-
+            this.companyRepository.save(company);
         }
         catch (Exception e){
             log.error(e.getMessage());
             company.setActive(true);
-            System.out.println(e.getMessage());
-           // throw new GenericException("User-service Authentication Error");
-        }
-        finally {
-        this.companyRepository.save(company);
+            this.companyRepository.save(company);
+           throw new GenericException("User-service Authentication Error");
         }
     }
 
