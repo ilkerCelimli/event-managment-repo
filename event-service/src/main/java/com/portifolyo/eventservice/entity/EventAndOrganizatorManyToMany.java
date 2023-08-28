@@ -1,15 +1,19 @@
 package com.portifolyo.eventservice.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.proxy.HibernateProxy;
+
+import java.util.Objects;
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "events_and_organizators_join_table")
 public class EventAndOrganizatorManyToMany extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -19,6 +23,5 @@ public class EventAndOrganizatorManyToMany extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinColumn(name = "organizator_id")
     private Organizator organizator;
-
 
 }

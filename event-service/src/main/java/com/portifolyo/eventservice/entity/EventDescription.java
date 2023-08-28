@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,13 +14,18 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
-@ToString(of = "id")
-@EqualsAndHashCode(callSuper = true,of = {"id"})
-public class EventDescription extends BaseEntity {
+@Table(name = "event_description")
+public class EventDescription extends BaseEntity implements Serializable {
     @Column(name = "description",nullable = false)
     private String descrtiption;
 
    @OneToMany(mappedBy = "eventDescription",fetch = FetchType.EAGER ,cascade = CascadeType.ALL)
     private Set<ImageAndLinks> imageAndLinksSet = new HashSet<>();
+
+
+   @Override
+    public String toString(){
+       return String.format("id: %s",super.getId());
+   }
 
 }

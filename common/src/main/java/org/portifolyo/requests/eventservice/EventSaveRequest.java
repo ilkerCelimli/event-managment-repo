@@ -11,7 +11,6 @@ import java.util.List;
 import static org.portifolyo.requests.eventservice.messages.EventSaveRequestMessage.*;
 
 public record EventSaveRequest(
-        @NotNull(message = ORGANIZATOR_LIST_IS_NOT_NULL)
         List<OrganizatorRequest> organizatorLists,
         @NotNull(message = EVENT_NAME_NOT_NULL)
         String eventName,

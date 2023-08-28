@@ -7,7 +7,7 @@ import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 
 
-public interface OrganizatorService {
+public interface OrganizatorService extends BaseService<Organizator> {
 
     Organizator handleOrganizator(OrganizatorRequest organizatorRequest);
     OrganizatorInfo findOrganizatorByEmail(String email);

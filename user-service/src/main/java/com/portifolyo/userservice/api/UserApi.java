@@ -89,4 +89,13 @@ public class UserApi {
         return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
 
+    @GetMapping("/findById")
+    public ResponseEntity<GenericResponse<UserInfo>> findById(@RequestParam String id){
+        return ResponseEntity.ok(
+                GenericResponse.SUCCESS(
+                        this.userService.findById(id)
+                )
+        );
+    }
+
 }

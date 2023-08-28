@@ -1,26 +1,27 @@
 package com.portifolyo.eventservice.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Inheritance(strategy = InheritanceType.JOINED)
-@Data
+@Getter
+@Setter
 @Entity
-
+@Table(name = "organizators",indexes = {
+        @Index(name = "idx_fullname",columnList = "name,surname"),
+        @Index(name = "idx_email",columnList = "email")
+})
 public class Organizator extends BaseEntity {
 
-    @Column(nullable = false)
+    @Column(nullable = false,name = "name",length = 20)
     private String name;
-    @Column(nullable = false)
+    @Column(nullable = false,name = "surname",length = 20)
     private String surname;
-    @Column(nullable = false)
+    @Column(nullable = false,length = 16,name = "phone_number")
     private String phoneNumber;
-    @Column(nullable = false)
+    @Column(nullable = false,length = 32,name = "email")
     private String email;
-    @Column(nullable = false)
+    @Column(nullable = false,length = 11,name = "identity_number")
     private String tcNo;
 
     public Organizator() {}

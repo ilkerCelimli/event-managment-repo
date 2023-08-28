@@ -10,7 +10,6 @@ import com.portifolyo.eventservice.repository.projections.EventAreaInfo;
 import com.portifolyo.eventservice.repository.projections.EventDto;
 import com.portifolyo.eventservice.repository.projections.OrganizatorEventsInfos;
 import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
-import com.portifolyo.eventservice.service.BaseServiceImpl;
 import com.portifolyo.eventservice.service.EventAndOrganizatorManyToManyService;
 import com.portifolyo.eventservice.service.EventAreaService;
 import com.portifolyo.eventservice.util.mapper.EventDtoMapper;

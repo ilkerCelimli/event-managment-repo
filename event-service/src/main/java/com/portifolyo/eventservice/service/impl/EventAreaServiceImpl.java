@@ -5,7 +5,6 @@ import com.portifolyo.eventservice.entity.EventArea;
 import com.portifolyo.eventservice.exceptions.NotFoundException;
 import com.portifolyo.eventservice.repository.EventAreaRepository;
 import com.portifolyo.eventservice.repository.projections.EventAreaInfo;
-import com.portifolyo.eventservice.service.BaseServiceImpl;
 import com.portifolyo.eventservice.service.EventAreaService;
 import com.portifolyo.eventservice.util.mapper.EventAreaMapper;
 import org.portifolyo.requests.eventservice.EventAreaRequest;

@@ -5,7 +5,6 @@ import com.portifolyo.eventservice.entity.Ticket;
 import com.portifolyo.eventservice.exceptions.TicketNotSellException;
 import com.portifolyo.eventservice.repository.TicketRepository;
 import com.portifolyo.eventservice.repository.projections.TicketInfo;
-import com.portifolyo.eventservice.service.BaseServiceImpl;
 import com.portifolyo.eventservice.service.EventService;
 import com.portifolyo.eventservice.service.TicketService;
 import com.portifolyo.eventservice.util.mapper.TicketRequestMapper;

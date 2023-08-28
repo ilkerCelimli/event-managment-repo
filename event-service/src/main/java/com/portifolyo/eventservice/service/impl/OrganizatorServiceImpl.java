@@ -6,7 +6,6 @@ import com.portifolyo.eventservice.exceptions.NotFoundException;
 import com.portifolyo.eventservice.repository.OrganizatorRepository;
 import com.portifolyo.eventservice.repository.projections.OrganizatorEventsInfos;
 import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
-import com.portifolyo.eventservice.service.BaseServiceImpl;
 import com.portifolyo.eventservice.service.EventAndOrganizatorManyToManyService;
 import com.portifolyo.eventservice.service.OrganizatorService;
 import com.portifolyo.eventservice.util.mapper.OrganizatorRequestMapper;

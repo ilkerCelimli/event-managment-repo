@@ -14,6 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.requests.userservice.UserLoginRequest;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
+import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.TokenResponse;
 import org.portifolyo.response.UserInfo;
 import org.portifolyo.utils.DeserializeHelper;
@@ -42,7 +43,7 @@ public class UserService {
     @Transactional
     public User saveUser(UserRegisterRequest userRegisterRequest) {
         if (!findEmailIsExists(userRegisterRequest.email())) {
-            User u = this.userRepository.save(userRegisterRequestConverter.toEntity(userRegisterRequest));
+            User u = userRegisterRequestConverter.toEntity(userRegisterRequest);
             List<Roles> roles = new ArrayList<>();
             userRegisterRequest.role().forEach(i -> roles.add(this.roleRepository.findById(i.id()).get()));
             u.setRolesList(roles);
@@ -84,7 +85,7 @@ public class UserService {
         User user = this.userRepository.findUserByEmail(organizatorRequest.email()).orElse(new User());
         if (user.getId() == null) {
             User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
-                    RandomStringGenerator.randomStringGenerator(), LocalDateTime.of(1900, 1, 1, 1, 1, 1, 1), true);
+                    RandomStringGenerator.RandomPasswordGenerator(), LocalDateTime.of(1900, 1, 1, 1, 1, 1, 1), true);
             this.userRepository.save(u);
             return;
         }
@@ -130,6 +131,11 @@ public class UserService {
         String email = JsonTokenUtils.validate(token).getClaim("email").asString();
         String[] roles = JsonTokenUtils.validate(token).getClaim("roles").asArray(String.class);
         return new TokenResponse(JsonTokenUtils.generate(email,roles,JsonTokenUtils.extractClaim(token,"id", String.class)));
+    }
+
+    public UserInfo findById(String id){
+        UserInfo userInfo = this.userRepository.findByIdAndIsActiveTrue(id).orElseThrow(() -> new BannedUserException(id));
+        return userInfo;
     }
 
     @Transactional

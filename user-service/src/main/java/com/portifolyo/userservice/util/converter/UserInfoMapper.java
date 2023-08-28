@@ -6,7 +6,7 @@ import org.portifolyo.response.UserInfo;
 public class UserInfoMapper {
 
     public static UserInfo toDto(User u){
-        return new UserInfo(u.getId(),u.getName(),u.getSurname(),u.getBirtday().toString());
+        return new UserInfo(u.getId(),u.getName(),u.getSurname(),u.getEmail(),u.getBirtday().toString());
     }
 
 }

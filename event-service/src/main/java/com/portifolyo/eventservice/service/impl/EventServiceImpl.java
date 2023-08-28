@@ -5,28 +5,36 @@ import com.portifolyo.eventservice.entity.EventDescription;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
 import com.portifolyo.eventservice.exceptions.GenericException;
 import com.portifolyo.eventservice.exceptions.NotFoundException;
+import com.portifolyo.eventservice.feign.UserServiceFeignClient;
 import com.portifolyo.eventservice.repository.EventDescriptionRepository;
 import com.portifolyo.eventservice.repository.EventRepository;
 import com.portifolyo.eventservice.repository.ImageAndLinksRepository;
 import com.portifolyo.eventservice.repository.projections.EventAreaInfo;
 import com.portifolyo.eventservice.repository.projections.EventDto;
 import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
-import com.portifolyo.eventservice.service.BaseServiceImpl;
 import com.portifolyo.eventservice.service.EventAndOrganizatorManyToManyService;
 import com.portifolyo.eventservice.service.EventAreaService;
 import com.portifolyo.eventservice.service.EventService;
 import com.portifolyo.eventservice.util.mapper.EventDtoMapper;
 import com.portifolyo.eventservice.util.mapper.EventSaveRequestMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
+import org.portifolyo.requests.eventservice.OrganizatorRequest;
+import org.portifolyo.response.GenericResponse;
+import org.portifolyo.response.UserInfo;
 import org.portifolyo.utils.UpdateHelper;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
+@Slf4j
 public class EventServiceImpl extends BaseServiceImpl<Event> implements EventService {
 
     private final EventRepository eventRepository;
@@ -35,18 +43,22 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     private final ImageAndLinksRepository imageAndLinksRepository;
     private final EventDescriptionRepository eventDescriptionRepository;
 
-    public EventServiceImpl(EventRepository eventRepository, EventAreaService eventAreaService, EventAndOrganizatorManyToManyService eventAndOrganizatorManyToManyService, ImageAndLinksRepository imageAndLinksRepository, EventDescriptionRepository eventDescriptionRepository) {
+    private final UserServiceFeignClient userServiceFeignClient;
+
+
+    public EventServiceImpl(EventRepository eventRepository, EventAreaService eventAreaService, EventAndOrganizatorManyToManyService eventAndOrganizatorManyToManyService, ImageAndLinksRepository imageAndLinksRepository, EventDescriptionRepository eventDescriptionRepository, UserServiceFeignClient userServiceFeignClient) {
         super(eventRepository);
         this.eventRepository = eventRepository;
         this.eventAreaService = eventAreaService;
         this.eventAndOrganizatorManyToManyService = eventAndOrganizatorManyToManyService;
         this.imageAndLinksRepository = imageAndLinksRepository;
         this.eventDescriptionRepository = eventDescriptionRepository;
+        this.userServiceFeignClient = userServiceFeignClient;
     }
 
     @Override
     @Transactional
-    public void saveEventRequestHandle(EventSaveRequest request) {
+    public Event saveEventRequestHandle(EventSaveRequest request,String eventOwner,String token) {
         Event event = EventSaveRequestMapper.toEntity(request);
         EventDescription desc = this.eventDescriptionRepository.save(event.getEventDescription());
         event.setEventDescription(desc);
@@ -60,20 +72,30 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
                 this.imageAndLinksRepository.save(f);
             });
         }
+
+        ResponseEntity<GenericResponse<UserInfo>> response =  this.userServiceFeignClient.findById(eventOwner,token);
+        if(response.getBody() == null && response.getBody().getData() == null) {
+            throw new GenericException("User not found",404);
+        }
+            UserInfo userInfo = response.getBody().getData();
+            event.setEventOwner(userInfo.id());
+
+        List<OrganizatorRequest> organizators = handleOrganizatorRequests(request.organizatorLists(),userInfo);
         Event saved = this.save(event);
-        this.eventAndOrganizatorManyToManyService.saveOrganizator(request.organizatorLists(),saved);
+        this.eventAndOrganizatorManyToManyService.saveOrganizator(organizators,saved);
         this.eventAreaService.handleEventAreaRequest(request.eventAreaRequest(),saved);
+        return saved;
     }
 
     @Override
-    public void updateEventRequestHandle(EventSaveRequest event, String eventId){
+    public Event updateEventRequestHandle(EventSaveRequest event, String eventId){
         Event e = this.eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(
                 String.format("%s event id not found",eventId)
         ));
         UpdateHelper<EventSaveRequest,Event> updateHelper = new UpdateHelper<>();
            Event updated = updateHelper.updateHelper(event,e);
            if(updated == null) throw new GenericException("Update problems",500);
-           save(updated);
+           return save(updated);
     }
 
     @Override
@@ -81,11 +103,6 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
         this.eventRepository.updateIsDeletedById(true,eventId);
     }
 
-    @Override
-    public Event findById(String id) {
-        return this.eventRepository.findById(id).orElseThrow(()
-                -> new NotFoundException(String.format("%s event id not found",id)));
-    }
 
     @Override
     public void addimages(String eventid, List<ImageAndLinks> imageAndLinks) {
@@ -113,6 +130,20 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
         Event e = this.eventRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("%s bulunamadı",id)));
         List<OrganizatorInfo> list = this.eventAndOrganizatorManyToManyService.findOrganizatorsByEventId(id);
         return EventDtoMapper.toDto(e,this.eventAreaService.findEventArea(id),list);
+    }
+
+    private List<OrganizatorRequest> handleOrganizatorRequests(List<OrganizatorRequest> request,UserInfo userInfo){
+        if(request == null) {
+            List<OrganizatorRequest> list = new ArrayList<>();
+            list.add(new OrganizatorRequest(userInfo.name(), userInfo.surname(),"", userInfo.email(),""));
+            return list;
+        }
+        List<OrganizatorRequest> filter = request.stream().filter(i -> i.email().equals(userInfo.email())).toList();
+        if(filter.isEmpty()) {
+            request.add(new OrganizatorRequest(userInfo.name(), userInfo.surname(),"", userInfo.email(),""));
+            return request;
+        }
+        return request;
     }
 
 }

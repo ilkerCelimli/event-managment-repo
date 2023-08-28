@@ -10,8 +10,10 @@ import lombok.ToString;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
-@ToString(of = "id")
-@EqualsAndHashCode(callSuper = true,of = {"id"})
+@Table(name = "event_areas",indexes = {
+        @Index(name = "idx_area_name",columnList = "area_name"),
+        @Index(name = "idx_coordinates",columnList = "area_lat,area_lng")
+})
 public class EventArea extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id",nullable = false)
@@ -26,7 +28,7 @@ public class EventArea extends BaseEntity {
     @Column(name = "area_lng",nullable = false)
     private String areaLng;
     @Column(name ="area_capacity",nullable = false)
-    private Integer areaCapacity;
+    private Integer areaCapacity = 0;
 
     @Column(name = "open_adress",nullable = false)
     private String openAdress;
@@ -39,4 +41,10 @@ public class EventArea extends BaseEntity {
         this.openAdress = openAdress;
     }
     public EventArea() {}
+
+
+    @Override
+    public String toString(){
+        return String.format("id: %s",super.getId());
+    }
 }

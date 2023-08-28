@@ -7,7 +7,7 @@ import org.portifolyo.requests.eventservice.EventDescriptionRequest;
 
 import java.util.List;
 
-public interface EventDescriptionService {
+public interface EventDescriptionService extends BaseService<EventDescription> {
 
     EventDescription eventDescriptionHandler(EventDescriptionRequest list);
     void addImages(Event event, List<ImageAndLinks> images);
