@@ -45,7 +45,13 @@ public class UserService {
         if (!findEmailIsExists(userRegisterRequest.email())) {
             User u = userRegisterRequestConverter.toEntity(userRegisterRequest);
             List<Roles> roles = new ArrayList<>();
-            userRegisterRequest.role().forEach(i -> roles.add(this.roleRepository.findById(i.id()).get()));
+
+            userRegisterRequest.role().forEach(i -> {
+                Optional<Roles> role = this.roleRepository.findById(i.id());
+                if(role.isPresent()){
+                    roles.add(role.get());
+                }
+            });
             u.setRolesList(roles);
             this.userRepository.save(u);
             log.info("saved user date {},id {}", new Date(), u.getId());

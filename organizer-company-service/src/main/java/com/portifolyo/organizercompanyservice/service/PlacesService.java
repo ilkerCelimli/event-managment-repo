@@ -1,7 +1,7 @@
 package com.portifolyo.organizercompanyservice.service;
 
 import com.portifolyo.organizercompanyservice.entity.Place;
-import com.portifolyo.organizercompanyservice.repository.PlaceInfo;
+import com.portifolyo.organizercompanyservice.repository.projections.PlaceInfo;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.organizercompanyservice.SavePlaceRequest;
 

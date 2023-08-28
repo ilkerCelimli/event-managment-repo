@@ -1,6 +1,6 @@
 package com.portifolyo.organizercompanyservice.api;
 
-import com.portifolyo.organizercompanyservice.repository.PlaceInfo;
+import com.portifolyo.organizercompanyservice.repository.projections.PlaceInfo;
 import com.portifolyo.organizercompanyservice.service.PlacesService;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.TableRequest;

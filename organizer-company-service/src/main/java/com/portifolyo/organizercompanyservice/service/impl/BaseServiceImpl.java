@@ -1,6 +1,7 @@
 package com.portifolyo.organizercompanyservice.service.impl;
 
 import com.portifolyo.organizercompanyservice.entity.BaseEntity;
+import com.portifolyo.organizercompanyservice.exception.NotFoundException;
 import com.portifolyo.organizercompanyservice.repository.BaseRepository;
 import com.portifolyo.organizercompanyservice.service.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +26,9 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
             log.info("saved {} , {} date",entity.getId(),saved.getCreatedDate());
             return saved;
         }
-        //TODO refactor this log
+
         log.error("error{} date",entity.getCreatedDate());
-        //TODO refactor this exception
-        throw new RuntimeException();
+        return null;
     }
 
     @Override
@@ -51,7 +51,6 @@ public class BaseServiceImpl<T extends BaseEntity> implements BaseService<T> {
 
     @Override
     public T findById(String id) {
-        // TODO refactor this exception
-        return this.baseRepository.findById(id).orElseThrow(RuntimeException::new);
+        return this.baseRepository.findById(id).orElseThrow(() -> new NotFoundException(id));
     }
 }

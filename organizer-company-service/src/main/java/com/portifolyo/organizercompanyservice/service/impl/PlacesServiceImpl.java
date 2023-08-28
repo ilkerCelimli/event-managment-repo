@@ -4,7 +4,7 @@ import com.portifolyo.organizercompanyservice.entity.Adress;
 import com.portifolyo.organizercompanyservice.entity.City;
 import com.portifolyo.organizercompanyservice.entity.Company;
 import com.portifolyo.organizercompanyservice.entity.Place;
-import com.portifolyo.organizercompanyservice.repository.PlaceInfo;
+import com.portifolyo.organizercompanyservice.repository.projections.PlaceInfo;
 import com.portifolyo.organizercompanyservice.repository.PlaceRepository;
 import com.portifolyo.organizercompanyservice.service.AdressService;
 import com.portifolyo.organizercompanyservice.service.CompanyService;
@@ -17,7 +17,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service

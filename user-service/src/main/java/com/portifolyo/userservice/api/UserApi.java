@@ -30,9 +30,8 @@ public class UserApi {
     private final UserService userService;
     private final RoleRepository roleRepository;
     @PostMapping("/addrole")
-    @RolesAllowed("ADMIN")
     public ResponseEntity<Void> addRole(){
-        this.roleRepository.save(new Roles(null, Role.ROLE_ADMIN.getValue()));
+        this.roleRepository.save(new Roles(null, Role.ROLE_COMPANY_USER.getValue()));
         return ResponseEntity.ok().build();
     }
 
@@ -96,7 +95,7 @@ public class UserApi {
     }
 
     @GetMapping("/findById")
-    
+
     public ResponseEntity<GenericResponse<UserInfo>> findById(@RequestParam String id){
         return ResponseEntity.ok(
                 GenericResponse.SUCCESS(

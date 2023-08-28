@@ -6,20 +6,20 @@ import lombok.Setter;
 
 import java.util.Objects;
 
-@Table(name = "ADRESS")
+@Table(name = "adress")
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @Getter
 @Setter
 public class Adress extends BaseEntity {
-    @Column(name = "OPEN_ADRESS",length = 100)
+    @Column(name = "open_adress",length = 100)
     private String openAdress;
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "COMPANY_ID")
+    @JoinColumn(name = "company_id")
     private Company company;
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "CITY_ID")
+    @JoinColumn(name = "city_id")
     private City city;
 
 

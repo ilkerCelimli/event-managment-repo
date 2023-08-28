@@ -3,12 +3,13 @@ package com.portifolyo.organizercompanyservice.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 @Entity
-@Table(name = "COMPANIES")
+@Table(name = "companies",indexes = {
+        @Index(name = "idx_company_name",columnList = "company_name"),
+        @Index(name = "idx_company_tax_number",columnList = "tax_number"),
+})
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,7 +28,7 @@ public class Company extends BaseEntity {
     @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
     private Set<Place> places = new HashSet<>();
     @OneToMany
-    private Set<Adress> companyAdresses = new HashSet<>();
+    private List<Adress> companyAdresses = new ArrayList<>();
 
 
 

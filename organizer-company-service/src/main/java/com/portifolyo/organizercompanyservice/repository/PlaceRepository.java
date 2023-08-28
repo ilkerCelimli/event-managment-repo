@@ -1,6 +1,7 @@
 package com.portifolyo.organizercompanyservice.repository;
 
 import com.portifolyo.organizercompanyservice.entity.Place;
+import com.portifolyo.organizercompanyservice.repository.projections.PlaceInfo;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

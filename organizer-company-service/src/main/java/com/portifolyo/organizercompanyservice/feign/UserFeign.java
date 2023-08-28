@@ -14,7 +14,7 @@ public interface UserFeign {
     UserInfo findUserInfo(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                          @RequestParam String email);
     @PostMapping("/user/register")
-    ResponseEntity<GenericResponse<UserInfo>> registerUser(UserRegisterRequest userRegisterRequest);
+    ResponseEntity<GenericResponse<UserInfo>> registerUser(@RequestBody UserRegisterRequest userRegisterRequest);
 
     @DeleteMapping("/user/")
     ResponseEntity<GenericResponse<Void>> deleteUser(@RequestHeader(HttpHeaders.AUTHORIZATION) String token,@RequestParam String email);
