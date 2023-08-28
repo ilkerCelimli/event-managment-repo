@@ -31,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -58,12 +57,12 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
 
     @Override
     @Transactional
-    public Event saveEventRequestHandle(EventSaveRequest request,String eventOwner,String token) {
+    public Event saveEventRequestHandle(EventSaveRequest request, String eventOwner, String token) {
         Event event = EventSaveRequestMapper.toEntity(request);
         EventDescription desc = this.eventDescriptionRepository.save(event.getEventDescription());
         event.setEventDescription(desc);
 
-        if(request.description().imageAndLinksReqeusts() != null){
+        if (request.description().imageAndLinksReqeusts() != null) {
             request.description().imageAndLinksReqeusts().forEach(i -> {
                 ImageAndLinks f = new ImageAndLinks();
                 f.setEventDescription(desc);
@@ -73,51 +72,52 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
             });
         }
 
-        ResponseEntity<GenericResponse<UserInfo>> response =  this.userServiceFeignClient.findById(eventOwner,token);
-        if(response.getBody() == null && response.getBody().getData() == null) {
-            throw new GenericException("User not found",404);
+        ResponseEntity<GenericResponse<UserInfo>> response = this.userServiceFeignClient.findById(eventOwner, token);
+        if (response.getBody() == null && response.getBody().getData() == null) {
+            throw new GenericException("User not found", 404);
         }
-            UserInfo userInfo = response.getBody().getData();
+
+        UserInfo userInfo = response.getBody().getData();
             event.setEventOwner(userInfo.id());
 
-        List<OrganizatorRequest> organizators = handleOrganizatorRequests(request.organizatorLists(),userInfo);
+        List<OrganizatorRequest> organizators = handleOrganizatorRequests(request.organizatorLists(), userInfo);
         Event saved = this.save(event);
-        this.eventAndOrganizatorManyToManyService.saveOrganizator(organizators,saved);
-        this.eventAreaService.handleEventAreaRequest(request.eventAreaRequest(),saved);
+        this.eventAndOrganizatorManyToManyService.saveOrganizator(organizators, saved);
+        this.eventAreaService.handleEventAreaRequest(request.eventAreaRequest(), saved);
         return saved;
     }
 
     @Override
-    public Event updateEventRequestHandle(EventSaveRequest event, String eventId){
+    public Event updateEventRequestHandle(EventSaveRequest event, String eventId) {
         Event e = this.eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(
-                String.format("%s event id not found",eventId)
+                String.format("%s event id not found", eventId)
         ));
-        UpdateHelper<EventSaveRequest,Event> updateHelper = new UpdateHelper<>();
-           Event updated = updateHelper.updateHelper(event,e);
-           if(updated == null) throw new GenericException("Update problems",500);
-           return save(updated);
+        UpdateHelper<EventSaveRequest, Event> updateHelper = new UpdateHelper<>();
+        Event updated = updateHelper.updateHelper(event, e);
+        if (updated == null) throw new GenericException("Update problems", 500);
+        return save(updated);
     }
 
     @Override
     public void eventInActiveHandle(String eventId) {
-        this.eventRepository.updateIsDeletedById(true,eventId);
+        this.eventRepository.updateIsDeletedById(true, eventId);
     }
 
 
     @Override
     public void addimages(String eventid, List<ImageAndLinks> imageAndLinks) {
-        EventDescription desc = this.eventRepository.findById(eventid).orElseThrow(() -> new NotFoundException(String.format("%s not found",eventid))).getEventDescription();
+        EventDescription desc = this.eventRepository.findById(eventid).orElseThrow(() -> new NotFoundException(String.format("%s not found", eventid))).getEventDescription();
         imageAndLinks.forEach(i -> i.setEventDescription(desc));
         this.imageAndLinksRepository.saveAll(imageAndLinks);
     }
 
     @Override
     public List<EventDto> findEvents(TableRequest request) {
-        List<EventDto> result =  new ArrayList<>();
-        List<Event> events =  this.eventRepository.findAll(PageRequest.of(request.getPage(), request.getSize())).toList();
+        List<EventDto> result = new ArrayList<>();
+        List<Event> events = this.eventRepository.findAll(PageRequest.of(request.getPage(), request.getSize())).toList();
         events.forEach(i -> {
             EventAreaInfo eventAreaInfo = this.eventAreaService.findEventArea(i.getId());
-            EventDto dtos = EventDtoMapper.toDto(i,eventAreaInfo,this.eventAndOrganizatorManyToManyService.findOrganizatorsByEventId(i.getId()));
+            EventDto dtos = EventDtoMapper.toDto(i, eventAreaInfo, this.eventAndOrganizatorManyToManyService.findOrganizatorsByEventId(i.getId()));
             result.add(dtos);
         });
 
@@ -127,20 +127,20 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
 
     @Override
     public EventDto findEventById(String id) {
-        Event e = this.eventRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("%s bulunamadı",id)));
+        Event e = this.eventRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("%s bulunamadı", id)));
         List<OrganizatorInfo> list = this.eventAndOrganizatorManyToManyService.findOrganizatorsByEventId(id);
-        return EventDtoMapper.toDto(e,this.eventAreaService.findEventArea(id),list);
+        return EventDtoMapper.toDto(e, this.eventAreaService.findEventArea(id), list);
     }
 
-    private List<OrganizatorRequest> handleOrganizatorRequests(List<OrganizatorRequest> request,UserInfo userInfo){
-        if(request == null) {
+    private List<OrganizatorRequest> handleOrganizatorRequests(List<OrganizatorRequest> request, UserInfo userInfo) {
+        if (request == null) {
             List<OrganizatorRequest> list = new ArrayList<>();
-            list.add(new OrganizatorRequest(userInfo.name(), userInfo.surname(),"", userInfo.email(),""));
+            list.add(new OrganizatorRequest(userInfo.name(), userInfo.surname(), "", userInfo.email(), ""));
             return list;
         }
         List<OrganizatorRequest> filter = request.stream().filter(i -> i.email().equals(userInfo.email())).toList();
-        if(filter.isEmpty()) {
-            request.add(new OrganizatorRequest(userInfo.name(), userInfo.surname(),"", userInfo.email(),""));
+        if (filter.isEmpty()) {
+            request.add(new OrganizatorRequest(userInfo.name(), userInfo.surname(), "", userInfo.email(), ""));
             return request;
         }
         return request;
