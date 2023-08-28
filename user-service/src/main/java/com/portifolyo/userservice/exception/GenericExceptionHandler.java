@@ -3,6 +3,7 @@ package com.portifolyo.userservice.exception;
 import com.portifolyo.userservice.exception.apiexceptions.BannedUserException;
 import com.portifolyo.userservice.exception.apiexceptions.EmailIsExistsException;
 import com.portifolyo.userservice.exception.apiexceptions.PasswordNotMatchesException;
+import com.sun.mail.util.MailConnectException;
 import jakarta.mail.MessagingException;
 import org.portifolyo.response.GenericResponse;
 import org.springframework.http.HttpStatus;
@@ -36,6 +37,12 @@ public class GenericExceptionHandler {
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ResponseEntity<GenericResponse<Void>> passwordIsNotMatches(PasswordNotMatchesException ex){
         return new ResponseEntity<>(GenericResponse.BAD_REQUEST(ex.getMessage()),HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(MailConnectException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public GenericResponse<Void> mailConnectExceptionHandler(MailConnectException ex) {
+        return GenericResponse.SUCCESS();
     }
 
 }

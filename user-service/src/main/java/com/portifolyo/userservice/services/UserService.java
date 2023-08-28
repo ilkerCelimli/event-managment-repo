@@ -49,7 +49,7 @@ public class UserService {
             u.setRolesList(roles);
             this.userRepository.save(u);
             log.info("saved user date {},id {}", new Date(), u.getId());
-           // emailService.sendMail(u);
+            emailService.sendMail(u);
             return u;
         }
         throw new EmailIsExistsException();
