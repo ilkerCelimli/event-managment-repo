@@ -8,7 +8,7 @@ import java.util.Objects;
 
 @Table(name = "adress")
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 public class Adress extends BaseEntity {

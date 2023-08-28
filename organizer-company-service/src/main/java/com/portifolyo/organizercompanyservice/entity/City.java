@@ -10,7 +10,7 @@ import lombok.Setter;
 
 import java.util.Objects;
 
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Entity(name = "CITIES")
 @Getter
 @Setter

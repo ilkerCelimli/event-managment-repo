@@ -10,7 +10,7 @@ import java.util.*;
         @Index(name = "idx_company_name",columnList = "company_name"),
         @Index(name = "idx_company_tax_number",columnList = "tax_number"),
 })
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
