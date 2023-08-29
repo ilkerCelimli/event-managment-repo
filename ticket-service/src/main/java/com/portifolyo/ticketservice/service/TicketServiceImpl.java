@@ -51,6 +51,6 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public List<TicketInfo> findTickets(TableRequest tableRequest, String eventId) {
-        return this.ticketRepository.findByDeletedFalseAndEvent_IdOrderByCreatedDateAsc(eventId, PageRequest.of(tableRequest.getPage(), tableRequest.getSize()));
+        return this.ticketRepository.findByDeletedFalseAndEventId(eventId, PageRequest.of(tableRequest.getPage(), tableRequest.getSize()));
     }
 }

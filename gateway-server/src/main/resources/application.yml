@@ -23,6 +23,10 @@ spring:
           uri: lb://organizer-company-service
           predicates:
             - Path=/company-service/**
+        - id: ticket-service
+          uri: lb://ticket-service
+          predicates:
+            - Path=/ticket-service/**
 
 
 server:

@@ -41,7 +41,6 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     private final EventAndOrganizatorManyToManyService eventAndOrganizatorManyToManyService;
     private final ImageAndLinksRepository imageAndLinksRepository;
     private final EventDescriptionRepository eventDescriptionRepository;
-
     private final UserServiceFeignClient userServiceFeignClient;
 
 
