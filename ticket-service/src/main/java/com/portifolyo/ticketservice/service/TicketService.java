@@ -14,5 +14,7 @@ public interface TicketService {
 
     List<TicketInfo> findTickets(TableRequest tableRequest, String eventId);
 
+    void handleTicketRequest(byte[] bytes);
+
 
 }

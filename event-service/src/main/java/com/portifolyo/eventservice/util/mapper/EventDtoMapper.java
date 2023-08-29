@@ -18,13 +18,12 @@ public class EventDtoMapper {
                 .eventAreaInfo(area)
                 .eventDescription(EventDescriptionMapper.toDto(e.getEventDescription()))
                 .isDeleted(e.getDeleted())
-                .isPeopleRegistered(e.getIsPeopleRegistered())
-                .comingPeople(e.getComingPeople())
+                .isPeopleRegistered(e.isPeopleRegistered())
                 .eventName(e.getEventName())
                 .eventType(e.getEventType())
                 .eventDate(e.getEventDate())
                 .maxPeople(e.getMaxPeople())
-                .isTicket(e.getIsTicket())
+                .isTicket(e.isTicket())
                 .organizatorInfos(organizatorInfoList).build();
     }
 

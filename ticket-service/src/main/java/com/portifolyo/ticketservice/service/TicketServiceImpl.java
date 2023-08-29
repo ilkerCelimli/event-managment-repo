@@ -1,5 +1,4 @@
 package com.portifolyo.ticketservice.service;
-
 import com.portifolyo.ticketservice.entity.Ticket;
 import com.portifolyo.ticketservice.exception.TicketNotSellException;
 import com.portifolyo.ticketservice.repository.TicketInfo;
@@ -7,7 +6,9 @@ import com.portifolyo.ticketservice.repository.TicketRepository;
 import com.portifolyo.ticketservice.util.TicketRequestMapper;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.TicketRequest;
+import org.portifolyo.utils.DeserializeHelper;
 import org.portifolyo.utils.UpdateHelper;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public class TicketServiceImpl implements TicketService {
         if(!ticketRequest.eventStartDate().equals(new Date()) || !ticketRequest.eventStartDate().after(new Date()) ) {
         Ticket ticket = TicketRequestMapper.toEntity(ticketRequest);
         ticketRepository.save(ticket);
+        return;
         }
         throw new TicketNotSellException();
     }
@@ -52,5 +54,12 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public List<TicketInfo> findTickets(TableRequest tableRequest, String eventId) {
         return this.ticketRepository.findByDeletedFalseAndEventId(eventId, PageRequest.of(tableRequest.getPage(), tableRequest.getSize()));
+    }
+
+    @Override
+    @RabbitListener(queues = "ticket-queue")
+    public void handleTicketRequest(byte[] message) {
+        TicketRequest ticketRequest = (TicketRequest) DeserializeHelper.desarialize(message);
+        this.handleTicketRequest(ticketRequest);
     }
 }

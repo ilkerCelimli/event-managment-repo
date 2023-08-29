@@ -10,7 +10,6 @@ import java.io.Serializable;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
-
 @AllArgsConstructor
 @NoArgsConstructor
 public class ImageAndLinks extends BaseEntity implements Serializable {

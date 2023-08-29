@@ -17,9 +17,8 @@ public class EventSaveRequestMapper {
         Event ref = new Event();
         ref.setEventDate(request.eventDate());
         ref.setEventType(request.eventType());
-        ref.setComingPeople(request.comingPeople());
-        ref.setIsPeopleRegistered(request.isPeopleIsRegistered());
-        ref.setIsTicket(request.isTicket());
+        ref.setPeopleRegistered(request.isPeopleIsRegistered());
+        ref.setTicket(request.isTicket());
         ref.setEventName(request.eventName());
         EventDescription eventDescription = new EventDescription();
         eventDescription.setDescrtiption(request.description().description());

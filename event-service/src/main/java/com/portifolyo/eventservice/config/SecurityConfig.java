@@ -19,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@EnableGlobalAuthentication
 public class SecurityConfig {
 
     @Bean
@@ -31,9 +30,7 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         httpSecurity.sessionManagement(request -> request.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         httpSecurity.authorizeHttpRequests(i -> {
-            i.requestMatchers(HttpMethod.GET, "/event/").permitAll();
-            i.requestMatchers("/actuator/**").permitAll();
-            i.anyRequest().authenticated();
+            i.anyRequest().permitAll();
         });
         httpSecurity.exceptionHandling(i -> {
             i.accessDeniedHandler(accessDeniedErrorPoint);

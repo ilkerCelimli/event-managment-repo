@@ -12,6 +12,7 @@ import com.portifolyo.eventservice.repository.ImageAndLinksRepository;
 import com.portifolyo.eventservice.repository.projections.EventAreaInfo;
 import com.portifolyo.eventservice.repository.projections.EventDto;
 import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
+import com.portifolyo.eventservice.service.EventAndInComingPeopleManyToManyService;
 import com.portifolyo.eventservice.service.EventAndOrganizatorManyToManyService;
 import com.portifolyo.eventservice.service.EventAreaService;
 import com.portifolyo.eventservice.service.EventService;
@@ -19,11 +20,14 @@ import com.portifolyo.eventservice.util.mapper.EventDtoMapper;
 import com.portifolyo.eventservice.util.mapper.EventSaveRequestMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.portifolyo.requests.TableRequest;
+import org.portifolyo.requests.eventservice.EventRegisterRequest;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.UserInfo;
 import org.portifolyo.utils.UpdateHelper;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.utils.SerializationUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -43,8 +47,10 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     private final EventDescriptionRepository eventDescriptionRepository;
     private final UserServiceFeignClient userServiceFeignClient;
 
+    private final RabbitTemplate rabbitTemplate;
+    private final EventAndInComingPeopleManyToManyService eventAndInComingPeopleManyToManyService;
 
-    public EventServiceImpl(EventRepository eventRepository, EventAreaService eventAreaService, EventAndOrganizatorManyToManyService eventAndOrganizatorManyToManyService, ImageAndLinksRepository imageAndLinksRepository, EventDescriptionRepository eventDescriptionRepository, UserServiceFeignClient userServiceFeignClient) {
+    public EventServiceImpl(EventRepository eventRepository, EventAreaService eventAreaService, EventAndOrganizatorManyToManyService eventAndOrganizatorManyToManyService, ImageAndLinksRepository imageAndLinksRepository, EventDescriptionRepository eventDescriptionRepository, UserServiceFeignClient userServiceFeignClient, RabbitTemplate rabbitTemplate, EventAndInComingPeopleManyToManyService eventAndInComingPeopleManyToManyService) {
         super(eventRepository);
         this.eventRepository = eventRepository;
         this.eventAreaService = eventAreaService;
@@ -52,6 +58,8 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
         this.imageAndLinksRepository = imageAndLinksRepository;
         this.eventDescriptionRepository = eventDescriptionRepository;
         this.userServiceFeignClient = userServiceFeignClient;
+        this.rabbitTemplate = rabbitTemplate;
+        this.eventAndInComingPeopleManyToManyService = eventAndInComingPeopleManyToManyService;
     }
 
     @Override
@@ -129,6 +137,19 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
         Event e = this.eventRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("%s bulunamadı", id)));
         List<OrganizatorInfo> list = this.eventAndOrganizatorManyToManyService.findOrganizatorsByEventId(id);
         return EventDtoMapper.toDto(e, this.eventAreaService.findEventArea(id), list);
+    }
+
+    @Override
+    @Transactional
+    public void eventRegister(String eventId, EventRegisterRequest request) {
+        Event ref = findById(eventId);
+        if(!ref.isTicket()) {
+            this.eventAndInComingPeopleManyToManyService.registerEvent(ref, request.userEmail());
+            return;
+        }
+        this.eventAndInComingPeopleManyToManyService.registerEvent(ref,request.userEmail());
+        byte[] message = SerializationUtils.serialize(request.ticketRequest());
+        rabbitTemplate.convertAndSend("ticket-exchange","ticket-router",message);
     }
 
     private List<OrganizatorRequest> handleOrganizatorRequests(List<OrganizatorRequest> request, UserInfo userInfo) {

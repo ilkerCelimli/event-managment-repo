@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.TableRequest;
+import org.portifolyo.requests.eventservice.EventRegisterRequest;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.utils.JsonTokenUtils;
@@ -28,7 +29,6 @@ import java.util.List;
 public class EventApi {
 
     private final EventService eventService;
-    @RolesAllowed("ADMIN")
     @PostMapping("/")
     public ResponseEntity<GenericResponse<Event>> saveEvent(@Valid @RequestBody EventSaveRequest request,
                                                             HttpServletRequest httpServletRequest) {
@@ -39,7 +39,6 @@ public class EventApi {
                 this.eventService.saveEventRequestHandle(request,id,token)
         ));
     }
-    @RolesAllowed("ADMIN")
     @PutMapping("/")
     public ResponseEntity<GenericResponse<Void>> updateEvent(@JsonInclude(JsonInclude.Include.NON_NULL)
                                                                  @RequestBody
@@ -69,5 +68,13 @@ public class EventApi {
     public ResponseEntity<GenericResponse<EventDto>> findEventsById(@PathVariable String id){
         return ResponseEntity.ok(GenericResponse.SUCCESS(this.eventService.findEventById(id)));
     }
+
+    @PostMapping("/registerEvent/{eventId}")
+    public ResponseEntity<GenericResponse<Void>> registerEvent(@PathVariable String eventId, @RequestBody EventRegisterRequest request){
+        this.eventService.eventRegister(eventId,request);
+        return ResponseEntity.ok(GenericResponse.SUCCESS());
+    }
+
+
 
 }

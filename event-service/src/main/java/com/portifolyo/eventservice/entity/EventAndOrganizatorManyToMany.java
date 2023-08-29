@@ -13,7 +13,6 @@ import java.util.Objects;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "events_and_organizators_join_table")
 public class EventAndOrganizatorManyToMany extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)

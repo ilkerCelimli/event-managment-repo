@@ -6,11 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "incoming_people")
+@Table(indexes = {
+        @Index(name = "idx_user_email",columnList = "user_email")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,10 +19,10 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class IncomingPeople extends BaseEntity {
 
-    @Column(name = "user_id")
-    private String userId;
+    @Column(name = "user_email")
+    private String userEmail;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<EventAndIncomingPeopleManyToMany> incomingPeopleManyToManyList = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "incomingPeople")
+    private List<EventAndIncomingPeopleManyToMany> incomingPeopleManyToManyList;
 
 }

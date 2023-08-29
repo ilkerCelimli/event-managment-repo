@@ -12,14 +12,15 @@ import lombok.Setter;
 public class Ticket {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-
+    @Column(name = "id",length = 128)
+    private String id;
     @Column(nullable = false,length = 32)
     private String name;
     @Column(nullable = false,length = 32)
     private String surname;
     @Column(nullable = false,length = 16)
     private String phoneNumber;
-    @Column(nullable = false,length = 32)
+    @Column(nullable = false,length = 40)
     private String email;
     @Column(nullable = false,length = 11)
     private String tcNo;
@@ -30,11 +31,12 @@ public class Ticket {
 
 
 
-    public Ticket(String name, String surname, String phoneNumber, String email, String tcNo) {
+    public Ticket(String name, String surname, String phoneNumber, String email, String tcNo,String eventId) {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.tcNo = tcNo;
+        this.eventId = eventId;
     }
 }

@@ -22,10 +22,5 @@ public class GenericExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @ExceptionHandler(TicketNotSellException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<GenericResponse<Void>> ticketNotSellExceptionHandler(TicketNotSellException ex){
-      return ResponseEntity.badRequest().body(GenericResponse.BAD_REQUEST(ex.getMessage()));
-    }
 
 }

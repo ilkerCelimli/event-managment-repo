@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "organizators",indexes = {
+@Table(indexes = {
         @Index(name = "idx_fullname",columnList = "name,surname"),
         @Index(name = "idx_email",columnList = "email")
 })

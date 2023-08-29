@@ -6,7 +6,7 @@ import org.portifolyo.requests.eventservice.TicketRequest;
 public class TicketRequestMapper {
     private TicketRequestMapper(){}
     public static Ticket toEntity(TicketRequest ticketRequest){
-        return new Ticket(ticketRequest.name(), ticketRequest.surname(),  ticketRequest.phoneNumber(),ticketRequest.email(), ticketRequest.tcNo());
+        return new Ticket(ticketRequest.name(), ticketRequest.surname(),ticketRequest.phoneNumber(),ticketRequest.email(), ticketRequest.tcNo(),ticketRequest.eventId());
     }
     public static TicketRequest toDto(Ticket c) {
         return new TicketRequest(c.getName(),c.getSurname(),c.getPhoneNumber(),c.getEmail(),c.getTcNo(),c.getEventId(),null);

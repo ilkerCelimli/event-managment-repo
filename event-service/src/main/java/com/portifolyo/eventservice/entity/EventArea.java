@@ -10,7 +10,7 @@ import lombok.ToString;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
-@Table(name = "event_areas",indexes = {
+@Table(indexes = {
         @Index(name = "idx_area_name",columnList = "area_name"),
         @Index(name = "idx_coordinates",columnList = "area_lat,area_lng")
 })

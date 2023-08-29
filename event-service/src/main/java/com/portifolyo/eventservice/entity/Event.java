@@ -18,7 +18,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
-@Table(name = "events",indexes = {
+@Table(indexes = {
         @Index(name = "idx_name",columnList = "name"),
         @Index(name = "idx_event_date",columnList = "event_date"),
         @Index(name = "idx_event_type",columnList = "event_type")
@@ -30,16 +30,15 @@ public class Event extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime eventDate;
-
     @Column(name = "is_ticket")
-    private Boolean isTicket = false;
+    private boolean isTicket = false;
     @Column(name = "is_people_registered",nullable = false)
-    private Boolean isPeopleRegistered = false;
+    private boolean isPeopleRegistered = false;
     @Enumerated(EnumType.STRING)
     @Column(name = "event_type",nullable = false)
     private EventType eventType;
     @Column(name = "max_people",nullable = false)
-    private Integer maxPeople = 0;
+    private int maxPeople = 0;
 
     @Column(name = "event_owner",nullable = false,length = 64)
     private String eventOwner;
@@ -47,10 +46,10 @@ public class Event extends BaseEntity {
     @OneToOne(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private EventDescription eventDescription;
     @OneToMany(mappedBy = "event")
-    private List<EventArea> eventAreaList = new ArrayList<>();
+    private List<EventArea> eventAreaList;
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "eventId")
-    private List<EventAndIncomingPeopleManyToMany> incomingPeopleManyToManies = new ArrayList<>();
+    private List<EventAndIncomingPeopleManyToMany> incomingPeopleManyToManies;
     public Event(String eventName, LocalDateTime eventDate, Boolean isTicket, Boolean isPeopleRegistered, EventType eventType, int maxPeople, EventDescription eventDescription) {
         this.eventName = eventName;
         this.eventDate = eventDate;
