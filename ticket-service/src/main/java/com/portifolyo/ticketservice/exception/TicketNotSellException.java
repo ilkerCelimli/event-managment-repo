@@ -1,4 +1,4 @@
-package com.portifolyo.eventservice.exceptions;
+package com.portifolyo.ticketservice.exception;
 
 public class TicketNotSellException extends RuntimeException {
 

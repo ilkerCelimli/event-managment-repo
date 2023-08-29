@@ -1,4 +1,4 @@
-package com.portifolyo.eventservice.repository.projections;
+package com.portifolyo.ticketservice.repository;
 
 import org.portifolyo.requests.eventservice.enums.EventType;
 

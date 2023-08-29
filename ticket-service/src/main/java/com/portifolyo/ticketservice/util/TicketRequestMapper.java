@@ -1,6 +1,6 @@
-package com.portifolyo.eventservice.util.mapper;
+package com.portifolyo.ticketservice.util;
 
-import com.portifolyo.eventservice.entity.Ticket;
+import com.portifolyo.ticketservice.entity.Ticket;
 import org.portifolyo.requests.eventservice.TicketRequest;
 
 public class TicketRequestMapper {
@@ -9,7 +9,7 @@ public class TicketRequestMapper {
         return new Ticket(ticketRequest.name(), ticketRequest.surname(),  ticketRequest.phoneNumber(),ticketRequest.email(), ticketRequest.tcNo());
     }
     public static TicketRequest toDto(Ticket c) {
-        return new TicketRequest(c.getName(),c.getSurname(),c.getPhoneNumber(),c.getEmail(),c.getTcNo(),null);
+        return new TicketRequest(c.getName(),c.getSurname(),c.getPhoneNumber(),c.getEmail(),c.getTcNo(),c.getEventId(),null);
     }
 
 }

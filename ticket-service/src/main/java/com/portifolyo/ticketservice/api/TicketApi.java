@@ -1,7 +1,7 @@
-package com.portifolyo.eventservice.api;
+package com.portifolyo.ticketservice.api;
 
-import com.portifolyo.eventservice.repository.projections.TicketInfo;
-import com.portifolyo.eventservice.service.TicketService;
+import com.portifolyo.ticketservice.repository.TicketInfo;
+import com.portifolyo.ticketservice.service.TicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.TableRequest;
@@ -40,7 +40,6 @@ public class TicketApi {
     }
 
     @GetMapping("/findTicket/{id}")
-    @Cacheable(key = "#id",cacheNames = "tickets")
     public ResponseEntity<GenericResponse<List<TicketInfo>>> findTickets(@RequestBody TableRequest tableRequest, @PathVariable String id) {
         return ResponseEntity.ok(GenericResponse.SUCCESS(this.ticketService.findTickets(tableRequest,id)));
     }

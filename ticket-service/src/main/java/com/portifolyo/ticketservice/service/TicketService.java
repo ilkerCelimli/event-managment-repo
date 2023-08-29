@@ -1,6 +1,6 @@
-package com.portifolyo.eventservice.service;
+package com.portifolyo.ticketservice.service;
 
-import com.portifolyo.eventservice.repository.projections.TicketInfo;
+import com.portifolyo.ticketservice.repository.TicketInfo;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.TicketRequest;
 

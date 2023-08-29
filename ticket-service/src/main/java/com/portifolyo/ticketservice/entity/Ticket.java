@@ -1,4 +1,4 @@
-package com.portifolyo.eventservice.entity;
+package com.portifolyo.ticketservice.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -6,25 +6,29 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 @NoArgsConstructor
-public class Ticket extends BaseEntity {
+public class Ticket {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
 
-    @Column(nullable = false)
+    @Column(nullable = false,length = 32)
     private String name;
-    @Column(nullable = false)
+    @Column(nullable = false,length = 32)
     private String surname;
-    @Column(nullable = false)
+    @Column(nullable = false,length = 16)
     private String phoneNumber;
-    @Column(nullable = false)
+    @Column(nullable = false,length = 32)
     private String email;
-    @Column(nullable = false)
+    @Column(nullable = false,length = 11)
     private String tcNo;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "event_id", nullable = false)
-    private Event event;
+    @Column(nullable = false,length = 128)
+    private String eventId;
+    @Column(nullable = false)
+    private boolean isDeleted = false;
+
+
 
     public Ticket(String name, String surname, String phoneNumber, String email, String tcNo) {
         this.name = name;
