@@ -48,9 +48,7 @@ public class UserService {
 
             userRegisterRequest.role().forEach(i -> {
                 Optional<Roles> role = this.roleRepository.findById(i.id());
-                if(role.isPresent()){
-                    roles.add(role.get());
-                }
+                role.ifPresent(roles::add);
             });
             u.setRolesList(roles);
             this.userRepository.save(u);
@@ -85,20 +83,6 @@ public class UserService {
         Optional<UserInfo> user = this.userRepository.findUserByEmailAndIsActiveTrue(email);
         return user.orElse(null);
     }
-
-    @Transactional
-    public void handleOrganizator(OrganizatorRequest organizatorRequest) {
-        User user = this.userRepository.findUserByEmail(organizatorRequest.email()).orElse(new User());
-        if (user.getId() == null) {
-            User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
-                    RandomStringGenerator.RandomPasswordGenerator(), LocalDateTime.of(1900, 1, 1, 1, 1, 1, 1), true);
-            this.userRepository.save(u);
-            return;
-        }
-        UpdateHelper<OrganizatorRequest, User> updateHelper = new UpdateHelper<>();
-        this.userRepository.save(updateHelper.updateHelper(organizatorRequest, user));
-    }
-
 
     private boolean findEmailIsExists(String email) {
         return this.userRepository.existsUserByEmail(email);
@@ -140,16 +124,20 @@ public class UserService {
     }
 
     public UserInfo findById(String id){
-        UserInfo userInfo = this.userRepository.findByIdAndIsActiveTrue(id).orElseThrow(() -> new BannedUserException(id));
-        return userInfo;
+        return this.userRepository.findByIdAndIsActiveTrue(id).orElseThrow(() -> new BannedUserException(id));
     }
 
     @Transactional
     @RabbitListener(queues = "user-queue")
-    public void handleMessage(byte[] message)  {
-       OrganizatorRequest organizatorRequest = (OrganizatorRequest) DeserializeHelper.desarialize(message);
-        if (organizatorRequest != null) {
-            handleOrganizator(organizatorRequest);
+    public void handleMessage(OrganizatorRequest organizatorRequest)  {
+        User user = this.userRepository.findUserByEmail(organizatorRequest.email()).orElse(new User());
+        if (user.getId() == null) {
+            User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
+                    RandomStringGenerator.RandomPasswordGenerator(), LocalDateTime.of(1900, 1, 1, 1, 1, 1, 1), true);
+            this.userRepository.save(u);
+            return;
         }
+        UpdateHelper<OrganizatorRequest, User> updateHelper = new UpdateHelper<>();
+        this.userRepository.save(updateHelper.updateHelper(organizatorRequest, user));
     }
 }
