@@ -23,8 +23,9 @@ import java.util.List;
         @Index(name = "idx_event_date",columnList = "event_date"),
         @Index(name = "idx_event_type",columnList = "event_type")
 })
+
 public class Event extends BaseEntity {
-    @Column(name = "name")
+    @Column(name = "name",length = 32)
     private String eventName = "";
     @Column(name = "event_date",nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -35,7 +36,7 @@ public class Event extends BaseEntity {
     @Column(name = "is_people_registered",nullable = false)
     private boolean isPeopleRegistered = false;
     @Enumerated(EnumType.STRING)
-    @Column(name = "event_type",nullable = false)
+    @Column(name = "event_type",nullable = false,length = 16)
     private EventType eventType;
     @Column(name = "max_people",nullable = false)
     private int maxPeople = 0;

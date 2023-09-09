@@ -5,6 +5,7 @@ import com.portifolyo.eventservice.entity.EventDescription;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
 import com.portifolyo.eventservice.exceptions.GenericException;
 import com.portifolyo.eventservice.exceptions.NotFoundException;
+import com.portifolyo.eventservice.feign.TicketServiceFeignClient;
 import com.portifolyo.eventservice.feign.UserServiceFeignClient;
 import com.portifolyo.eventservice.repository.EventDescriptionRepository;
 import com.portifolyo.eventservice.repository.EventRepository;
@@ -47,10 +48,11 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     private final EventDescriptionRepository eventDescriptionRepository;
     private final UserServiceFeignClient userServiceFeignClient;
 
+    private final TicketServiceFeignClient ticketServiceFeignClient;
     private final RabbitTemplate rabbitTemplate;
     private final EventAndInComingPeopleManyToManyService eventAndInComingPeopleManyToManyService;
 
-    public EventServiceImpl(EventRepository eventRepository, EventAreaService eventAreaService, EventAndOrganizatorManyToManyService eventAndOrganizatorManyToManyService, ImageAndLinksRepository imageAndLinksRepository, EventDescriptionRepository eventDescriptionRepository, UserServiceFeignClient userServiceFeignClient, RabbitTemplate rabbitTemplate, EventAndInComingPeopleManyToManyService eventAndInComingPeopleManyToManyService) {
+    public EventServiceImpl(EventRepository eventRepository, EventAreaService eventAreaService, EventAndOrganizatorManyToManyService eventAndOrganizatorManyToManyService, ImageAndLinksRepository imageAndLinksRepository, EventDescriptionRepository eventDescriptionRepository, UserServiceFeignClient userServiceFeignClient, TicketServiceFeignClient ticketServiceFeignClient, RabbitTemplate rabbitTemplate, EventAndInComingPeopleManyToManyService eventAndInComingPeopleManyToManyService) {
         super(eventRepository);
         this.eventRepository = eventRepository;
         this.eventAreaService = eventAreaService;
@@ -58,6 +60,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
         this.imageAndLinksRepository = imageAndLinksRepository;
         this.eventDescriptionRepository = eventDescriptionRepository;
         this.userServiceFeignClient = userServiceFeignClient;
+        this.ticketServiceFeignClient = ticketServiceFeignClient;
         this.rabbitTemplate = rabbitTemplate;
         this.eventAndInComingPeopleManyToManyService = eventAndInComingPeopleManyToManyService;
     }
@@ -147,9 +150,10 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
             this.eventAndInComingPeopleManyToManyService.registerEvent(ref, request.userEmail());
             return;
         }
-        this.eventAndInComingPeopleManyToManyService.registerEvent(ref,request.userEmail());
-        byte[] message = SerializationUtils.serialize(request.ticketRequest());
-        rabbitTemplate.convertAndSend("ticket-exchange","ticket-router",message);
+        ResponseEntity<GenericResponse<Void>> response = this.ticketServiceFeignClient.saveTicket(null,request.ticketRequest());
+        if(response.getStatusCode().is2xxSuccessful()) {
+            this.eventAndInComingPeopleManyToManyService.registerEvent(ref,request.userEmail());
+        }
     }
 
     private List<OrganizatorRequest> handleOrganizatorRequests(List<OrganizatorRequest> request, UserInfo userInfo) {

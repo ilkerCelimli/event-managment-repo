@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 public class RequestLogFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         log.info("ipAdress: {},path: {},time: {} ",request.getRemoteAddr(),request.getServletPath(), LocalDateTime.now());
         filterChain.doFilter(request,response);
     }

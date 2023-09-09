@@ -10,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -26,10 +27,11 @@ public class SecurityConfig {
                                                    CustomAuthenticationEntryPoint customAuthenticationEntryPoint,
                                                    JwtFilter jwtFilter,
                                                    RequestLogFilter requestLogFilter) throws Exception {
-        http.csrf().disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.DELETE,"/company-service/company/delete-company/{id}").permitAll());
-        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET,"/company-service/company").permitAll());
-        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST , "/company-service/company").permitAll());
+        http.csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET, "/company-service/company").permitAll());
+        http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, "/company-service/company").permitAll());
         http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
         http.exceptionHandling(exception -> {
             exception.authenticationEntryPoint(customAuthenticationEntryPoint);

@@ -28,16 +28,12 @@ public class EventAndInComingPeopleManyToManyServiceImpl extends BaseServiceImpl
 
     @Override
     public void registerEvent(Event eventId, String userEmail) {
-        if(eventId.getMaxPeople() > this.repository.ComingPeopleCountByEventId(eventId.getId())) {
-        IncomingPeople incomingPeople = new IncomingPeople(userEmail,null);
-         try {
-             incomingPeople = this.incomingPeopleRepository.save(incomingPeople);
-         }
-         catch (Exception e){
-             System.out.println(e.getStackTrace());
-         }
-         EventAndIncomingPeopleManyToMany ref = new EventAndIncomingPeopleManyToMany(incomingPeople,eventId);
-         save(ref);
+        if (eventId.getMaxPeople() > this.repository.ComingPeopleCountByEventId(eventId.getId())) {
+            IncomingPeople incomingPeople = new IncomingPeople();
+            incomingPeople.setUserEmail(userEmail);
+            incomingPeople = this.incomingPeopleRepository.save(incomingPeople);
+            EventAndIncomingPeopleManyToMany ref = new EventAndIncomingPeopleManyToMany(incomingPeople, eventId);
+            save(ref);
         }
 
 

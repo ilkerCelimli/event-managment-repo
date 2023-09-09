@@ -19,7 +19,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class IncomingPeople extends BaseEntity {
 
-    @Column(name = "user_email")
+    @Column(name = "user_email",length = 48)
     private String userEmail;
 
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "incomingPeople")

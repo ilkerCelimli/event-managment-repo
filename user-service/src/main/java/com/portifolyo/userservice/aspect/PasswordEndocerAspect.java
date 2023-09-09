@@ -19,9 +19,9 @@ public class PasswordEndocerAspect {
 
     @AfterReturning(value = "@annotation(com.portifolyo.userservice.customannonatations.PasswordEncoder)",returning = "obj")
     public void encodePassword(Object obj){
-       User u  =  (User) obj;
-       String password = u.getPassword();
-       ((User) obj).setPassword(bCryptPasswordEncoder.encode(password));
+        if(obj  instanceof User user){
+            user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }
     }
 
 }

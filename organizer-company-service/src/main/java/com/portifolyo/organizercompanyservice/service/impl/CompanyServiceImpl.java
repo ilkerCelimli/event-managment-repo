@@ -45,10 +45,8 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
             UserInfo userInfo = response.getBody().getData();
             Company company = SaveOrganizerCompanyRequestMapper.toEntity(request);
             company.setCompanySuperAdminUserId(userInfo.id());
-            company.setUpdatedDate(LocalDateTime.now());
-            company.setCreatedDate(LocalDateTime.now());
             try {
-                company = this.companyRepository.save(company);
+                company = super.save(company);
                 this.adressService.handleAdressRequest(request.adressRequest(), company);
                 return;
 

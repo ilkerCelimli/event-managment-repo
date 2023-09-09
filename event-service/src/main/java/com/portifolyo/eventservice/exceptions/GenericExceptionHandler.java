@@ -12,14 +12,22 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GenericExceptionHandler {
 
     @ExceptionHandler(FeignException.UnprocessableEntity.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<GenericResponse<Void>> notFoundUserExceptionHandler(Exception ex) {
         return ResponseEntity.badRequest().body(GenericResponse.BAD_REQUEST(ex.getMessage()));
     }
 
     @ExceptionHandler(GenericException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<GenericResponse<Void>> generalExceptionHandler(GenericException ex) {
         GenericResponse<Void> response = new GenericResponse<>(ex.getStatusCode(),ex.getMessage(),null);
         return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(FeignException.FeignClientException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public GenericResponse<Void> feignClientException(FeignException.FeignClientException ex){
+        return GenericResponse.BAD_REQUEST(null);
     }
 
 
