@@ -26,7 +26,8 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public void handleTicketRequest(TicketRequest ticketRequest) {
-        if(!ticketRequest.eventStartDate().equals(new Date()) || !ticketRequest.eventStartDate().after(new Date()) ) {
+        if(!ticketRequest.eventStartDate().equals(new Date()) ||
+                !ticketRequest.eventStartDate().after(new Date()) ){
         Ticket ticket = TicketRequestMapper.toEntity(ticketRequest);
         ticketRepository.save(ticket);
         return;
@@ -58,8 +59,7 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     @RabbitListener(queues = "ticket-queue")
-    public void handleTicketRequest(byte[] message) {
-        TicketRequest ticketRequest = (TicketRequest) DeserializeHelper.desarialize(message);
+    public void handleTicketRequestQueue(TicketRequest ticketRequest) {
         this.handleTicketRequest(ticketRequest);
     }
 }

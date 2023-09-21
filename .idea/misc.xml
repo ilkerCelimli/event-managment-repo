@@ -9,6 +9,7 @@
     <file type="web" url="file://$PROJECT_DIR$/oauth-resource" />
     <file type="web" url="file://$PROJECT_DIR$/oauth-server" />
     <file type="web" url="file://$PROJECT_DIR$/organizer-company-service" />
+    <file type="web" url="file://$PROJECT_DIR$/payment-service" />
     <file type="web" url="file://$PROJECT_DIR$/ticket-service" />
     <file type="web" url="file://$PROJECT_DIR$/user-service" />
   </component>

@@ -27,7 +27,7 @@ public class SecurityConfig {
                                            RequestLogFilter requestLogFilter) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.sessionManagement(i -> i.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.authorizeHttpRequests(i ->i.requestMatchers("/user/login","/user/register","/user/refresh","/user/activeuser","/actuator/**","/user/addrole").permitAll()
+        http.authorizeHttpRequests(i ->i.requestMatchers("/user/login","/user/register","/user/refresh","/user/activeuser","/actuator/**","/user/addrole","/swagger-ui/**","/v3/api-docs","/v3/api-docs/**").permitAll()
                 .anyRequest().authenticated());
         http.exceptionHandling(i ->{
             i.authenticationEntryPoint(authenticationEntryPoint);

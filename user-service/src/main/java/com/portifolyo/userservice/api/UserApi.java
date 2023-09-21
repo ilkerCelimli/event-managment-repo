@@ -7,6 +7,8 @@ import com.portifolyo.userservice.enums.Role;
 import com.portifolyo.userservice.repository.RoleRepository;
 import com.portifolyo.userservice.services.UserService;
 import com.portifolyo.userservice.util.converter.UserInfoMapper;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;

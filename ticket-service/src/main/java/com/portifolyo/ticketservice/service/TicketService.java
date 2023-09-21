@@ -1,5 +1,6 @@
 package com.portifolyo.ticketservice.service;
 
+import com.portifolyo.ticketservice.entity.Ticket;
 import com.portifolyo.ticketservice.repository.TicketInfo;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.TicketRequest;
@@ -14,7 +15,7 @@ public interface TicketService {
 
     List<TicketInfo> findTickets(TableRequest tableRequest, String eventId);
 
-    void handleTicketRequest(byte[] bytes);
+    void handleTicketRequestQueue(TicketRequest bytes);
 
 
 }
