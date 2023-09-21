@@ -6,11 +6,11 @@ import java.io.ObjectInputStream;
 
 public class DeserializeHelper {
 
-    public static Object desarialize(byte[] data) {
+    public static <T> T desarialize(byte[] data) {
 
         try (ByteArrayInputStream bis = new ByteArrayInputStream(data);
              ObjectInputStream ois = new ObjectInputStream(bis)) {
-            return ois.readObject();
+            return (T) ois.readObject();
 
         } catch (IOException | ClassNotFoundException | RuntimeException ignored) {
             return null;

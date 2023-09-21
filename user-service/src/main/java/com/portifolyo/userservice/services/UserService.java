@@ -129,7 +129,8 @@ public class UserService {
 
     @Transactional
     @RabbitListener(queues = "user-queue")
-    public void handleMessage(OrganizatorRequest organizatorRequest)  {
+    public void handleMessage(byte[] message)  {
+        OrganizatorRequest organizatorRequest = DeserializeHelper.desarialize(message);
         User user = this.userRepository.findUserByEmail(organizatorRequest.email()).orElse(new User());
         if (user.getId() == null) {
             User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),

@@ -73,10 +73,13 @@ public class EventAndOrganizatorServiceImpl extends BaseServiceImpl<EventAndOrga
     @Override
     public OrganizatorEventsInfos complitionOrganizatorEvents(String email, TableRequest request) {
         List<EventAndOrganizatorManyToMany> lists =  this.repository.findOrganizatorAndEventsByOrganizatorEmail(email, PageRequest.of(request.getPage(),request.getSize()));
-        Organizator organizator = lists.get(0).getOrganizator();
+        if(lists.isEmpty()) {
+           return null;
+        }
+        EventAndOrganizatorManyToMany organizator = lists.get(0);
         List<EventDto> eventList = new ArrayList<>();
-        if(organizator == null) throw new NotFoundException(email);
-        OrganizatorEventsInfos organizatorEventsInfos = OrganizatorEventsInfos.buildOrganizatorEntity(organizator);
+        if(organizator.getOrganizator() == null) throw new NotFoundException(email);
+        OrganizatorEventsInfos organizatorEventsInfos = OrganizatorEventsInfos.buildOrganizatorEntity(organizator.getOrganizator());
         lists.forEach(i -> {
             EventAreaInfo eventAreaInfo =  this.eventAreaService.findEventArea(i.getEvent().getId());
             EventDto eventDto = EventDtoMapper.toDto(i.getEvent(),eventAreaInfo,null);
