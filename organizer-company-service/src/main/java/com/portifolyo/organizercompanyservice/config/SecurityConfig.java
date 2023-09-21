@@ -32,6 +32,7 @@ public class SecurityConfig {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.GET, "/company-service/company").permitAll());
         http.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, "/company-service/company").permitAll());
+        http.authorizeHttpRequests(request -> request.requestMatchers("/swagger-ui/**","/v3/api-docs","/v3/api-docs/**").permitAll());
         http.authorizeHttpRequests(request -> request.anyRequest().authenticated());
         http.exceptionHandling(exception -> {
             exception.authenticationEntryPoint(customAuthenticationEntryPoint);

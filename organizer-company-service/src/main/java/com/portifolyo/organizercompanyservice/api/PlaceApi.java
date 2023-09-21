@@ -2,6 +2,7 @@ package com.portifolyo.organizercompanyservice.api;
 
 import com.portifolyo.organizercompanyservice.repository.projections.PlaceInfo;
 import com.portifolyo.organizercompanyservice.service.PlacesService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.organizercompanyservice.SavePlaceRequest;
@@ -14,6 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/company-service/place")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
+
 public class PlaceApi {
 
     private final PlacesService placesService;

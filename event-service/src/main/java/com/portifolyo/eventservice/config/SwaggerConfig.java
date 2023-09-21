@@ -1,4 +1,5 @@
-package com.portifolyo.userservice.config;
+package com.portifolyo.eventservice.config;
+
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -13,9 +14,9 @@ import org.springframework.context.annotation.Configuration;
         bearerFormat = "JWT",
         scheme = "bearer")
 public class SwaggerConfig {
+
     @Bean
-    public OpenAPI docket(){
-        return new OpenAPI()
-                .info(new Info().title("User service Api"));
+    public OpenAPI openAPI(){
+        return new OpenAPI().info(new Info().title("Event service"));
     }
 }

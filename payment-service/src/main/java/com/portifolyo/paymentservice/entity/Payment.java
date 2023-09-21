@@ -38,5 +38,7 @@ public class Payment {
     private BigDecimal commuisionRate;
     @Column(name = "amount_paid")
     private BigDecimal amountPaid;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted = Boolean.FALSE;
 
 }

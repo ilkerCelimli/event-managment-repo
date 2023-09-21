@@ -16,7 +16,7 @@ public class PaymentRequestMapper {
                 paymentRequest.total(),
                 paymentRequest.userId(),
                 paymentRequest.companyId(),
-                null,null);
+                null,null,false);
     }
 
 }

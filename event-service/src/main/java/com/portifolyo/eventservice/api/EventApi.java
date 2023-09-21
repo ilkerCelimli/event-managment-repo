@@ -6,6 +6,7 @@ import com.portifolyo.eventservice.entity.ImageAndLinks;
 import com.portifolyo.eventservice.repository.projections.EventDto;
 import com.portifolyo.eventservice.service.EventService;
 import com.portifolyo.eventservice.util.mapper.EventSaveRequestMapper;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -26,6 +27,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/event-service/event")
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
 public class EventApi {
 
     private final EventService eventService;

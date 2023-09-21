@@ -2,6 +2,7 @@ package com.portifolyo.ticketservice.api;
 
 import com.portifolyo.ticketservice.repository.TicketInfo;
 import com.portifolyo.ticketservice.service.TicketService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.TableRequest;
@@ -16,6 +17,8 @@ import java.util.List;
 @RequestMapping("/ticket-service/ticket")
 @RestController
 @RequiredArgsConstructor
+@SecurityRequirement(name = "Bearer Authentication")
+
 public class TicketApi {
 
     private final TicketService ticketService;

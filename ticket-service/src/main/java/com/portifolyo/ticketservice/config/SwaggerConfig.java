@@ -1,4 +1,4 @@
-package com.portifolyo.userservice.config;
+package com.portifolyo.ticketservice.config;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -16,6 +16,6 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI docket(){
         return new OpenAPI()
-                .info(new Info().title("User service Api"));
+                .info(new Info().title("Ticket service Api"));
     }
 }

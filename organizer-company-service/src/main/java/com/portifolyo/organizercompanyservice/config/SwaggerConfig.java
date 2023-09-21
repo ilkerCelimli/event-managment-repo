@@ -1,4 +1,5 @@
-package com.portifolyo.userservice.config;
+package com.portifolyo.organizercompanyservice.config;
+
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -14,8 +15,8 @@ import org.springframework.context.annotation.Configuration;
         scheme = "bearer")
 public class SwaggerConfig {
     @Bean
-    public OpenAPI docket(){
+    public OpenAPI openAPI(){
         return new OpenAPI()
-                .info(new Info().title("User service Api"));
+                .info(new Info().title("Organizer Company"));
     }
 }
