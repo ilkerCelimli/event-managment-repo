@@ -15,7 +15,7 @@ public record TicketRequest(
         @NotNull @NotBlank @Email String email,
         @NotNull @NotBlank String tcNo,
         @NotNull @NotBlank String eventId,
-        @NotNull @NotBlank Date eventStartDate
+        @NotNull Date eventStartDate
         ) implements Serializable {
 
 
