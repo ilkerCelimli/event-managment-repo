@@ -1,3 +1,0 @@
-# event-managment-repo
-___
-

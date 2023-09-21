@@ -1,4 +1,0 @@
-rootProject.name = 'ticket-service'
-include(":common")
-project(':common').projectDir = file('../common/')
-
