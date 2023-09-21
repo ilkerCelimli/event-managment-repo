@@ -1,0 +1,5 @@
+
+rootProject.name = 'user-service'
+include(":common")
+project(':common').projectDir = file('../common/')
+
