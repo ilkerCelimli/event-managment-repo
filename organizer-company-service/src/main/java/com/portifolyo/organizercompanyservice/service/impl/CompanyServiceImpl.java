@@ -2,13 +2,17 @@ package com.portifolyo.organizercompanyservice.service.impl;
 
 import com.portifolyo.organizercompanyservice.entity.Company;
 import com.portifolyo.organizercompanyservice.exception.GenericException;
+import com.portifolyo.organizercompanyservice.exception.NotFoundException;
 import com.portifolyo.organizercompanyservice.feign.UserFeign;
 import com.portifolyo.organizercompanyservice.repository.CompanyRepository;
+import com.portifolyo.organizercompanyservice.repository.projections.CompanyInfo;
 import com.portifolyo.organizercompanyservice.service.AdressService;
 import com.portifolyo.organizercompanyservice.service.CompanyService;
+import com.portifolyo.organizercompanyservice.util.CompanyResponseMapper;
 import com.portifolyo.organizercompanyservice.util.SaveOrganizerCompanyRequestMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.portifolyo.requests.organizercompanyservice.SaveOrganizerCompanyRequest;
+import org.portifolyo.response.CompanyResponse;
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.UserInfo;
 import org.portifolyo.utils.JsonTokenUtils;
@@ -75,6 +79,13 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
             this.companyRepository.save(company);
             throw new GenericException("User-service Authentication Error");
         }
+    }
+
+    @Override
+    public CompanyResponse findCompanyById(String id) {
+        return CompanyResponseMapper.toDto(
+                findById(id)
+        );
     }
 
     @Override

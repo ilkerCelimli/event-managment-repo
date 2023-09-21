@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
 import org.portifolyo.requests.organizercompanyservice.SaveOrganizerCompanyRequest;
+import org.portifolyo.response.CompanyResponse;
 import org.portifolyo.response.GenericResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,13 @@ public class CompanyApi {
     @GetMapping
     public ResponseEntity<GenericResponse<List<Company>>> findAll(){
         return ResponseEntity.ok(GenericResponse.SUCCESS(this.companyService.findAll()));
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<GenericResponse<CompanyResponse>> findById(@PathVariable String id){
+        return ResponseEntity.ok(GenericResponse.SUCCESS(
+                this.companyService.findCompanyById(id)
+        ));
+
     }
 
 }

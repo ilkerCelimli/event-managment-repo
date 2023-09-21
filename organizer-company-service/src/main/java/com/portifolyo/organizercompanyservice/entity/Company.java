@@ -25,14 +25,12 @@ public class Company extends BaseEntity {
     private String phoneNumber;
     @Column(name = "company_super_admin_user_id",nullable = false)
     private String companySuperAdminUserId;
+    @Column(name = "commusion_rate")
+    private double commusionRate;
     @OneToMany(mappedBy = "company", fetch = FetchType.EAGER)
     private Set<Place> places = new HashSet<>();
     @OneToMany
     private List<Adress> companyAdresses = new ArrayList<>();
-
-
-
-
 
     @Override
     public String toString() {
