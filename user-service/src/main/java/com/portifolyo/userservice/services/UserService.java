@@ -69,8 +69,8 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUser(UserRegisterRequest userRegisterRequest) {
-        User opt = this.userRepository.findUserByEmail(userRegisterRequest.email()).orElseThrow(EmailIsExistsException::new);
+    public void updateUser(UserRegisterRequest userRegisterRequest,String id) {
+        User opt = this.userRepository.findUserById(id).orElseThrow(() -> new org.portifolyo.commonexceptions.NotFoundException(id));
         UpdateHelper<UserRegisterRequest, User> updateHelper = new UpdateHelper<>();
             this.userRepository.save(updateHelper.updateHelper(userRegisterRequest, opt));
     }

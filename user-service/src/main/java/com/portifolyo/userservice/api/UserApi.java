@@ -65,26 +65,22 @@ public class UserApi {
     }
 
     @GetMapping("/")
-    @RolesAllowed({"ADMIN","SUPER_ADMIN"})
     public ResponseEntity<GenericResponse<List<UserInfo>>> findUsers() {
         return ResponseEntity.ok(GenericResponse.SUCCESS(this.userService.findAllUser()));
     }
 
-    @PutMapping("/")
-    @RolesAllowed({"USER","ADMIN","SUPER_ADMIN","COMPANY_ADMIN","COMPANY_EMPLOYEE"})
-    public ResponseEntity<GenericResponse<Void>> updateUsers(@JsonInclude(JsonInclude.Include.NON_NULL) @RequestBody UserRegisterRequest request) {
-        this.userService.updateUser(request);
+    @PutMapping("/{id}")
+    public ResponseEntity<GenericResponse<Void>> updateUsers(@JsonInclude(JsonInclude.Include.NON_NULL) @RequestBody UserRegisterRequest request,@PathVariable String id) {
+        this.userService.updateUser(request,id);
         return ResponseEntity.ok(new GenericResponse<>(200,"User Updated"));
     }
 
     @DeleteMapping("/")
-    @RolesAllowed({"ADMIN","COMPANY_ADMIN"})
     public ResponseEntity<GenericResponse<Void>> deleteUser(@RequestParam String email) {
          this.userService.deleteUser(email);
          return ResponseEntity.ok(new GenericResponse<>(200,"user inactived"));
     }
     @GetMapping("/finduser")
-    @RolesAllowed({"COMPANY_ADMIN","ADMIN"})
     public ResponseEntity<GenericResponse<UserInfo>>findUserByEmail(@RequestParam String email){
         UserInfo u = this.userService.findUserByEmail(email);
        return u != null ? ResponseEntity.ok(new GenericResponse<>(200,null,u)) :
@@ -92,7 +88,6 @@ public class UserApi {
     }
 
     @DeleteMapping("/delete-by-id/{id}")
-    @RolesAllowed({"ADMIN","SUPER_ADMIN","COMPANY_ADMIN"})
     public ResponseEntity<GenericResponse<Void>> deleteById(@PathVariable String id){
         this.userService.deleteUserById(id);
         return ResponseEntity.ok(GenericResponse.SUCCESS());
