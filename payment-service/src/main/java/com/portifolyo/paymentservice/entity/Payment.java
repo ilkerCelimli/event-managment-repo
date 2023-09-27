@@ -6,13 +6,12 @@ import org.hibernate.annotations.UuidGenerator;
 
 import java.math.BigDecimal;
 
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(of = "id")
-@ToString(of = "id")
 @Entity
 @Table(name = "payment")
+@Getter
+@Setter
 public class Payment {
 
     @GeneratedValue

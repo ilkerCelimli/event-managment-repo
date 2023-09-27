@@ -12,7 +12,7 @@ import java.util.Objects;
 @Getter
 @Setter
 public class Adress extends BaseEntity {
-    @Column(name = "open_adress",length = 100)
+    @Column(name = "open_adress", length = 100)
     private String openAdress;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
@@ -24,21 +24,21 @@ public class Adress extends BaseEntity {
 
 
     @Override
-    public String toString(){
+    public String toString() {
         return this.getId();
     }
 
     @Override
-    public boolean equals(Object obj){
-        return  obj != null && (this == obj
+    public boolean equals(Object obj) {
+        return obj != null && (this == obj
                 || obj.hashCode() == this.hashCode()
-                ||obj instanceof Adress
+                || obj instanceof Adress
                 || this.getId().equals(obj));
     }
 
     @Override
-    public int hashCode(){
-       return Objects.hash(this.getId());
+    public int hashCode() {
+        return Objects.hash(this.getId());
     }
 
 }

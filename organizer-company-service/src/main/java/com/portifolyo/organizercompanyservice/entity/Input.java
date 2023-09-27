@@ -13,7 +13,7 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "INPUT")
+@Entity(name = "input")
 @Inheritance(strategy = InheritanceType.JOINED)
 
 public class Input extends BaseEntity {

@@ -2,15 +2,12 @@ package com.portifolyo.eventservice.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.proxy.HibernateProxy;
 
-import java.util.Objects;
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @Entity
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventAndOrganizatorManyToMany extends BaseEntity {
@@ -23,4 +20,8 @@ public class EventAndOrganizatorManyToMany extends BaseEntity {
     @JoinColumn(name = "organizator_id")
     private Organizator organizator;
 
+    @Override
+    public String toString(){
+        return this.getId();
+    }
 }

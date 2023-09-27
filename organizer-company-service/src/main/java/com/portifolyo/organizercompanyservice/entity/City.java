@@ -11,7 +11,7 @@ import lombok.Setter;
 import java.util.Objects;
 
 @Inheritance(strategy = InheritanceType.JOINED)
-@Entity(name = "CITIES")
+@Entity(name = "city")
 @Getter
 @Setter
 @AllArgsConstructor

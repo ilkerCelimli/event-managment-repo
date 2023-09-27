@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.*;
 
 @Entity
-@Table(name = "companies",indexes = {
+@Table(name = "company",indexes = {
         @Index(name = "idx_company_name",columnList = "company_name"),
         @Index(name = "idx_company_tax_number",columnList = "tax_number"),
 })
