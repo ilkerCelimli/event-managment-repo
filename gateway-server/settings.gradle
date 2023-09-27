@@ -1,1 +1,3 @@
 rootProject.name = 'gateway-server'
+include(":common")
+project(':common').projectDir = file('../common/')

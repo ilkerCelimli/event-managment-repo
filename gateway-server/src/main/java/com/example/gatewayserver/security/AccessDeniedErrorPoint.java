@@ -1,30 +1,16 @@
 package com.example.gatewayserver.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.portifolyo.response.GenericResponse;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.server.authorization.ServerAccessDeniedHandler;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.io.PrintWriter;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 @Component
-public class AccessDeniedErrorPoint implements AccessDeniedHandler {
-    private final ObjectMapper objectMapper;
+public class AccessDeniedErrorPoint implements ServerAccessDeniedHandler {
 
-    public AccessDeniedErrorPoint(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
 
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
-        response.setStatus(405);
-        response.setContentType("application/json");
-        GenericResponse<Void> res = new GenericResponse<>(405,"Access Denied");
-        PrintWriter writer = response.getWriter();
-        writer.print(objectMapper.writeValueAsString(res));
-        writer.flush();
+    public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
+        return Mono.empty();
     }
 }

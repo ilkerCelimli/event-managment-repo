@@ -1,8 +1,5 @@
 package com.portifolyo.userservice.config;
 
-import com.portifolyo.userservice.security.AccessDeniedErrorPoint;
-import com.portifolyo.userservice.security.CustomAuthenticationEntryPoint;
-import com.portifolyo.userservice.security.JwtFilter;
 import com.portifolyo.userservice.security.RequestLogFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
 @EnableWebSecurity
@@ -21,22 +17,15 @@ import org.springframework.web.cors.CorsConfiguration;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, CustomAuthenticationEntryPoint authenticationEntryPoint,
-                                           JwtFilter jwtFilter,
-                                           AccessDeniedErrorPoint accessDeniedErrorPoint,
+    public SecurityFilterChain filterChain(HttpSecurity http,
                                            RequestLogFilter requestLogFilter) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.sessionManagement(i -> i.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.authorizeHttpRequests(reqeest -> reqeest.anyRequest().permitAll());
-        http.exceptionHandling(i ->{
-            i.authenticationEntryPoint(authenticationEntryPoint);
-            i.accessDeniedHandler(accessDeniedErrorPoint);
-                });
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(requestLogFilter, JwtFilter.class);
+        http.addFilter(requestLogFilter);
         return http.build();
     }
-
+    @Bean
     public CorsConfiguration corsConfiguration(){
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedHeader("*");
