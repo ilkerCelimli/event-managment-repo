@@ -63,7 +63,7 @@ public class TicketServiceImpl implements TicketService {
     @RabbitListener(queues = "ticket-queue")
     public void handleTicketRequestQueue(byte[] request) {
         TicketRequest ticketRequest = DeserializeHelper.desarialize(request);
-        assert ticketRequest != null;
-        this.handleTicketRequest(ticketRequest);
+        if(ticketRequest != null) this.handleTicketRequest(ticketRequest);
+
     }
 }
