@@ -2,6 +2,7 @@ package com.portifolyo.userservice.exception;
 
 import com.portifolyo.userservice.exception.apiexceptions.BannedUserException;
 import com.portifolyo.userservice.exception.apiexceptions.EmailIsExistsException;
+import com.portifolyo.userservice.exception.apiexceptions.InvalidRefreshTokenException;
 import com.portifolyo.userservice.exception.apiexceptions.PasswordNotMatchesException;
 import com.sun.mail.util.MailConnectException;
 import jakarta.mail.MessagingException;
@@ -43,6 +44,12 @@ public class GenericExceptionHandler {
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     public GenericResponse<Void> mailConnectExceptionHandler(MailConnectException ex) {
         return GenericResponse.SUCCESS();
+    }
+
+    @ExceptionHandler(InvalidRefreshTokenException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public GenericResponse<Void> invalidRefreshTokenException(InvalidRefreshTokenException ex){
+        return new GenericResponse<>(HttpStatus.UNAUTHORIZED.value(),ex.getMessage());
     }
 
 }
