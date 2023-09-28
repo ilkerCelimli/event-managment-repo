@@ -103,7 +103,7 @@ public class UserService {
         }, EmailIsNotFoundException::new);
     }
 
-    public TokenResponse tokenResponse(UserLoginRequest userLoginRequest) {
+    public TokenResponse tokenResponse(UserLoginRequest userLoginRequest,String ipAdress) {
         User u = this.userRepository.findUserByEmail(userLoginRequest.email()).orElseThrow(EmailIsNotFoundException::new);
         if (!u.isActive()) throw new BannedUserException(userLoginRequest.email());
         if (!passwordEncoder.matches(userLoginRequest.password(), u.getPassword()))
@@ -114,13 +114,18 @@ public class UserService {
             list[i] = u.getRolesList().get(i).getRole();
         }
         String token = JsonTokenUtils.generate(userLoginRequest,list,u.getId());
-        return new TokenResponse(token);
+        return new TokenResponse(token,JsonTokenUtils.generateRefresh(userLoginRequest.email(),list,u.getId(),ipAdress));
     }
 
-    public TokenResponse tokenResponse(String token) {
+    public TokenResponse tokenResponse(String token,String ipAdress) {
         String email = JsonTokenUtils.validate(token).getClaim("email").asString();
         String[] roles = JsonTokenUtils.validate(token).getClaim("roles").asArray(String.class);
-        return new TokenResponse(JsonTokenUtils.generate(email,roles,JsonTokenUtils.extractClaim(token,"id", String.class)));
+        String ip = JsonTokenUtils.extractClaim(token,"ip",String.class);
+        if(!ipAdress.equals(ip)){
+            throw new InvalidRefreshTokenException();
+        }
+        String id = JsonTokenUtils.extractClaim(token,"id", String.class);
+        return new TokenResponse(JsonTokenUtils.generate(email,roles,id,ip),JsonTokenUtils.generateRefresh(email,roles,id,ip));
     }
 
     public UserInfo findById(String id){

@@ -10,6 +10,7 @@ import com.portifolyo.userservice.util.converter.UserInfoMapper;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -47,15 +48,19 @@ public class UserApi {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<GenericResponse<TokenResponse>> login(@RequestBody @Valid UserLoginRequest userLoginRequest, HttpServletResponse response){
-       TokenResponse tokenResponse =  this.userService.tokenResponse(userLoginRequest);
-       response.addHeader(HttpHeaders.AUTHORIZATION, tokenResponse.getToken());
+    public ResponseEntity<GenericResponse<TokenResponse>> login(@RequestBody @Valid UserLoginRequest userLoginRequest,
+                                                                HttpServletResponse response,
+                                                                HttpServletRequest httpServletRequest){
+       TokenResponse tokenResponse =  this.userService.tokenResponse(userLoginRequest,httpServletRequest.getRemoteHost());
+       response.addHeader(HttpHeaders.AUTHORIZATION, tokenResponse.getAccessToken());
+       response.addHeader("REFRESH_TOKEN",tokenResponse.getRefreshToken());
        return ResponseEntity.ok(GenericResponse.SUCCESS(tokenResponse));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<GenericResponse<TokenResponse>> refresh(@RequestBody TokenResponse token) {
-        TokenResponse tokenResponse = this.userService.tokenResponse(token.getToken());
+    public ResponseEntity<GenericResponse<TokenResponse>> refresh(@RequestBody TokenResponse token, HttpServletRequest request) {
+        String ip = request.getRemoteHost();
+        TokenResponse tokenResponse = this.userService.tokenResponse(token.getRefreshToken(),ip);
         return ResponseEntity.ok(GenericResponse.SUCCESS(tokenResponse));
     }
     @GetMapping("/activeuser")

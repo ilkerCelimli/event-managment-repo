@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface EventService extends BaseService<Event> {
 
-    Event saveEventRequestHandle(EventSaveRequest event,String eventOwner,String token);
+    Event saveEventRequestHandle(EventSaveRequest event,String eventOwner);
     Event updateEventRequestHandle(EventSaveRequest event,String eventId);
     void eventInActiveHandle(String eventId);
     void addimages(String eventid, List<ImageAndLinks> imageAndLinks);

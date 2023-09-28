@@ -31,14 +31,11 @@ import java.util.List;
 public class EventApi {
 
     private final EventService eventService;
-    @PostMapping("/")
+    @PostMapping("/{id}")
     public ResponseEntity<GenericResponse<Event>> saveEvent(@Valid @RequestBody EventSaveRequest request,
-                                                            HttpServletRequest httpServletRequest) {
-        String token = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        token = token.replace("Bearer ","");
-        String id = JsonTokenUtils.extractClaim(token,"id",String.class);
+                                                            @PathVariable String id) {
         return ResponseEntity.ok(GenericResponse.SUCCESS(
-                this.eventService.saveEventRequestHandle(request,id,token)
+                this.eventService.saveEventRequestHandle(request,id)
         ));
     }
     @PutMapping("/")

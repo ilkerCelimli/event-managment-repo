@@ -6,5 +6,6 @@ public class Constants {
     protected static String emailIsAldreadyExists = "Email is aldready Exists";
     protected static String emailIsNotFound = "Email is Not found";
 
+    protected static String invalidRefreshToken = "Invalid Refresh Token";
 
 }

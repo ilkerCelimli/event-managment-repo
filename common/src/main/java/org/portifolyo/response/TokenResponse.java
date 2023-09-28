@@ -1,14 +1,18 @@
 package org.portifolyo.response;
 public class TokenResponse {
 
-    private String token;
-
-    public TokenResponse(){}
-    public TokenResponse(String token) {
-        this.token = token;
+    private final String accessToken;
+    private final String refreshToken;
+    public TokenResponse(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
     }
 
-    public String getToken(){
-        return "Bearer "+ this.token;
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
     }
 }

@@ -24,11 +24,22 @@ public class JsonTokenUtils {
                 .sign(algorithm);
     }
 
-    public static String generate(String email,String[] roles,String id){
+    public static String generate(String email,String[] roles,String id,String ip){
         return JWT.create()
                 .withClaim("email",email)
                 .withClaim("id",id)
                 .withExpiresAt(new Date(System.currentTimeMillis() + (30*60*60)))
+                .withClaim("ip",ip)
+                .withArrayClaim("roles",roles)
+                .sign(algorithm);
+    }
+
+    public static String generateRefresh(String email,String[] roles,String id , String ip){
+        return JWT.create()
+                .withClaim("email",email)
+                .withClaim("id",id)
+                .withExpiresAt(new Date(System.currentTimeMillis() + (180*60*60)))
+                .withClaim("ip",ip)
                 .withArrayClaim("roles",roles)
                 .sign(algorithm);
     }

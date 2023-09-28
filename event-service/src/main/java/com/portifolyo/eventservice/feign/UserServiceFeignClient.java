@@ -14,6 +14,6 @@ public interface UserServiceFeignClient {
     @GetMapping("user/finduser")
     ResponseEntity<GenericResponse<UserInfo>> findUserByEmail(@RequestParam String email);
     @GetMapping("user/findById")
-    ResponseEntity<GenericResponse<UserInfo>> findById(@RequestParam String id, @RequestHeader(HttpHeaders.AUTHORIZATION) String token);
+    ResponseEntity<GenericResponse<UserInfo>> findById(@RequestParam String id);
 
 }

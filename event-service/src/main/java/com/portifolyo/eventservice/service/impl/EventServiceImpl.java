@@ -67,7 +67,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
 
     @Override
     @Transactional
-    public Event saveEventRequestHandle(EventSaveRequest request, String eventOwner, String token) {
+    public Event saveEventRequestHandle(EventSaveRequest request, String eventOwner) {
         Event event = EventSaveRequestMapper.toEntity(request);
         EventDescription desc = this.eventDescriptionRepository.save(event.getEventDescription());
         event.setEventDescription(desc);
@@ -82,7 +82,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
             });
         }
 
-        ResponseEntity<GenericResponse<UserInfo>> response = this.userServiceFeignClient.findById(eventOwner, token);
+        ResponseEntity<GenericResponse<UserInfo>> response = this.userServiceFeignClient.findById(eventOwner);
         if (response.getBody() == null && response.getBody().getData() == null) {
             throw new GenericException("User not found", 404);
         }
