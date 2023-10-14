@@ -23,6 +23,17 @@ public class CustomAuthenticationManager implements ReactiveAuthenticationManage
         String refreshToken = authentication.getCredentials().toString();
         try {
             DecodedJWT jwt = JsonTokenUtils.decodeJWT(token, refreshToken);
+            String type = jwt.getClaim("TYPE").asString();
+
+            if(type.equals("REFRESH")){
+                token = JsonTokenUtils.generate(
+                        jwt.getClaim("email").asString(),
+                        jwt.getClaim("roles").asArray(String.class),
+                        jwt.getClaim("id").asString(),
+                        jwt.getClaim("ip").asString()
+                );
+            }
+
             String[] roles = jwt.getClaim("roles").asArray(String.class);
             List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
             Arrays.stream(roles).forEach(i -> authorityList.add(new SimpleGrantedAuthority(i)));

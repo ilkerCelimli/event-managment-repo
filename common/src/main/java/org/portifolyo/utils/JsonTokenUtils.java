@@ -20,6 +20,7 @@ public class JsonTokenUtils {
                 .withClaim("email",userLoginRequest.email())
                 .withArrayClaim("roles",roles)
                 .withClaim("id",id)
+                .withClaim("TYPE","ACCESS")
                 .withExpiresAt(new Date(System.currentTimeMillis() + (1000*60*30)))
                 .sign(algorithm);
     }
@@ -30,6 +31,7 @@ public class JsonTokenUtils {
                 .withClaim("id",id)
                 .withExpiresAt(new Date(System.currentTimeMillis() + (30*60*60)))
                 .withClaim("ip",ip)
+                .withClaim("TYPE","REFRESH")
                 .withArrayClaim("roles",roles)
                 .sign(algorithm);
     }

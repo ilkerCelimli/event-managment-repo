@@ -1,5 +1,7 @@
 package com.example.gatewayserver.security;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
+import org.portifolyo.utils.JsonTokenUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -36,6 +38,7 @@ public class CustomSecurityContextRepository implements ServerSecurityContextRep
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             authToken = authHeader.replace("Bearer ", "");
         }
+
         if (authToken != null) {
             Authentication auth = new UsernamePasswordAuthenticationToken(authToken, refreshToken);
             return this.reactiveAuthenticationManager.authenticate(auth).map(SecurityContextImpl::new);
