@@ -30,12 +30,14 @@ public class CustomSecurityContextRepository implements ServerSecurityContextRep
     public Mono<SecurityContext> load(ServerWebExchange swe) {
         ServerHttpRequest request = swe.getRequest();
         String authHeader = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        String refreshHeader = request.getHeaders().getFirst("Refresh_Token");
         String authToken = null;
+        String refreshToken = refreshHeader != null ? refreshHeader.replace("Bearer ","") : "";
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             authToken = authHeader.replace("Bearer ", "");
         }
         if (authToken != null) {
-            Authentication auth = new UsernamePasswordAuthenticationToken(authToken, authToken);
+            Authentication auth = new UsernamePasswordAuthenticationToken(authToken, refreshToken);
             return this.reactiveAuthenticationManager.authenticate(auth).map(SecurityContextImpl::new);
         } else {
             return Mono.empty();

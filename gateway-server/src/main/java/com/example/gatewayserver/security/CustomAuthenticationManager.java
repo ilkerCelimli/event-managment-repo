@@ -18,15 +18,21 @@ import java.util.List;
 public class CustomAuthenticationManager implements ReactiveAuthenticationManager {
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
-        String token = authentication.getCredentials().toString();
-        token = token.replace("Bearer ","");
-        DecodedJWT jwt = JsonTokenUtils.validate(token);
-        String[] roles = jwt.getClaim("roles").asArray(String.class);
-        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-        Arrays.stream(roles).forEach(i -> authorityList.add(new SimpleGrantedAuthority(i)));
-        String email = jwt.getClaim("email").asString();
-        UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(email,token,authorityList);
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        return Mono.just(auth);
+        String token = authentication.getPrincipal().toString();
+        token = token.replace("Bearer ", "");
+        String refreshToken = authentication.getCredentials().toString();
+        try {
+            DecodedJWT jwt = JsonTokenUtils.decodeJWT(token, refreshToken);
+            String[] roles = jwt.getClaim("roles").asArray(String.class);
+            List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+            Arrays.stream(roles).forEach(i -> authorityList.add(new SimpleGrantedAuthority(i)));
+            String email = jwt.getClaim("email").asString();
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(email, token, authorityList);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            return Mono.just(auth);
+        } catch (Exception ex) {
+            return Mono.just(authentication);
+        }
+
     }
 }

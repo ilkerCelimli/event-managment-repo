@@ -2,11 +2,9 @@ package com.portifolyo.userservice.services;
 
 import com.portifolyo.userservice.entity.Roles;
 import com.portifolyo.userservice.entity.User;
-import com.portifolyo.userservice.enums.Role;
 import com.portifolyo.userservice.exception.apiexceptions.*;
 import com.portifolyo.userservice.repository.RoleRepository;
 import com.portifolyo.userservice.repository.UserRepository;
-import com.portifolyo.userservice.util.JwtUtil;
 import com.portifolyo.userservice.util.RandomStringGenerator;
 import com.portifolyo.userservice.util.converter.UserRegisterRequestConverter;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +12,6 @@ import lombok.extern.log4j.Log4j2;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.requests.userservice.UserLoginRequest;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
-import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.TokenResponse;
 import org.portifolyo.response.UserInfo;
 import org.portifolyo.utils.DeserializeHelper;
@@ -27,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -118,8 +114,8 @@ public class UserService {
     }
 
     public TokenResponse tokenResponse(String token,String ipAdress) {
-        String email = JsonTokenUtils.validate(token).getClaim("email").asString();
-        String[] roles = JsonTokenUtils.validate(token).getClaim("roles").asArray(String.class);
+        String email = JsonTokenUtils.decodeJWT(token,null).getClaim("email").asString();
+        String[] roles = JsonTokenUtils.decodeJWT(token,null).getClaim("roles").asArray(String.class);
         String ip = JsonTokenUtils.extractClaim(token,"ip",String.class);
         if(!ipAdress.equals(ip)){
             throw new InvalidRefreshTokenException();

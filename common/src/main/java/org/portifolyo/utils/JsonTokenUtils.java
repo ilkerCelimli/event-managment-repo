@@ -48,8 +48,14 @@ public class JsonTokenUtils {
         return JWT.decode(token).getClaim(name).as(clazz);
     }
 
-    public static DecodedJWT validate(String token){
-        return JWT.require(algorithm).build().verify(token);
+    public static DecodedJWT decodeJWT(String accessToken,String refreshToken){
+        try {
+            return JWT.decode(accessToken);
+        }
+
+        catch (Exception e){
+            return JWT.decode(refreshToken);
+        }
     }
 
 
