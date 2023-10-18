@@ -19,14 +19,14 @@ public class SecurityConfig {
     public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http,
                                                       SecuredEndPoints endPoints,
                                                       Roles roles,
-                                                      CustomSecurityContextRepository jwtFilter,
+                                                      CustomSecurityContextRepository contextRepository,
                                                       RequestLogFilter requestLogFilter,
                                                       CustomAuthenticationManager customAuthenticationManager,
                                                       CustomAuthenticationEntryPoint authenticationEntryPoint,
                                                       AccessDeniedErrorPoint accessDeniedErrorPoint
                                                       ) {
         http.csrf(ServerHttpSecurity.CsrfSpec::disable);
-        http.securityContextRepository(jwtFilter);
+        http.securityContextRepository(contextRepository);
         http.authenticationManager(customAuthenticationManager);
         http.exceptionHandling(handler -> handler.accessDeniedHandler(accessDeniedErrorPoint));
         http.exceptionHandling(handler -> handler.authenticationEntryPoint(authenticationEntryPoint));
