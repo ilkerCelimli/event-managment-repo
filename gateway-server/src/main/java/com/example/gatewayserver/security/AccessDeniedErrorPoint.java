@@ -16,7 +16,7 @@ public class AccessDeniedErrorPoint implements ServerAccessDeniedHandler {
     @Override
     public Mono<Void> handle(ServerWebExchange exchange, AccessDeniedException denied) {
         exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
-        exchange.getResponse().getHeaders().add("Content-Type","Application/json");
+        exchange.getResponse().getHeaders().add("Content-Type","application/json");
         GenericResponse<Void> error = new GenericResponse<>(403,"Access Denied");
         ObjectMapper mapper = new ObjectMapper();
         String errorMessage = null;

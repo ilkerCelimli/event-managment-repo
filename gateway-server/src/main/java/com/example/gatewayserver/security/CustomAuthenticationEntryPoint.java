@@ -27,6 +27,7 @@ public class CustomAuthenticationEntryPoint implements ServerAuthenticationEntry
 
     @Override
     public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException ex) {
+        exchange.getResponse().getHeaders().add("Content-Type","application/json");
         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
         GenericResponse<Void> error = new GenericResponse<>(HttpStatus.UNAUTHORIZED.value(),"Authentication is required");
         String errorMessage;
