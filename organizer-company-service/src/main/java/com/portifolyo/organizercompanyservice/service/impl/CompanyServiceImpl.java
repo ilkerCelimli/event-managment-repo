@@ -12,6 +12,7 @@ import com.portifolyo.organizercompanyservice.util.CompanyResponseMapper;
 import com.portifolyo.organizercompanyservice.util.SaveOrganizerCompanyRequestMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.portifolyo.requests.organizercompanyservice.SaveOrganizerCompanyRequest;
+import org.portifolyo.requests.userservice.UserLoginRequest;
 import org.portifolyo.response.CompanyResponse;
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.UserInfo;
@@ -56,7 +57,7 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
 
             } catch (Exception e) {
                 String[] arr = new String[]{"ROLE_USER"};
-                String token = JsonTokenUtils.generate(request.userRegisterRequest().email(), arr, null);
+                String token = JsonTokenUtils.generate(new UserLoginRequest(userInfo.email(),null), arr,userInfo.id());
                 this.userFeign.deleteUser(token, request.userRegisterRequest().email());
                 throw new GenericException("Company not saved");
 

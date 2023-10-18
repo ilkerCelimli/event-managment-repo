@@ -12,10 +12,10 @@ import java.util.List;
 public interface PlaceRepository extends BaseRepository<Place>{
     @Transactional
     @Modifying
-    @Query("update PLACES p set p.isBusy = ?1 where p.id = ?2")
+    @Query("update place p set p.isBusy = ?1 where p.id = ?2")
     void updatePlaceBusyStatus(boolean isBusy, String id);
 
-    @Query("select p from PLACES p where p.isBusy = false and p.company.id = ?1 order by p.id")
+    @Query("select p from place p where p.isBusy = false and p.company.id = ?1 order by p.id")
     List<PlaceInfo> findPlacesByCompanyId(String id, Pageable pageable);
 
 }
