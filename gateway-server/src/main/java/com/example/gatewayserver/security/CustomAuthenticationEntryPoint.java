@@ -1,19 +1,24 @@
 package com.example.gatewayserver.security;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.portifolyo.response.GenericResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.server.ServerAuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
 @Component
-public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
+public class CustomAuthenticationEntryPoint implements ServerAuthenticationEntryPoint {
     private final ObjectMapper objectMapper;
 
     public CustomAuthenticationEntryPoint(ObjectMapper objectMapper) {
@@ -21,14 +26,17 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     }
 
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.setStatus(403);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        GenericResponse<Void> genericResponse = new GenericResponse<>(403, "Authentication error");
-        PrintWriter i = response.getWriter();
-        i.print(objectMapper.writeValueAsString(genericResponse));
-        i.flush();
-
+    public Mono<Void> commence(ServerWebExchange exchange, AuthenticationException ex) {
+        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+        GenericResponse<Void> error = new GenericResponse<>(HttpStatus.UNAUTHORIZED.value(),"Authentication is required");
+        String errorMessage;
+        try {
+            errorMessage = objectMapper.writeValueAsString(error);
+        }
+        catch (JsonProcessingException exception){
+            return Mono.empty();
+        }
+        return exchange.getResponse().writeWith(Mono.just(exchange.getResponse().bufferFactory()
+                .wrap(errorMessage.getBytes())));
     }
 }

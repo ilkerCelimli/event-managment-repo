@@ -1,6 +1,7 @@
 package com.example.gatewayserver.security;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.gatewayserver.model.SecurityModel;
 import org.portifolyo.utils.JsonTokenUtils;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,37 +14,28 @@ import reactor.core.publisher.Mono;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 public class CustomAuthenticationManager implements ReactiveAuthenticationManager {
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
-        String token = authentication.getPrincipal().toString();
-        token = token.replace("Bearer ", "");
-        String refreshToken = authentication.getCredentials().toString();
-        try {
-            DecodedJWT jwt = JsonTokenUtils.decodeJWT(token, refreshToken);
-            String type = jwt.getClaim("TYPE").asString();
+        SecurityModel model = (SecurityModel) authentication.getPrincipal();
+        if (model != null) {
+                if(Objects.isNull(model.getAccessToken())){
+                    String[] roles = new String[model.getRoles().size()];
+                    String newAccessToken = JsonTokenUtils.generateRefresh(model.getEmail(),model.getRoles().toArray(roles),model.getId(),model.getIp());
+                    model.setAccessToken(newAccessToken);
+                }
+                String[] roles = new String[model.getRoles().size()];
+                roles = model.getRoles().toArray(roles);
+                List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+                Arrays.stream(roles).forEach(i -> authorityList.add(new SimpleGrantedAuthority(i)));
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(model,null,authorityList);
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                return Mono.just(auth);
 
-            if(type.equals("REFRESH")){
-                token = JsonTokenUtils.generate(
-                        jwt.getClaim("email").asString(),
-                        jwt.getClaim("roles").asArray(String.class),
-                        jwt.getClaim("id").asString(),
-                        jwt.getClaim("ip").asString()
-                );
-            }
-
-            String[] roles = jwt.getClaim("roles").asArray(String.class);
-            List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-            Arrays.stream(roles).forEach(i -> authorityList.add(new SimpleGrantedAuthority(i)));
-            String email = jwt.getClaim("email").asString();
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(email, token, authorityList);
-            SecurityContextHolder.getContext().setAuthentication(auth);
-            return Mono.just(auth);
-        } catch (Exception ex) {
-            return Mono.just(authentication);
         }
-
+        return Mono.just(authentication);
     }
 }

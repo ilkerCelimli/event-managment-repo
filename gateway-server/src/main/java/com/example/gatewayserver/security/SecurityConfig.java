@@ -21,11 +21,15 @@ public class SecurityConfig {
                                                       Roles roles,
                                                       CustomSecurityContextRepository jwtFilter,
                                                       RequestLogFilter requestLogFilter,
-                                                      CustomAuthenticationManager customAuthenticationManager
+                                                      CustomAuthenticationManager customAuthenticationManager,
+                                                      CustomAuthenticationEntryPoint authenticationEntryPoint,
+                                                      AccessDeniedErrorPoint accessDeniedErrorPoint
                                                       ) {
         http.csrf(ServerHttpSecurity.CsrfSpec::disable);
         http.securityContextRepository(jwtFilter);
         http.authenticationManager(customAuthenticationManager);
+        http.exceptionHandling(handler -> handler.accessDeniedHandler(accessDeniedErrorPoint));
+        http.exceptionHandling(handler -> handler.authenticationEntryPoint(authenticationEntryPoint));
         http.authorizeExchange(request -> request.pathMatchers(endPoints.getPermittedEndPoint())
                 .permitAll());
         http.authorizeExchange(request -> request.pathMatchers(endPoints.getAdminEndPoints())
