@@ -23,15 +23,14 @@ public class CustomAuthenticationManager implements ReactiveAuthenticationManage
         SecurityModel model = (SecurityModel) authentication.getPrincipal();
         if (model != null) {
                 if(Objects.isNull(model.getAccessToken())){
-                    String[] roles = new String[model.getRoles().size()];
-                    String newAccessToken = JsonTokenUtils.generateRefresh(model.getEmail(),model.getRoles().toArray(roles),model.getId(),model.getIp());
+                    String newAccessToken = JsonTokenUtils.generateRefresh(model.getEmail(),model.getRoles().toArray(String[]::new),model.getId(),model.getIp());
                     model.setAccessToken(newAccessToken);
                 }
                 String[] roles = new String[model.getRoles().size()];
                 roles = model.getRoles().toArray(roles);
                 List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
                 Arrays.stream(roles).forEach(i -> authorityList.add(new SimpleGrantedAuthority(i)));
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(model,null,authorityList);
+                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(model,model,authorityList);
                 SecurityContextHolder.getContext().setAuthentication(auth);
                 return Mono.just(auth);
 

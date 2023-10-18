@@ -67,7 +67,7 @@ public class CustomSecurityContextRepository implements ServerSecurityContextRep
                     return Mono.empty();
                 }
             }
-                Authentication auth = new UsernamePasswordAuthenticationToken(securityModel,null);
+                Authentication auth = new UsernamePasswordAuthenticationToken(securityModel,securityModel);
                 return this.reactiveAuthenticationManager.authenticate(auth).map(SecurityContextImpl::new);
 
         } else {

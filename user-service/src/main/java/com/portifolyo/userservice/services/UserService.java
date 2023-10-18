@@ -1,5 +1,6 @@
 package com.portifolyo.userservice.services;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.portifolyo.userservice.entity.Roles;
 import com.portifolyo.userservice.entity.User;
 import com.portifolyo.userservice.exception.apiexceptions.*;
@@ -114,14 +115,18 @@ public class UserService {
     }
 
     public TokenResponse tokenResponse(String token,String ipAdress) {
-        String email = JsonTokenUtils.decodeJWT(token,null).getClaim("email").asString();
-        String[] roles = JsonTokenUtils.decodeJWT(token,null).getClaim("roles").asArray(String.class);
-        String ip = JsonTokenUtils.extractClaim(token,"ip",String.class);
-        if(!ipAdress.equals(ip)){
-            throw new InvalidRefreshTokenException();
+        DecodedJWT decodedJWT = JsonTokenUtils.decodeJWT(token);
+        if (decodedJWT != null) {
+            String email = JsonTokenUtils.decodeJWT(token).getClaim("email").asString();
+            String[] roles = JsonTokenUtils.decodeJWT(token).getClaim("roles").asArray(String.class);
+            String ip = JsonTokenUtils.extractClaim(token, "ip", String.class);
+            if (!ipAdress.equals(ip)) {
+                throw new InvalidRefreshTokenException();
+            }
+            String id = JsonTokenUtils.extractClaim(token, "id", String.class);
+            return new TokenResponse(JsonTokenUtils.generateRefresh(email, roles, id, ip), JsonTokenUtils.generateRefresh(email, roles, id, ip));
         }
-        String id = JsonTokenUtils.extractClaim(token,"id", String.class);
-        return new TokenResponse(JsonTokenUtils.generate(email,roles,id,ip),JsonTokenUtils.generateRefresh(email,roles,id,ip));
+        throw new InvalidRefreshTokenException();
     }
 
     public UserInfo findById(String id){
