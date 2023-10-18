@@ -30,9 +30,7 @@ public class CustomAuthenticationManager implements ReactiveAuthenticationManage
                 roles = model.getRoles().toArray(roles);
                 List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
                 Arrays.stream(roles).forEach(i -> authorityList.add(new SimpleGrantedAuthority(i)));
-                UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(model,model,authorityList);
-                SecurityContextHolder.getContext().setAuthentication(auth);
-                return Mono.just(auth);
+                return Mono.just(Boolean.TRUE).map(value -> new UsernamePasswordAuthenticationToken(model,null,authorityList));
 
         }
         return Mono.just(authentication);

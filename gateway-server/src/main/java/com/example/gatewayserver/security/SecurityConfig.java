@@ -34,6 +34,7 @@ public class SecurityConfig {
                 .permitAll());
         http.authorizeExchange(request -> request.pathMatchers(endPoints.getAdminEndPoints())
                 .hasAnyAuthority(roles.getSuperAdminRoles()));
+        http.authorizeExchange(request -> request.anyExchange().authenticated());
         http.addFilterBefore(requestLogFilter, SecurityWebFiltersOrder.FIRST);
         return http.build();
     }

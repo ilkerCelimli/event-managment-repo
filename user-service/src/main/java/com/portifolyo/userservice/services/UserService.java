@@ -11,6 +11,7 @@ import com.portifolyo.userservice.util.converter.UserRegisterRequestConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
+import org.portifolyo.requests.notificationservice.NotificationRequest;
 import org.portifolyo.requests.userservice.UserLoginRequest;
 import org.portifolyo.requests.userservice.UserRegisterRequest;
 import org.portifolyo.response.TokenResponse;
@@ -19,12 +20,14 @@ import org.portifolyo.utils.DeserializeHelper;
 import org.portifolyo.utils.JsonTokenUtils;
 import org.portifolyo.utils.UpdateHelper;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +39,6 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final RoleRepository roleRepository;
-
     @Transactional
     public User saveUser(UserRegisterRequest userRegisterRequest) {
         if (!findEmailIsExists(userRegisterRequest.email())) {
@@ -55,6 +57,7 @@ public class UserService {
         }
         throw new EmailIsExistsException();
     }
+
 
     @Transactional
     public void activiteUser(String activitionCode) {
