@@ -12,6 +12,7 @@ import com.portifolyo.eventservice.util.mapper.OrganizatorRequestMapper;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.utils.UpdateHelper;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 
@@ -28,11 +29,13 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
     }
 
     @Override
+    @Cacheable(cacheNames = "organizator",key = "#organizatorRequest.email()")
     public Organizator handleOrganizator(OrganizatorRequest organizatorRequest) {
         return save(OrganizatorRequestMapper.toEntity(organizatorRequest));
     }
 
     @Override
+    @Cacheable(cacheNames = "organizator",key = "#email")
     public OrganizatorInfo findOrganizatorByEmail(String email) {
         Organizator organizator = this.organizatorRepository.findOrganizatorByEmailEquals(email)
                 .orElseThrow(() -> new NotFoundException(String.format("Not found %s",email)));
@@ -77,6 +80,7 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
     }
 
     @Override
+    @Cacheable(cacheNames = "organizator_events",key = "#email")
     public OrganizatorEventsInfos findOrganizatorEvents(String email, TableRequest tableRequest) {
         return this.organizatorManyToManyService.complitionOrganizatorEvents(email,tableRequest);
     }

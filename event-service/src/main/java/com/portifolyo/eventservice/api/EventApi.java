@@ -5,21 +5,13 @@ import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
 import com.portifolyo.eventservice.repository.projections.EventDto;
 import com.portifolyo.eventservice.service.EventService;
-import com.portifolyo.eventservice.util.mapper.EventSaveRequestMapper;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import jakarta.annotation.security.RolesAllowed;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.EventRegisterRequest;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
 import org.portifolyo.response.GenericResponse;
-import org.portifolyo.utils.JsonTokenUtils;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/event-service/event")
 @RequiredArgsConstructor
-@SecurityRequirement(name = "Bearer Authentication")
 public class EventApi {
 
     private final EventService eventService;

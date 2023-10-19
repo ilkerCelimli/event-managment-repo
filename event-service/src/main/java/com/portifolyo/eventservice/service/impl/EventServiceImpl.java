@@ -27,8 +27,8 @@ import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.response.GenericResponse;
 import org.portifolyo.response.UserInfo;
 import org.portifolyo.utils.UpdateHelper;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.utils.SerializationUtils;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -49,10 +49,9 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     private final UserServiceFeignClient userServiceFeignClient;
 
     private final TicketServiceFeignClient ticketServiceFeignClient;
-    private final RabbitTemplate rabbitTemplate;
     private final EventAndInComingPeopleManyToManyService eventAndInComingPeopleManyToManyService;
 
-    public EventServiceImpl(EventRepository eventRepository, EventAreaService eventAreaService, EventAndOrganizatorManyToManyService eventAndOrganizatorManyToManyService, ImageAndLinksRepository imageAndLinksRepository, EventDescriptionRepository eventDescriptionRepository, UserServiceFeignClient userServiceFeignClient, TicketServiceFeignClient ticketServiceFeignClient, RabbitTemplate rabbitTemplate, EventAndInComingPeopleManyToManyService eventAndInComingPeopleManyToManyService) {
+    public EventServiceImpl(EventRepository eventRepository, EventAreaService eventAreaService, EventAndOrganizatorManyToManyService eventAndOrganizatorManyToManyService, ImageAndLinksRepository imageAndLinksRepository, EventDescriptionRepository eventDescriptionRepository, UserServiceFeignClient userServiceFeignClient, TicketServiceFeignClient ticketServiceFeignClient, EventAndInComingPeopleManyToManyService eventAndInComingPeopleManyToManyService) {
         super(eventRepository);
         this.eventRepository = eventRepository;
         this.eventAreaService = eventAreaService;
@@ -61,7 +60,6 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
         this.eventDescriptionRepository = eventDescriptionRepository;
         this.userServiceFeignClient = userServiceFeignClient;
         this.ticketServiceFeignClient = ticketServiceFeignClient;
-        this.rabbitTemplate = rabbitTemplate;
         this.eventAndInComingPeopleManyToManyService = eventAndInComingPeopleManyToManyService;
     }
 
@@ -98,6 +96,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
+    @CachePut(cacheNames = "event",key = "#eventId")
     public Event updateEventRequestHandle(EventSaveRequest event, String eventId) {
         Event e = this.eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(
                 String.format("%s event id not found", eventId)
@@ -122,6 +121,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
+    @Cacheable(value = "allevents")
     public List<EventDto> findEvents(TableRequest request) {
         List<EventDto> result = new ArrayList<>();
         List<Event> events = this.eventRepository.findAll(PageRequest.of(request.getPage(), request.getSize())).toList();
@@ -136,6 +136,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
+    @Cacheable(cacheNames = "events",key = "#id")
     public EventDto findEventById(String id) {
         Event e = this.eventRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("%s bulunamadı", id)));
         List<OrganizatorInfo> list = this.eventAndOrganizatorManyToManyService.findOrganizatorsByEventId(id);
