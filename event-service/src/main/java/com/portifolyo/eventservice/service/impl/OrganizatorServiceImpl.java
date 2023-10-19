@@ -8,6 +8,7 @@ import com.portifolyo.eventservice.repository.projections.OrganizatorEventsInfos
 import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
 import com.portifolyo.eventservice.service.EventAndOrganizatorManyToManyService;
 import com.portifolyo.eventservice.service.OrganizatorService;
+import com.portifolyo.eventservice.util.mapper.OrganizatorInfoMapper;
 import com.portifolyo.eventservice.util.mapper.OrganizatorRequestMapper;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
@@ -29,24 +30,17 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
     }
 
     @Override
-    @Cacheable(cacheNames = "organizator",key = "#organizatorRequest.email()")
+   // @Cacheable(cacheNames = "organizator",key = "#organizatorRequest.email()")
     public Organizator handleOrganizator(OrganizatorRequest organizatorRequest) {
         return save(OrganizatorRequestMapper.toEntity(organizatorRequest));
     }
 
     @Override
-    @Cacheable(cacheNames = "organizator",key = "#email")
+  //  @Cacheable(cacheNames = "organizator",key = "#email")
     public OrganizatorInfo findOrganizatorByEmail(String email) {
         Organizator organizator = this.organizatorRepository.findOrganizatorByEmailEquals(email)
                 .orElseThrow(() -> new NotFoundException(String.format("Not found %s",email)));
-        return OrganizatorInfo.builder()
-                .id(organizator.getId())
-                .tcNo(organizator.getEmail())
-                .name(organizator.getName())
-                .phoneNumber(organizator.getPhoneNumber())
-                .surName(organizator.getSurname())
-                .mail(organizator.getEmail())
-                .build();
+        return OrganizatorInfoMapper.toDto(organizator);
     }
 
     @Override
@@ -64,13 +58,7 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
             Organizator updated = updateHelper.updateHelper(or,organizator);
             if(updated == null) throw new GenericException("update problem",500);
             save(updated);
-            return OrganizatorInfo.builder()
-                    .id(updated.getId())
-                    .tcNo(updated.getTcNo())
-                    .name(updated.getName())
-                    .surName(updated.getSurname())
-                    .mail(updated.getEmail())
-                    .phoneNumber(updated.getPhoneNumber()).build();
+            return OrganizatorInfoMapper.toDto(organizator);
 
     }
 
@@ -80,7 +68,7 @@ public class OrganizatorServiceImpl extends BaseServiceImpl<Organizator> impleme
     }
 
     @Override
-    @Cacheable(cacheNames = "organizator_events",key = "#email")
+ //   @Cacheable(cacheNames = "organizator_events",key = "#email")
     public OrganizatorEventsInfos findOrganizatorEvents(String email, TableRequest tableRequest) {
         return this.organizatorManyToManyService.complitionOrganizatorEvents(email,tableRequest);
     }

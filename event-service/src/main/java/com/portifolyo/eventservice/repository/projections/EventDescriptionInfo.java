@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.portifolyo.requests.eventservice.ImageAndLinksReqeust;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 

@@ -96,7 +96,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
-    @CachePut(cacheNames = "event",key = "#eventId")
+ //   @CachePut(value = "event",key = "#eventId")
     public Event updateEventRequestHandle(EventSaveRequest event, String eventId) {
         Event e = this.eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(
                 String.format("%s event id not found", eventId)
@@ -121,7 +121,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
-    @Cacheable(value = "allevents")
+   // @Cacheable(cacheNames = "allevents")
     public List<EventDto> findEvents(TableRequest request) {
         List<EventDto> result = new ArrayList<>();
         List<Event> events = this.eventRepository.findAll(PageRequest.of(request.getPage(), request.getSize())).toList();
@@ -136,7 +136,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
-    @Cacheable(cacheNames = "events",key = "#id")
+  //  @Cacheable(value = "event",key = "#id")
     public EventDto findEventById(String id) {
         Event e = this.eventRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("%s bulunamadı", id)));
         List<OrganizatorInfo> list = this.eventAndOrganizatorManyToManyService.findOrganizatorsByEventId(id);

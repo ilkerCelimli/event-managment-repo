@@ -1,7 +1,7 @@
 #
 # Build stage
 #
-FROM maven:3-amazoncorretto-20 AS build
+FROM maven:3-amazoncorretto-17 AS build
 COPY src /home/app/
 COPY pom.xml /home/app
 RUN mvn -f /home/app/pom.xml clean package

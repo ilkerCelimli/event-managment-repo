@@ -3,6 +3,7 @@ package com.portifolyo.eventservice.repository.projections;
 import com.portifolyo.eventservice.entity.Organizator;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Builder

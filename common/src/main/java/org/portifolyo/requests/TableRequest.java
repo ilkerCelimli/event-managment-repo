@@ -1,5 +1,7 @@
 package org.portifolyo.requests;
 
+import java.util.UUID;
+
 public class TableRequest {
 
    private int page;
@@ -26,4 +28,5 @@ public class TableRequest {
     public void setSize(int size) {
         this.size = size;
     }
+
 }

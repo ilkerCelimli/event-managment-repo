@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.portifolyo.requests.eventservice.enums.EventType;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,7 +15,8 @@ import java.util.List;
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class EventDto {
+
+public class EventDto implements Serializable {
     private String id;
     private LocalDateTime createdDate;
     private Boolean isDeleted;
