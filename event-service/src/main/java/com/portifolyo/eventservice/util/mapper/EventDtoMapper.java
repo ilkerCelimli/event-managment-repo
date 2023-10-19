@@ -15,7 +15,7 @@ public class EventDtoMapper {
         return EventDto.builder()
                 .id(e.getId())
                 .createdDate(e.getCreatedDate())
-                .eventAreaInfo(area)
+                //.eventAreaInfo(area)
                 .eventDescription(EventDescriptionMapper.toDto(e.getEventDescription()))
                 .isDeleted(e.getDeleted())
                 .isPeopleRegistered(e.isPeopleRegistered())

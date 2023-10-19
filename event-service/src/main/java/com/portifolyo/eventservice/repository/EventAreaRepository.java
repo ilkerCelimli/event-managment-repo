@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface EventAreaRepository extends BaseRepository<EventArea> {
 
-    Optional<EventAreaInfo> findByEvent_Id(String id);
+    Optional<EventArea> findByEvent_Id(String id);
 }

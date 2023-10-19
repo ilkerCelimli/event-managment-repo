@@ -9,7 +9,7 @@ public interface EventRepository extends BaseRepository<Event> {
     @Transactional
     @Modifying
     @Query("update Event e set e.deleted = ?1 where e.id = ?2")
-    int updateIsDeletedById(Boolean isDeleted, String id);
+    void updateIsDeletedById(Boolean isDeleted, String id);
 
 
 

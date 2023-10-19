@@ -14,7 +14,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class EventDescriptionInfo {
+public class EventDescriptionInfo implements Serializable{
     private String id;
     private LocalDateTime createdDate;
     private Boolean isDeleted;

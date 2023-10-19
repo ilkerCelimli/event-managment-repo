@@ -15,7 +15,6 @@ import java.util.List;
 @Getter
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-
 public class EventDto implements Serializable {
     private String id;
     private LocalDateTime createdDate;
@@ -28,7 +27,7 @@ public class EventDto implements Serializable {
     private EventType eventType;
     private int maxPeople;
     private List<OrganizatorInfo> organizatorInfos;
-    private EventAreaInfo eventAreaInfo;
+   // private EventAreaInfo eventAreaInfo;
     private EventDescriptionInfo eventDescription;
 
 }

@@ -6,6 +6,7 @@ import com.portifolyo.eventservice.exceptions.NotFoundException;
 import com.portifolyo.eventservice.repository.EventAreaRepository;
 import com.portifolyo.eventservice.repository.projections.EventAreaInfo;
 import com.portifolyo.eventservice.service.EventAreaService;
+import com.portifolyo.eventservice.util.mapper.EventAreaInfoMapper;
 import com.portifolyo.eventservice.util.mapper.EventAreaMapper;
 import org.portifolyo.requests.eventservice.EventAreaRequest;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,8 @@ public class EventAreaServiceImpl extends BaseServiceImpl<EventArea> implements 
 
     @Override
     public EventAreaInfo findEventArea(String eventId) {
-        return this.eventAreaRepository.findByEvent_Id(eventId).orElseThrow(() ->
+        EventArea area = this.eventAreaRepository.findByEvent_Id(eventId).orElseThrow(() ->
                 new NotFoundException(String.format("Not found event area %s id",eventId)));
+        return EventAreaInfoMapper.toDto(area);
     }
 }

@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 @Getter
 @Builder
-public class OrganizatorInfo {
+public class OrganizatorInfo implements Serializable {
     String id;
 
     String name;

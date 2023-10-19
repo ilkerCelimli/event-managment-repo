@@ -86,7 +86,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
         }
 
         UserInfo userInfo = response.getBody().getData();
-            event.setEventOwner(userInfo.id());
+        event.setEventOwner(userInfo.id());
 
         List<OrganizatorRequest> organizators = handleOrganizatorRequests(request.organizatorLists(), userInfo);
         Event saved = this.save(event);
@@ -96,7 +96,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
- //   @CachePut(value = "event",key = "#eventId")
+    @CachePut(value = "event", key = "#eventId")
     public Event updateEventRequestHandle(EventSaveRequest event, String eventId) {
         Event e = this.eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException(
                 String.format("%s event id not found", eventId)
@@ -121,7 +121,6 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
-   // @Cacheable(cacheNames = "allevents")
     public List<EventDto> findEvents(TableRequest request) {
         List<EventDto> result = new ArrayList<>();
         List<Event> events = this.eventRepository.findAll(PageRequest.of(request.getPage(), request.getSize())).toList();
@@ -136,7 +135,7 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     }
 
     @Override
-  //  @Cacheable(value = "event",key = "#id")
+    @Cacheable(value = "event",key = "#id")
     public EventDto findEventById(String id) {
         Event e = this.eventRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("%s bulunamadı", id)));
         List<OrganizatorInfo> list = this.eventAndOrganizatorManyToManyService.findOrganizatorsByEventId(id);
@@ -147,13 +146,13 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
     @Transactional
     public void eventRegister(String eventId, EventRegisterRequest request) {
         Event ref = findById(eventId);
-        if(!ref.isTicket()) {
+        if (!ref.isTicket()) {
             this.eventAndInComingPeopleManyToManyService.registerEvent(ref, request.userEmail());
             return;
         }
-        ResponseEntity<GenericResponse<Void>> response = this.ticketServiceFeignClient.saveTicket(null,request.ticketRequest());
-        if(response.getStatusCode().is2xxSuccessful()) {
-            this.eventAndInComingPeopleManyToManyService.registerEvent(ref,request.userEmail());
+        ResponseEntity<GenericResponse<Void>> response = this.ticketServiceFeignClient.saveTicket(null, request.ticketRequest());
+        if (response.getStatusCode().is2xxSuccessful()) {
+            this.eventAndInComingPeopleManyToManyService.registerEvent(ref, request.userEmail());
         }
     }
 

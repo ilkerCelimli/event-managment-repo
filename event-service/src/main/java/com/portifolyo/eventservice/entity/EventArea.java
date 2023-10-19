@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
@@ -14,7 +16,7 @@ import lombok.ToString;
         @Index(name = "idx_area_name",columnList = "area_name"),
         @Index(name = "idx_coordinates",columnList = "area_lat,area_lng")
 })
-public class EventArea extends BaseEntity {
+public class EventArea extends BaseEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id",nullable = false)
     private Event event;
