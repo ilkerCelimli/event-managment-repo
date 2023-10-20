@@ -39,8 +39,10 @@ public class EmailService {
         info.put("host", emailConfig.getHost());
         info.put("port",String.valueOf(emailConfig.getPort()));
         info.put("context",process);
+        info.put("subject","Hoşgeldiniz");
         NotificationRequest notificationRequest = new NotificationRequest(NotificationType.EMAIL,info);
-        rabbitTemplate.convertAndSend("","notification",notificationRequest);
+
+        rabbitTemplate.convertAndSend("notification-exchange","notification",notificationRequest);
         log.info("sended queue");
     }
 

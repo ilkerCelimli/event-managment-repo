@@ -24,7 +24,7 @@ public class RabbitConfig {
     }
 
     @Bean(name = "notification-queue")
-    public Queue notificationQueue(){return new Queue("notification");}
+    public Queue notificationQueue(){return new Queue("notification",true);}
 
     @Bean(name = "notification-exchange")
     public FanoutExchange directExchange(){return new FanoutExchange("notification-exchange");}
