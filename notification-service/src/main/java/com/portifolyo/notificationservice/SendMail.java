@@ -45,7 +45,6 @@ public class SendMail {
                 log.info("sended mail");
             }
             catch (MessagingException ex){
-                System.out.println("Hata");
                 log.error(ex.toString());
             }
         }
