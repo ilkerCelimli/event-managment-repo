@@ -57,10 +57,8 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
 
             } catch (Exception e) {
                 String[] arr = new String[]{"ROLE_USER"};
-                String token = JsonTokenUtils.generate(new UserLoginRequest(userInfo.email(),null), arr,userInfo.id());
-                this.userFeign.deleteUser(token, request.userRegisterRequest().email());
+                this.userFeign.deleteUser(request.userRegisterRequest().email());
                 throw new GenericException("Company not saved");
-
             }
         }
         throw new GenericException("Company not saved");
@@ -70,9 +68,8 @@ public class CompanyServiceImpl extends BaseServiceImpl<Company> implements Comp
     public void inActiveCompany(String id, String token) {
         Company company = findById(id);
         company.setActive(false);
-
         try {
-            this.userFeign.deleteById(token, company.getCompanySuperAdminUserId());
+            this.userFeign.deleteById(company.getCompanySuperAdminUserId());
             this.companyRepository.save(company);
         } catch (Exception e) {
             log.error(e.getMessage());

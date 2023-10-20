@@ -22,8 +22,7 @@ public class CompanyEmailServiceImpl extends BaseServiceImpl<CompanyEmailAdress>
 
     @Override
     public CompanyEmailAdress handleSaveRequest(CompanyEmailAdress request) {
-       CompanyEmailAdress ref =  super.save(request);
-       return ref;
+       return super.save(request);
     }
 
     @Override
@@ -36,4 +35,6 @@ public class CompanyEmailServiceImpl extends BaseServiceImpl<CompanyEmailAdress>
        CompanyEmailAdress ref = this.findByCompanyEmailAdress_CompanyId(id);
        this.repository.delete(ref);
     }
+
+
 }

@@ -31,7 +31,7 @@ public class CompanyEmailAdressApi {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<GenericResponse<Void>> delete(@PathVariable String id){
+    public ResponseEntity<GenericResponse<Void>> delete(@PathVariable String id) {
         this.companyEmailService.handleDeleteCompanyEmailAdresses(id);
         return ResponseEntity.ok(GenericResponse.SUCCESS());
     }
