@@ -40,8 +40,8 @@ public class EmailService {
         info.put("port",String.valueOf(emailConfig.getPort()));
         info.put("context",process);
         NotificationRequest notificationRequest = new NotificationRequest(NotificationType.EMAIL,info);
-        rabbitTemplate.convertAndSend("notification","notification-router",notificationRequest);
-
+        rabbitTemplate.convertAndSend("","notification",notificationRequest);
+        log.info("sended queue");
     }
 
 }

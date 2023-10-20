@@ -1,8 +1,9 @@
 package org.portifolyo.requests.notificationservice;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class NotificationRequest {
+public class NotificationRequest implements Serializable {
 
     private NotificationType type;
 

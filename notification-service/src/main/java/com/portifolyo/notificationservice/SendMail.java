@@ -2,6 +2,7 @@ package com.portifolyo.notificationservice;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.portifolyo.requests.notificationservice.NotificationRequest;
 import org.portifolyo.requests.notificationservice.NotificationType;
 import org.portifolyo.utils.DeserializeHelper;
@@ -10,11 +11,11 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
 import java.util.Properties;
-
+@Slf4j
 public class SendMail {
 
 
-    @RabbitListener(queues = "notification")
+    @RabbitListener(queues = "notification-exchange")
     public void notification(byte[] data) throws MessagingException {
         NotificationRequest notificationRequest = DeserializeHelper.desarialize(data);
         if(notificationRequest.getType() == NotificationType.EMAIL){
@@ -37,7 +38,7 @@ public class SendMail {
             mimeMessageHelper.setText(notificationRequest.getInfo().get("context"),true);
             mimeMessageHelper.setTo(notificationRequest.getInfo().get("to"));
             javaMailSender.send(mimeMessageHelper.getMimeMessage());
-
+            log.info("sended mail");
         }
     }
 
