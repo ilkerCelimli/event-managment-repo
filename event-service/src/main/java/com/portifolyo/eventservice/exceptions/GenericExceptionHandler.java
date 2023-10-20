@@ -1,6 +1,7 @@
 package com.portifolyo.eventservice.exceptions;
 
 import feign.FeignException;
+import org.portifolyo.commonexceptions.NotFoundException;
 import org.portifolyo.response.GenericResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,13 @@ public class GenericExceptionHandler {
     @ExceptionHandler(FeignException.FeignClientException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public GenericResponse<Void> feignClientException(FeignException.FeignClientException ex){
-        return GenericResponse.BAD_REQUEST(null);
+        return GenericResponse.BAD_REQUEST(ex.getMessage());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public GenericResponse<Void> notFoundException(NotFoundException ex){
+        return new GenericResponse<>(HttpStatus.NOT_FOUND.value(),ex.getMessage());
     }
 
 

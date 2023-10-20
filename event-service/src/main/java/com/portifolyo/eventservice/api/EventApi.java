@@ -3,7 +3,8 @@ package com.portifolyo.eventservice.api;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
-import com.portifolyo.eventservice.repository.projections.EventDto;
+import com.portifolyo.eventservice.repository.model.EventDto;
+import com.portifolyo.eventservice.repository.model.EventRegistered;
 import com.portifolyo.eventservice.service.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +64,13 @@ public class EventApi {
     public ResponseEntity<GenericResponse<Void>> registerEvent(@PathVariable String eventId, @RequestBody EventRegisterRequest request){
         this.eventService.eventRegister(eventId,request);
         return ResponseEntity.ok(GenericResponse.SUCCESS());
+    }
+
+    @PostMapping("/find-registered-people/{eventId}")
+    public ResponseEntity<GenericResponse<EventRegistered>> findRegisteredPeople(@PathVariable String eventId){
+        return ResponseEntity.ok(
+                GenericResponse.SUCCESS(this.eventService.findEventRegisteredPeople(eventId))
+        );
     }
 
 

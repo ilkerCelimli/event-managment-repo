@@ -5,8 +5,12 @@ import com.portifolyo.eventservice.entity.EventAndIncomingPeopleManyToMany;
 import com.portifolyo.eventservice.entity.IncomingPeople;
 import com.portifolyo.eventservice.repository.EventAndIncomingPeopleManyToManyRepository;
 import com.portifolyo.eventservice.repository.IncomingPeopleRepository;
+import com.portifolyo.eventservice.repository.model.EventRegistered;
 import com.portifolyo.eventservice.service.EventAndInComingPeopleManyToManyService;
+import com.portifolyo.eventservice.util.mapper.EventRegisteredMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EventAndInComingPeopleManyToManyServiceImpl extends BaseServiceImpl<EventAndIncomingPeopleManyToMany> implements EventAndInComingPeopleManyToManyService {
@@ -37,5 +41,11 @@ public class EventAndInComingPeopleManyToManyServiceImpl extends BaseServiceImpl
         }
 
 
+    }
+
+    @Override
+    public EventRegistered findEventRegistered(String eventId) {
+
+        return EventRegisteredMapper.toDto(eventId,this.repository.findByEventId_Id(eventId));
     }
 }

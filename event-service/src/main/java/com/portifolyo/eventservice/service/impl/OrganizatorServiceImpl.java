@@ -2,14 +2,14 @@ package com.portifolyo.eventservice.service.impl;
 
 import com.portifolyo.eventservice.entity.Organizator;
 import com.portifolyo.eventservice.exceptions.GenericException;
-import com.portifolyo.eventservice.exceptions.NotFoundException;
 import com.portifolyo.eventservice.repository.OrganizatorRepository;
-import com.portifolyo.eventservice.repository.projections.OrganizatorEventsInfos;
-import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
+import com.portifolyo.eventservice.repository.model.OrganizatorEventsInfos;
+import com.portifolyo.eventservice.repository.model.OrganizatorInfo;
 import com.portifolyo.eventservice.service.EventAndOrganizatorManyToManyService;
 import com.portifolyo.eventservice.service.OrganizatorService;
 import com.portifolyo.eventservice.util.mapper.OrganizatorInfoMapper;
 import com.portifolyo.eventservice.util.mapper.OrganizatorRequestMapper;
+import org.portifolyo.commonexceptions.NotFoundException;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 import org.portifolyo.utils.UpdateHelper;

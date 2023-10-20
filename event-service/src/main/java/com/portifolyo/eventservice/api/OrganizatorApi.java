@@ -1,8 +1,8 @@
 package com.portifolyo.eventservice.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.portifolyo.eventservice.repository.projections.OrganizatorEventsInfos;
-import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
+import com.portifolyo.eventservice.repository.model.OrganizatorEventsInfos;
+import com.portifolyo.eventservice.repository.model.OrganizatorInfo;
 import com.portifolyo.eventservice.service.OrganizatorService;
 import lombok.RequiredArgsConstructor;
 import org.portifolyo.requests.TableRequest;

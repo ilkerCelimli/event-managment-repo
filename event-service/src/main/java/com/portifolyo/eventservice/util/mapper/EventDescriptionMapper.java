@@ -2,7 +2,7 @@ package com.portifolyo.eventservice.util.mapper;
 
 import com.portifolyo.eventservice.entity.EventDescription;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
-import com.portifolyo.eventservice.repository.projections.EventDescriptionInfo;
+import com.portifolyo.eventservice.repository.model.EventDescriptionInfo;
 import org.portifolyo.requests.eventservice.EventDescriptionRequest;
 import org.portifolyo.requests.eventservice.ImageAndLinksReqeust;
 

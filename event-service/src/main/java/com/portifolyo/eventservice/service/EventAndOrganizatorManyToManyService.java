@@ -2,8 +2,8 @@ package com.portifolyo.eventservice.service;
 
 import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.EventAndOrganizatorManyToMany;
-import com.portifolyo.eventservice.repository.projections.OrganizatorEventsInfos;
-import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
+import com.portifolyo.eventservice.repository.model.OrganizatorEventsInfos;
+import com.portifolyo.eventservice.repository.model.OrganizatorInfo;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.OrganizatorRequest;
 

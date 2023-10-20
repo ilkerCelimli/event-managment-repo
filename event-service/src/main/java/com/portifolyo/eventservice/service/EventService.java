@@ -2,7 +2,8 @@ package com.portifolyo.eventservice.service;
 
 import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
-import com.portifolyo.eventservice.repository.projections.EventDto;
+import com.portifolyo.eventservice.repository.model.EventDto;
+import com.portifolyo.eventservice.repository.model.EventRegistered;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.EventRegisterRequest;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
@@ -17,7 +18,7 @@ public interface EventService extends BaseService<Event> {
     void addimages(String eventid, List<ImageAndLinks> imageAndLinks);
     List<EventDto> findEvents(TableRequest request);
     EventDto findEventById(String id);
-
     void eventRegister(String eventId, EventRegisterRequest eventRegisterRequest);
+    EventRegistered findEventRegisteredPeople(String eventId);
 
 }

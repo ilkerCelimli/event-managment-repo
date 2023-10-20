@@ -1,7 +1,7 @@
 package com.portifolyo.eventservice.util.mapper;
 
 import com.portifolyo.eventservice.entity.EventArea;
-import com.portifolyo.eventservice.repository.projections.EventAreaInfo;
+import com.portifolyo.eventservice.repository.model.EventAreaInfo;
 
 public class EventAreaInfoMapper {
 

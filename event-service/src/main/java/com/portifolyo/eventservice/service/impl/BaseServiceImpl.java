@@ -1,14 +1,12 @@
 package com.portifolyo.eventservice.service.impl;
 
 import com.portifolyo.eventservice.entity.BaseEntity;
-import com.portifolyo.eventservice.exceptions.NotFoundException;
 import com.portifolyo.eventservice.repository.BaseRepository;
 import com.portifolyo.eventservice.service.BaseService;
 import lombok.extern.log4j.Log4j2;
+import org.portifolyo.commonexceptions.NotFoundException;
 import org.portifolyo.requests.TableRequest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
 

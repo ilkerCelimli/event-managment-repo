@@ -1,4 +1,4 @@
-package com.portifolyo.eventservice.repository.projections;
+package com.portifolyo.eventservice.repository.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;
@@ -27,7 +27,7 @@ public class EventDto implements Serializable {
     private EventType eventType;
     private int maxPeople;
     private List<OrganizatorInfo> organizatorInfos;
-   // private EventAreaInfo eventAreaInfo;
+    private EventAreaInfo eventAreaInfo;
     private EventDescriptionInfo eventDescription;
 
 }

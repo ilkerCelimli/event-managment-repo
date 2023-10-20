@@ -4,15 +4,15 @@ import com.portifolyo.eventservice.entity.Event;
 import com.portifolyo.eventservice.entity.EventDescription;
 import com.portifolyo.eventservice.entity.ImageAndLinks;
 import com.portifolyo.eventservice.exceptions.GenericException;
-import com.portifolyo.eventservice.exceptions.NotFoundException;
 import com.portifolyo.eventservice.feign.TicketServiceFeignClient;
 import com.portifolyo.eventservice.feign.UserServiceFeignClient;
 import com.portifolyo.eventservice.repository.EventDescriptionRepository;
 import com.portifolyo.eventservice.repository.EventRepository;
 import com.portifolyo.eventservice.repository.ImageAndLinksRepository;
-import com.portifolyo.eventservice.repository.projections.EventAreaInfo;
-import com.portifolyo.eventservice.repository.projections.EventDto;
-import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
+import com.portifolyo.eventservice.repository.model.EventAreaInfo;
+import com.portifolyo.eventservice.repository.model.EventDto;
+import com.portifolyo.eventservice.repository.model.EventRegistered;
+import com.portifolyo.eventservice.repository.model.OrganizatorInfo;
 import com.portifolyo.eventservice.service.EventAndInComingPeopleManyToManyService;
 import com.portifolyo.eventservice.service.EventAndOrganizatorManyToManyService;
 import com.portifolyo.eventservice.service.EventAreaService;
@@ -20,6 +20,7 @@ import com.portifolyo.eventservice.service.EventService;
 import com.portifolyo.eventservice.util.mapper.EventDtoMapper;
 import com.portifolyo.eventservice.util.mapper.EventSaveRequestMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.portifolyo.commonexceptions.NotFoundException;
 import org.portifolyo.requests.TableRequest;
 import org.portifolyo.requests.eventservice.EventRegisterRequest;
 import org.portifolyo.requests.eventservice.EventSaveRequest;
@@ -154,6 +155,11 @@ public class EventServiceImpl extends BaseServiceImpl<Event> implements EventSer
         if (response.getStatusCode().is2xxSuccessful()) {
             this.eventAndInComingPeopleManyToManyService.registerEvent(ref, request.userEmail());
         }
+    }
+
+    @Override
+    public EventRegistered findEventRegisteredPeople(String eventId) {
+        return this.eventAndInComingPeopleManyToManyService.findEventRegistered(eventId);
     }
 
     private List<OrganizatorRequest> handleOrganizatorRequests(List<OrganizatorRequest> request, UserInfo userInfo) {

@@ -1,7 +1,7 @@
 package com.portifolyo.eventservice.util.mapper;
 
 import com.portifolyo.eventservice.entity.Organizator;
-import com.portifolyo.eventservice.repository.projections.OrganizatorInfo;
+import com.portifolyo.eventservice.repository.model.OrganizatorInfo;
 
 public class OrganizatorInfoMapper {
 

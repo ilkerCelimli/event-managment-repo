@@ -1,4 +1,4 @@
-package com.portifolyo.eventservice.repository.projections;
+package com.portifolyo.eventservice.repository.model;
 
 
 import lombok.AllArgsConstructor;
