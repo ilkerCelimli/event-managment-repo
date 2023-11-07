@@ -7,6 +7,14 @@ spring:
       enabled: true
 
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: '*'
+            allowed-methods: '*'
+            allow-credentials: false
+            allowed-headers: '*'
+
       discovery:
         locator:
           enabled: true
@@ -32,6 +40,8 @@ spring:
           uri: lb://payment-service
           predicates:
             - Path=/payment-service/**
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
 
 
 server:

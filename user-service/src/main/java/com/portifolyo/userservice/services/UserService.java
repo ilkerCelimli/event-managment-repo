@@ -25,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -143,7 +144,7 @@ public class UserService {
         User user = this.userRepository.findUserByEmail(organizatorRequest.email()).orElse(new User());
         if (user.getId() == null) {
             User u = new User(organizatorRequest.name(), organizatorRequest.surname(), organizatorRequest.email(),
-                    RandomStringGenerator.RandomPasswordGenerator(), LocalDateTime.of(1900, 1, 1, 1, 1, 1, 1), true);
+                    RandomStringGenerator.RandomPasswordGenerator(), LocalDate.of(1900, 1, 1), true);
             this.userRepository.save(u);
             return;
         }

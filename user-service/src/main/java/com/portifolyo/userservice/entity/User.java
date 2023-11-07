@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class User {
     @Field
     private String password;
     @Field
-    private LocalDateTime birtday;
+    private LocalDate birtday;
     @Field
     private boolean isActive;
     @Field
@@ -46,7 +47,7 @@ public class User {
     @Field
     List<Roles> rolesList;
 
-    public User(String name, String surname, String email, String password, LocalDateTime birtday, Boolean isActive) {
+    public User(String name, String surname, String email, String password, LocalDate birtday, Boolean isActive) {
         this.name = name;
         this.surname = surname;
         this.birtday = birtday;

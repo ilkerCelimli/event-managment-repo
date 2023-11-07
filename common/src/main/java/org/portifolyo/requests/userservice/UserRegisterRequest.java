@@ -3,6 +3,7 @@ package org.portifolyo.requests.userservice;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public record UserRegisterRequest (
        @NotNull(message = "password is not null")
        @NotBlank(message = "Password is not blank")
        String password,
-       LocalDateTime birtday,
+       LocalDate birtday,
        String phoneNumber,
        List<RoleRequest> role
 ){

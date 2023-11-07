@@ -49,4 +49,15 @@ public class GenericExceptionHandler {
         return new GenericResponse<>(HttpStatus.UNAUTHORIZED.value(),ex.getMessage());
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public GenericResponse<Void> notfoundException(NotFoundException ex){
+        return new GenericResponse<>(HttpStatus.NOT_FOUND.value(),ex.getMessage());
+    }
+
+    @ExceptionHandler(EmailIsNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public GenericResponse<Void> emailIsNotFoundException(EmailIsNotFoundException ex){
+        return new GenericResponse<>(HttpStatus.NOT_FOUND.value(),ex.getMessage());
+    }
 }

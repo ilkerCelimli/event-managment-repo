@@ -29,8 +29,6 @@ import java.util.List;
 @RequestMapping("/user")
 @RestController
 @RequiredArgsConstructor
-@SecurityRequirement(name = "Bearer Authentication")
-
 public class UserApi {
     private final UserService userService;
     private final RoleRepository roleRepository;
